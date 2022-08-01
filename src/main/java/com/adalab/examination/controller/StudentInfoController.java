@@ -37,7 +37,7 @@ import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
 @RestController
 @RequestMapping("/api/studentInfo")
 public class StudentInfoController {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     private final StudentInfoMapper studentInfoMapper;
 
@@ -57,7 +57,7 @@ public class StudentInfoController {
         String step = "/step" + map.get("step");
         String localPath = System.getProperty("user.dir") + "/src/main/resources/studentCode" + userName + step;
         HashMap<String, Object> hashMap = traverseDir(localPath);
-        logger.info("获取到结构树");
+
         return new ServiceResponse<>(200, "", hashMap);
     }
 
@@ -213,7 +213,7 @@ public class StudentInfoController {
                     map.put("src", innerPath);
                     map.put("curEpisode", String.valueOf(episopde));
                     form.add(map);
-                    System.out.println("list:" + step + formatedTime);
+
 
                 }
             }
@@ -276,7 +276,7 @@ public class StudentInfoController {
     @GetMapping("/curUserID")
     public String getCurUserID(@CookieValue("id") String name) {
 //        String name = "huihuihui";
-        System.out.println(name);
+
         return name;
     }
 

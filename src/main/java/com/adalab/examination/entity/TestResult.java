@@ -24,7 +24,7 @@ public class TestResult {
            });
            passed = mes.get("result").equals("true");
        } catch (IOException e) {
-           System.out.println(e.getMessage());
+
            this.passed = false;
            mes.put("errMessage", "测试结果丢失|测试结果文件生成错误");
        }

@@ -74,13 +74,13 @@ public class EpisodeController {
             return new ServiceResponse<>(400, "试图更新不存在的关卡");
         }
         if (files != null) {
-            System.out.println("更新关卡");
+
             if (target.getTestFileName() != null) {
                 File file = new File("src/main/resources/testFile/" + target.getTestFileName());
                 try {
                     delete(file);
                 } catch (IOException e) {
-                    System.err.print("更新文件时删除原文件失败");
+
                 }
             }
 
@@ -168,7 +168,7 @@ public class EpisodeController {
         try {
             delete(new File("src/main/resources/testFile/" + episode.getTestFileName()));
         } catch (IOException e) {
-            System.err.print("删除失败(不重要)");
+
         }
         return new ServiceResponse<>(200, "删除成功");
     }

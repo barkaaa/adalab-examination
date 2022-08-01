@@ -26,9 +26,9 @@ public class GitService {
                 .setURI(url)
                 .setDirectory(new File(localPath))
                 .call()) {
-            logger.info("clone成功!" + git.toString());
+
         } catch (GitAPIException e) {
-            logger.error("clone失败!");
+
             throw e;
         }
     }

@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Component
 public class OSSService {
 
-    public static Logger log = LoggerFactory.getLogger(OSSService.class);
+
 
     private final OSSConfiguration ossConfiguration;
 
@@ -74,7 +74,7 @@ public class OSSService {
             uploadVo.setFileName(fileName);
             uploadVo.setUrl("https://" + ossConfiguration.getBucketName() + "." + OSSConfiguration.endpoint + "/" + newFileName);
         } catch (IOException e) {
-            log.error("Error occurred: {}", e.getMessage(), e);
+
         }
 
 
@@ -120,7 +120,7 @@ public class OSSService {
             }
             out.flush();
         } catch (IOException e) {
-            log.error("Error occurred: {}", e.getMessage(), e);
+
         }
     }
 
@@ -151,7 +151,7 @@ public class OSSService {
         try {
             ossClient.deleteObject(ossConfiguration.getBucketName(), fileName);
         } catch (Exception e) {
-            log.error("Error occurred: {}", e.getMessage(), e);
+
         }
     }
 
@@ -164,7 +164,7 @@ public class OSSService {
     public boolean doesObjectExist(String fileName) {
         try {
             if (Strings.isEmpty(fileName)) {
-                log.error("文件名不能为空");
+
                 return false;
             } else {
                 return ossClient.doesObjectExist(ossConfiguration.getBucketName(), fileName);

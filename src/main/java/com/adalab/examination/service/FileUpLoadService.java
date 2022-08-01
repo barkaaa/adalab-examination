@@ -35,11 +35,11 @@ public class FileUpLoadService {
                 return filename;
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("上传失败");
+
                 return "";
             }
         } else {
-            System.out.println("文件为空");
+
             return "";
         }
     }

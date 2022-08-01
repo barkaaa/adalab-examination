@@ -10,10 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 public class ErrorControllerAdvice {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @ExceptionHandler({AuthorizationException.class})
     public ModelAndView handlerError(RuntimeException e) {
-        logger.error(e.getMessage());
         return new ModelAndView("/api/error/401");
     }
 }

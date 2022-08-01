@@ -49,11 +49,11 @@ public class GitLoginService {
         try (Response response = client.newCall(request).execute()) {
             //向github发送授权请求，最容易因为网络问题导致出错
             String string = response.body().string();
-            logger.info("token:" + string);
+
             String[] split = string.split("&");
             return split[0].split("=")[1];
         } catch (IOException e) {
-            logger.error("获取githubToken时网络出错");
+
         }
         return null;
     }
@@ -66,15 +66,12 @@ public class GitLoginService {
                 .build();
         try {
             Response response = client.newCall(request).execute();
-            System.out.println("==============");
             String string = response.body().string();
-            System.out.println(string);
-            System.out.println("==============");
             GitHubUser gitHubUser = JSON.parseObject(string, GitHubUser.class);//将string解析成GitHub对象
-            logger.info(gitHubUser + "");
+
             //如果用户id等于0证明没有成功拿到用户信息
             if (gitHubUser.getId() == 0) {
-                logger.error("没有拿到用户信息");
+
                 return null;
             } else {
 
@@ -83,7 +80,7 @@ public class GitLoginService {
                 return Objects.requireNonNullElseGet(student, () -> uploadDatabase(gitHubUser));
             }
         } catch (IOException e) {
-            logger.error("getUser Error");
+
             return null;
         }
     }
