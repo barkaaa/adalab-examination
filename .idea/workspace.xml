@@ -4,14 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="034ae2e7-8322-4ed8-afdc-947b4127e638" name="变更" comment="mybatisplus-&gt;student table">
+    <list default="true" id="034ae2e7-8322-4ed8-afdc-947b4127e638" name="变更" comment="   @GetMapping(&quot;getRanking&quot;)">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/GitLoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/StudentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/adalab/examination/AdalabExaminationApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/adalab/examination/AdalabExaminationApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/adalab/examination/AdalabExaminationApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/adalab/examination/AdalabExaminationApplicationTests.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -24,6 +36,7 @@
     <option name="showVisibilityIcons" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
@@ -59,6 +72,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="AdalabExaminationApplicationTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="adalabExamination" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.adalab.examination.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.adalab.examination" />
+      <option name="MAIN_CLASS_NAME" value="com.adalab.examination.AdalabExaminationApplicationTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="AdalabExaminationApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="adalabExamination" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.adalab.examination.AdalabExaminationApplication" />
@@ -75,6 +103,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.AdalabExaminationApplicationTests" />
         <item itemvalue="应用程序.MybatisPlusGenerator" />
       </list>
     </recent_temporary>
@@ -87,7 +116,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1661157461508</updated>
-      <workItem from="1661157467022" duration="6294000" />
+      <workItem from="1661157467022" duration="15637000" />
     </task>
     <task id="LOCAL-00001" summary="mybatisplus-&gt;student table">
       <created>1661161935116</created>
@@ -103,7 +132,14 @@
       <option name="project" value="LOCAL" />
       <updated>1661166587849</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="   @GetMapping(&quot;getRanking&quot;)">
+      <created>1661222359477</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1661222359478</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -122,7 +158,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="mybatisplus-&gt;student table" />
-    <option name="LAST_COMMIT_MESSAGE" value="mybatisplus-&gt;student table" />
+    <MESSAGE value="   @GetMapping(&quot;getRanking&quot;)" />
+    <option name="LAST_COMMIT_MESSAGE" value="   @GetMapping(&quot;getRanking&quot;)" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
