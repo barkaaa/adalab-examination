@@ -4,12 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="034ae2e7-8322-4ed8-afdc-947b4127e638" name="变更" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/adalab/examination/entity/GitHubUser.java" afterDir="false" />
+    <list default="true" id="034ae2e7-8322-4ed8-afdc-947b4127e638" name="变更" comment="github login-&gt; upload database">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/GitLoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/GitLoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/StudentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/adalab/examination/entity/Student.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/adalab/examination/mapper/StudentMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/adalab/examination/mapper/xml/StudentMapper.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/adalab/examination/service/StudentService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/adalab/examination/service/impl/StudentServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/adalab/examination/controller/GitLoginController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/adalab/examination/entity/Student.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/adalab/examination/mapper/StudentMapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/adalab/examination/service/StudentService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/adalab/examination/service/impl/StudentServiceImpl.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +68,7 @@
       <recent name="C:\myCode\ada_examination\adalab-examination\src\main\java\com\example\adalabexamination\plugin" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.AdalabExaminationApplication (1)">
+  <component name="RunManager" selected="应用程序.MybatisPlusGenerator">
     <configuration name="AdalabExaminationApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.adalab.examination.AdalabExaminationApplication" />
       <module name="adalab-examination" />
@@ -134,8 +143,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="应用程序.AdalabExaminationApplication" />
         <item itemvalue="应用程序.MybatisPlusGenerator" />
+        <item itemvalue="应用程序.AdalabExaminationApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -178,7 +187,14 @@
       <option name="project" value="LOCAL" />
       <updated>1661243227753</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="github login-&gt; upload database">
+      <created>1661246863077</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1661246863077</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -200,7 +216,8 @@
     <MESSAGE value="mybatisplus-&gt;student table" />
     <MESSAGE value="   @GetMapping(&quot;getRanking&quot;)" />
     <MESSAGE value="github-login" />
-    <option name="LAST_COMMIT_MESSAGE" value="mybatisplus-&gt;student table" />
+    <MESSAGE value="github login-&gt; upload database" />
+    <option name="LAST_COMMIT_MESSAGE" value="github login-&gt; upload database" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
