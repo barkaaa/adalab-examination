@@ -1,0 +1,149 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"034ae2e7-8322-4ed8-afdc-947b4127e638\" name=\"变更\" comment=\"mybatisplus-&gt;student table\">\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/adalab/examination/GitClone/GitUtils.java\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/compiler.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/compiler.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/jarRepositories.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/jarRepositories.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/runConfigurations.xml\" beforeDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/vcs.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/vcs.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/pom.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/pom.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/StudentController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/StudentController.java\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"Class\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"MarkdownSettingsMigration\">\n    <option name=\"stateVersion\" value=\"1\" />\n  </component>\n  <component name=\"ProjectId\" id=\"2DhhvSu7op7Ktwr5D3WD4cfvXXn\" />\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n    <option name=\"showVisibilityIcons\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">\n    <property name=\"RequestMappingsPanelOrder0\" value=\"0\" />\n    <property name=\"RequestMappingsPanelOrder1\" value=\"1\" />\n    <property name=\"RequestMappingsPanelWidth0\" value=\"75\" />\n    <property name=\"RequestMappingsPanelWidth1\" value=\"75\" />\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\n    <property name=\"SHARE_PROJECT_CONFIGURATION_FILES\" value=\"true\" />\n    <property name=\"WebServerToolWindowFactoryState\" value=\"false\" />\n    <property name=\"go.formatter.settings.were.checked\" value=\"true\" />\n    <property name=\"go.import.settings.migrated\" value=\"true\" />\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$\" />\n    <property name=\"project.structure.last.edited\" value=\"项目\" />\n    <property name=\"project.structure.proportion\" value=\"0.0\" />\n    <property name=\"project.structure.side.proportion\" value=\"0.0\" />\n    <property name=\"settings.editor.selected.configurable\" value=\"MavenSettings\" />\n    <property name=\"vue.rearranger.settings.migration\" value=\"true\" />\n  </component>\n  <component name=\"RecentsManager\">\n    <key name=\"CopyFile.RECENT_KEYS\">\n      <recent name=\"C:\\myCode\\ada_examination\\adalab-examination\\src\\main\\java\\com\\example\\adalabexamination\\plugin\" />\n    </key>\n  </component>\n  <component name=\"RunManager\" selected=\"应用程序.AdalabExaminationApplication\">\n    <configuration name=\"AdalabExaminationApplication\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.adalab.examination.AdalabExaminationApplication\" />\n      <module name=\"adalab-examination\" />\n      <extension name=\"coverage\">\n        <pattern>\n          <option name=\"PATTERN\" value=\"com.adalab.examination.*\" />\n          <option name=\"ENABLED\" value=\"true\" />\n        </pattern>\n      </extension>\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"MybatisPlusGenerator\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.adalab.examination.plugin.MybatisPlusGenerator\" />\n      <module name=\"adalabExamination\" />\n      <extension name=\"coverage\">\n        <pattern>\n          <option name=\"PATTERN\" value=\"com.adalab.examination.plugin.*\" />\n          <option name=\"ENABLED\" value=\"true\" />\n        </pattern>\n      </extension>\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"AdalabExaminationApplication (1)\" type=\"SpringBootApplicationConfigurationType\" factoryName=\"Spring Boot\">\n      <module name=\"adalabExamination\" />\n      <option name=\"SPRING_BOOT_MAIN_CLASS\" value=\"com.adalab.examination.AdalabExaminationApplication\" />\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"AdalabExaminationApplication\" type=\"SpringBootApplicationConfigurationType\" factoryName=\"Spring Boot\">\n      <module name=\"adalabExamination\" />\n      <option name=\"SPRING_BOOT_MAIN_CLASS\" value=\"com.example.adalabexamination.AdalabExaminationApplication\" />\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"应用程序.AdalabExaminationApplication\" />\n        <item itemvalue=\"应用程序.MybatisPlusGenerator\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"应用程序级\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"默认任务\">\n      <changelist id=\"034ae2e7-8322-4ed8-afdc-947b4127e638\" name=\"变更\" comment=\"\" />\n      <created>1661157461508</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1661157461508</updated>\n      <workItem from=\"1661157467022\" duration=\"6294000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"mybatisplus-&gt;student table\">\n      <created>1661161935116</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1661161935116</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"mybatisplus-&gt;student table\">\n      <created>1661166587849</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1661166587849</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"3\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State />\n          </value>\n        </entry>\n      </map>\n    </option>\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"mybatisplus-&gt;student table\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"mybatisplus-&gt;student table\" />\n  </component>\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\n    <expand />\n    <select />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision db3716f7786a40b3287c17e55f137b19ecb2bc99)
++++ b/.idea/workspace.xml	(date 1661244362361)
+@@ -4,14 +4,9 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="034ae2e7-8322-4ed8-afdc-947b4127e638" name="变更" comment="mybatisplus-&gt;student table">
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/adalab/examination/GitClone/GitUtils.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
++    <list default="true" id="034ae2e7-8322-4ed8-afdc-947b4127e638" name="变更" comment="">
+       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/StudentController.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class" afterDir="false" />
+     </list>
+@@ -28,6 +23,11 @@
+     </option>
+   </component>
+   <component name="Git.Settings">
++    <option name="PREVIOUS_COMMIT_AUTHORS">
++      <list>
++        <option value="Ayaya33 &lt;hzh553871310@163.com&gt;" />
++      </list>
++    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+   <component name="MarkdownSettingsMigration">
+@@ -135,7 +135,14 @@
+       <option name="project" value="LOCAL" />
+       <updated>1661166587849</updated>
+     </task>
+-    <option name="localTasksCounter" value="3" />
++    <task id="LOCAL-00003" summary="添加一个接口 clone学员代码">
++      <created>1661242321460</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1661242321460</updated>
++    </task>
++    <option name="localTasksCounter" value="4" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -154,7 +161,8 @@
+   </component>
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="mybatisplus-&gt;student table" />
+-    <option name="LAST_COMMIT_MESSAGE" value="mybatisplus-&gt;student table" />
++    <MESSAGE value="添加一个接口 clone学员代码" />
++    <option name="LAST_COMMIT_MESSAGE" value="添加一个接口 clone学员代码" />
+   </component>
+   <component name="XSLT-Support.FileAssociations.UIState">
+     <expand />
+Index: src/main/java/com/adalab/examination/controller/StudentController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.adalab.examination.controller;\n\n\nimport com.adalab.examination.entity.Student;\nimport com.adalab.examination.service.StudentService;\nimport org.eclipse.jgit.api.Git;\nimport org.eclipse.jgit.api.errors.GitAPIException;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.http.server.reactive.HttpHandler;\nimport org.springframework.web.bind.annotation.*;\n\nimport java.io.File;\nimport java.util.List;\nimport java.util.Map;\n\nimport static com.adalab.examination.GitClone.GitUtils.delAllFile;\n\n/**\n * <p>\n *  前端控制器\n * </p>\n *\n * @author Karl\n * @since 2022-08-22\n */\n@RestController\n@RequestMapping(\"/api/student\")\n@CrossOrigin\npublic class StudentController {\n    private final Logger logger = LoggerFactory.getLogger(this.getClass());\n    @Autowired\n    StudentService studentService;\n\n    @GetMapping(\"/ping\")\n    public String ping(){\n        return \"pong\";\n    }\n\n    @GetMapping(\"getRanking\")\n    public List<Student> getRanking(){\n        return studentService.list();\n    }\n\n    //在resources文件夹下根据学员姓名生成文件夹 clone学员的代码\n    @PostMapping(\"/studentCode\")\n    public String cloneCode(@RequestBody Map<String,String>map){\n        String gitURL = map.get(\"url\");\n        String path = System.getProperty(\"user.dir\");\n        String name = \"/\"+map.get(\"name\");\n        String localPath = path+\"/src/main/resources/studentCode\"+name;//+studentName\n        File file = new File(localPath);\n        if (file.exists()){\n            logger.info(\"删除文件结果:\"+delAllFile(localPath));\n        }\n\n        try {\n            Git git = Git.cloneRepository()\n                    .setURI(gitURL)\n                    .setDirectory(new File(localPath))\n                    .call();\n            logger.info(\"clone成功\"+git.toString());\n        } catch (GitAPIException e) {\n            logger.error(\"clone失败\");\n            e.printStackTrace();\n            return \"克隆失败\";\n        }\n        return \"OK\";\n    }\n\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/adalab/examination/controller/StudentController.java b/src/main/java/com/adalab/examination/controller/StudentController.java
+--- a/src/main/java/com/adalab/examination/controller/StudentController.java	(revision db3716f7786a40b3287c17e55f137b19ecb2bc99)
++++ b/src/main/java/com/adalab/examination/controller/StudentController.java	(date 1661246661749)
+@@ -5,6 +5,7 @@
+ import com.adalab.examination.service.StudentService;
+ import org.eclipse.jgit.api.Git;
+ import org.eclipse.jgit.api.errors.GitAPIException;
++import org.eclipse.jgit.api.errors.TransportException;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+ import org.springframework.beans.factory.annotation.Autowired;
+@@ -12,7 +13,10 @@
+ import org.springframework.web.bind.annotation.*;
+ 
+ import java.io.File;
++import java.text.SimpleDateFormat;
++import java.util.Date;
+ import java.util.List;
++import java.util.Locale;
+ import java.util.Map;
+ 
+ import static com.adalab.examination.GitClone.GitUtils.delAllFile;
+@@ -49,7 +53,14 @@
+         String gitURL = map.get("url");
+         String path = System.getProperty("user.dir");
+         String name = "/"+map.get("name");
+-        String localPath = path+"/src/main/resources/studentCode"+name;//+studentName
++        String pattern = "MM-dd-HH:mm:ss";
++        //获取当地时区
++        Locale locale = Locale.getDefault();
++        //利用SimpleDateFormat 进行时间格式的转换
++        SimpleDateFormat sdf = new SimpleDateFormat(pattern,locale);
++        String time = "/"+sdf.format(new Date());
++
++        String localPath = path+"/src/main/resources/studentCode"+name+time;//+studentName
+         File file = new File(localPath);
+         if (file.exists()){
+             logger.info("删除文件结果:"+delAllFile(localPath));
+@@ -60,9 +71,9 @@
+                     .setURI(gitURL)
+                     .setDirectory(new File(localPath))
+                     .call();
+-            logger.info("clone成功"+git.toString());
++            logger.info("clone成功!"+git.toString());
+         } catch (GitAPIException e) {
+-            logger.error("clone失败");
++            logger.error("clone失败!");
+             e.printStackTrace();
+             return "克隆失败";
+         }
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"VcsDirectoryMappings\">\n    <mapping directory=\"\" vcs=\"Git\" />\n    <mapping directory=\"$PROJECT_DIR$/src/main/java/com.adalab.examination/StudentCode/studentName\" vcs=\"Git\" />\n    <mapping directory=\"$PROJECT_DIR$/src/main/resources/studentCode/DIngZhEN\" vcs=\"Git\" />\n    <mapping directory=\"$PROJECT_DIR$/src/main/resources/studentCode/ayaya\" vcs=\"Git\" />\n    <mapping directory=\"$PROJECT_DIR$/src/main/resources/studentCode/https:/gitee.com/ayaya33/jgit-test.git\" vcs=\"Git\" />\n    <mapping directory=\"$PROJECT_DIR$/src/main/resources/studentCodeayaya\" vcs=\"Git\" />\n    <mapping directory=\"$PROJECT_DIR$/src/main/resources/studentName\" vcs=\"Git\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+--- a/.idea/vcs.xml	(revision db3716f7786a40b3287c17e55f137b19ecb2bc99)
++++ b/.idea/vcs.xml	(date 1661245917358)
+@@ -3,7 +3,17 @@
+   <component name="VcsDirectoryMappings">
+     <mapping directory="" vcs="Git" />
+     <mapping directory="$PROJECT_DIR$/src/main/java/com.adalab.examination/StudentCode/studentName" vcs="Git" />
++    <mapping directory="$PROJECT_DIR$/src/main/resources/studentCode/Ayaya/08-23-16:51:39" vcs="Git" />
++    <mapping directory="$PROJECT_DIR$/src/main/resources/studentCode/Ayaya/08-23-16:52:41" vcs="Git" />
++    <mapping directory="$PROJECT_DIR$/src/main/resources/studentCode/Ayaya/08-23-16:53:45" vcs="Git" />
++    <mapping directory="$PROJECT_DIR$/src/main/resources/studentCode/Ayaya/08-23-16:54:54" vcs="Git" />
++    <mapping directory="$PROJECT_DIR$/src/main/resources/studentCode/Ayaya/08-23-16:55:02" vcs="Git" />
+     <mapping directory="$PROJECT_DIR$/src/main/resources/studentCode/DIngZhEN" vcs="Git" />
++    <mapping directory="$PROJECT_DIR$/src/main/resources/studentCode/DIngZhEN/08-23-16:44:14" vcs="Git" />
++    <mapping directory="$PROJECT_DIR$/src/main/resources/studentCode/DIngZhEN/08-23-16:44:46" vcs="Git" />
++    <mapping directory="$PROJECT_DIR$/src/main/resources/studentCode/DingZhen/08-23-16:55:15" vcs="Git" />
++    <mapping directory="$PROJECT_DIR$/src/main/resources/studentCode/DingZhen/08-23-16:55:23" vcs="Git" />
++    <mapping directory="$PROJECT_DIR$/src/main/resources/studentCode/DingZhen/08-23-17:11:21" vcs="Git" />
+     <mapping directory="$PROJECT_DIR$/src/main/resources/studentCode/ayaya" vcs="Git" />
+     <mapping directory="$PROJECT_DIR$/src/main/resources/studentCode/https:/gitee.com/ayaya33/jgit-test.git" vcs="Git" />
+     <mapping directory="$PROJECT_DIR$/src/main/resources/studentCodeayaya" vcs="Git" />
