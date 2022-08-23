@@ -2,12 +2,13 @@ package com.adalab.examination.controller;
 
 
 import com.adalab.examination.entity.AccessTokenDTO;
+import com.adalab.examination.entity.GitHubUser;
 import com.adalab.examination.entity.Student;
+import com.adalab.examination.service.StudentService;
 import com.alibaba.fastjson.JSON;
 import okhttp3.*;
-import org.springframework.beans.factory.annotation.Value;
 
-import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.UUID;
 
 @RestController("/api/git")
 public class GitLoginController {
 
+    @Autowired
+    StudentService studentService;
 
     public final String CLIENTID = "d9f9e0e5413419ab273e";
 
@@ -62,15 +63,28 @@ public class GitLoginController {
         try {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
-            System.out.println("string2"+string);
-
-            Student student = JSON.parseObject(string, Student.class);//将string解析成GitHub对象
-
+            System.out.println("String2   "+string);
+            GitHubUser gitHubUser = JSON.parseObject(string, GitHubUser.class);//将string解析成GitHub对象
+            Student student = uploadDatabase(gitHubUser);
             return student;
         } catch (IOException e) {
             return null;
         }
 
+    }
+    private Student uploadDatabase(GitHubUser gitHubUser){
+        String name = gitHubUser.getLogin();
+        int id = gitHubUser.getId();
+        String email = gitHubUser.getEmail();
+        String avatar = gitHubUser.getAvatar_url();
+        Student student = new Student();
+        student.setId(id);
+        student.setName(name);
+        student.setEmail(email);
+        student.setAvatar(avatar);
+        student.setRanking(0);
+        studentService.save(student);
+        return student;
     }
 
     //第二次发送请求到github，并得到github返回token
