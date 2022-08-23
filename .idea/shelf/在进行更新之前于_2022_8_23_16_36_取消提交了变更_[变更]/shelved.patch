@@ -1,0 +1,79 @@
+Index: src/main/java/com/adalab/examination/controller/StudentController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.adalab.examination.controller;\r\n\r\n\r\nimport com.adalab.examination.entity.Student;\r\nimport com.adalab.examination.service.StudentService;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.http.server.reactive.HttpHandler;\r\nimport org.springframework.web.bind.annotation.CrossOrigin;\r\nimport org.springframework.web.bind.annotation.GetMapping;\r\nimport org.springframework.web.bind.annotation.RequestMapping;\r\n\r\nimport org.springframework.web.bind.annotation.RestController;\r\n\r\nimport java.util.List;\r\n\r\n/**\r\n * <p>\r\n *  前端控制器\r\n * </p>\r\n *\r\n * @author Karl\r\n * @since 2022-08-22\r\n */\r\n@RestController\r\n@RequestMapping(\"/api/student\")\r\n@CrossOrigin\r\npublic class StudentController {\r\n    @Autowired\r\n    StudentService studentService;\r\n\r\n    @GetMapping(\"/ping\")\r\n    public String ping(){\r\n        return \"pong\";\r\n    }\r\n\r\n    @GetMapping(\"getRanking\")\r\n    public List<Student> getRanking(){\r\n        return studentService.list();\r\n    }\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/adalab/examination/controller/StudentController.java b/src/main/java/com/adalab/examination/controller/StudentController.java
+--- a/src/main/java/com/adalab/examination/controller/StudentController.java	(revision 0bf90768673fdd4e2fc5549bbb64995b83eb4adb)
++++ b/src/main/java/com/adalab/examination/controller/StudentController.java	(date 1661243152643)
+@@ -3,6 +3,7 @@
+ 
+ import com.adalab.examination.entity.Student;
+ import com.adalab.examination.service.StudentService;
++import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.http.server.reactive.HttpHandler;
+ import org.springframework.web.bind.annotation.CrossOrigin;
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"034ae2e7-8322-4ed8-afdc-947b4127e638\" name=\"变更\" comment=\"   @GetMapping(&quot;getRanking&quot;)\">\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/GitLoginController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/pom.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/pom.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/test/java/com/adalab/examination/AdalabExaminationApplicationTests.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/test/java/com/adalab/examination/AdalabExaminationApplicationTests.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/target/test-classes/com/adalab/examination/AdalabExaminationApplicationTests.class\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/target/test-classes/com/adalab/examination/AdalabExaminationApplicationTests.class\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"HTML File\" />\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2DhhvSu7op7Ktwr5D3WD4cfvXXn\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n    <option name=\"showMembers\" value=\"true\" />\r\n    <option name=\"showVisibilityIcons\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"DefaultHtmlFileTemplate\" value=\"HTML File\" />\r\n    <property name=\"RequestMappingsPanelOrder0\" value=\"0\" />\r\n    <property name=\"RequestMappingsPanelOrder1\" value=\"1\" />\r\n    <property name=\"RequestMappingsPanelWidth0\" value=\"75\" />\r\n    <property name=\"RequestMappingsPanelWidth1\" value=\"75\" />\r\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\r\n    <property name=\"WebServerToolWindowFactoryState\" value=\"false\" />\r\n    <property name=\"go.formatter.settings.were.checked\" value=\"true\" />\r\n    <property name=\"go.import.settings.migrated\" value=\"true\" />\r\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$/src/main/java/com/example/adalabexamination/plugin\" />\r\n    <property name=\"project.structure.last.edited\" value=\"项目\" />\r\n    <property name=\"project.structure.proportion\" value=\"0.0\" />\r\n    <property name=\"project.structure.side.proportion\" value=\"0.0\" />\r\n    <property name=\"settings.editor.selected.configurable\" value=\"MavenSettings\" />\r\n    <property name=\"vue.rearranger.settings.migration\" value=\"true\" />\r\n  </component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\myCode\\ada_examination\\adalab-examination\\src\\main\\java\\com\\example\\adalabexamination\\plugin\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Spring Boot.AdalabExaminationApplication (1)\">\r\n    <configuration name=\"MybatisPlusGenerator\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.adalab.examination.plugin.MybatisPlusGenerator\" />\r\n      <module name=\"adalabExamination\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.adalab.examination.plugin.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"AdalabExaminationApplicationTests\" type=\"JUnit\" factoryName=\"JUnit\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <module name=\"adalabExamination\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.adalab.examination.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <option name=\"PACKAGE_NAME\" value=\"com.adalab.examination\" />\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.adalab.examination.AdalabExaminationApplicationTests\" />\r\n      <option name=\"TEST_OBJECT\" value=\"class\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"AdalabExaminationApplication (1)\" type=\"SpringBootApplicationConfigurationType\" factoryName=\"Spring Boot\">\r\n      <module name=\"adalabExamination\" />\r\n      <option name=\"SPRING_BOOT_MAIN_CLASS\" value=\"com.adalab.examination.AdalabExaminationApplication\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"AdalabExaminationApplication\" type=\"SpringBootApplicationConfigurationType\" factoryName=\"Spring Boot\">\r\n      <module name=\"adalabExamination\" />\r\n      <option name=\"SPRING_BOOT_MAIN_CLASS\" value=\"com.example.adalabexamination.AdalabExaminationApplication\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"JUnit.AdalabExaminationApplicationTests\" />\r\n        <item itemvalue=\"应用程序.MybatisPlusGenerator\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"应用程序级\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"默认任务\">\r\n      <changelist id=\"034ae2e7-8322-4ed8-afdc-947b4127e638\" name=\"变更\" comment=\"\" />\r\n      <created>1661157461508</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1661157461508</updated>\r\n      <workItem from=\"1661157467022\" duration=\"15637000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"mybatisplus-&gt;student table\">\r\n      <created>1661161935116</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1661161935116</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"mybatisplus-&gt;student table\">\r\n      <created>1661166587849</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1661166587849</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"   @GetMapping(&quot;getRanking&quot;)\">\r\n      <created>1661222359477</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1661222359478</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"4\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"mybatisplus-&gt;student table\" />\r\n    <MESSAGE value=\"   @GetMapping(&quot;getRanking&quot;)\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"   @GetMapping(&quot;getRanking&quot;)\" />\r\n  </component>\r\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\r\n    <expand />\r\n    <select />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 0bf90768673fdd4e2fc5549bbb64995b83eb4adb)
++++ b/.idea/workspace.xml	(date 1661243657151)
+@@ -4,13 +4,9 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="034ae2e7-8322-4ed8-afdc-947b4127e638" name="变更" comment="   @GetMapping(&quot;getRanking&quot;)">
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/GitLoginController.java" afterDir="false" />
++    <list default="true" id="034ae2e7-8322-4ed8-afdc-947b4127e638" name="变更" comment="github-login">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/test/java/com/adalab/examination/AdalabExaminationApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/adalab/examination/AdalabExaminationApplicationTests.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/adalab/examination/AdalabExaminationApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/adalab/examination/AdalabExaminationApplicationTests.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/StudentController.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -116,7 +112,7 @@
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+       <updated>1661157461508</updated>
+-      <workItem from="1661157467022" duration="15637000" />
++      <workItem from="1661157467022" duration="16607000" />
+     </task>
+     <task id="LOCAL-00001" summary="mybatisplus-&gt;student table">
+       <created>1661161935116</created>
+@@ -139,7 +135,14 @@
+       <option name="project" value="LOCAL" />
+       <updated>1661222359478</updated>
+     </task>
+-    <option name="localTasksCounter" value="4" />
++    <task id="LOCAL-00004" summary="github-login">
++      <created>1661243227753</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1661243227753</updated>
++    </task>
++    <option name="localTasksCounter" value="5" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -159,7 +162,8 @@
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="mybatisplus-&gt;student table" />
+     <MESSAGE value="   @GetMapping(&quot;getRanking&quot;)" />
+-    <option name="LAST_COMMIT_MESSAGE" value="   @GetMapping(&quot;getRanking&quot;)" />
++    <MESSAGE value="github-login" />
++    <option name="LAST_COMMIT_MESSAGE" value="github-login" />
+   </component>
+   <component name="XSLT-Support.FileAssociations.UIState">
+     <expand />

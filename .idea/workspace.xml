@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="034ae2e7-8322-4ed8-afdc-947b4127e638" name="变更" comment="mybatisplus-&gt;student table">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/adalab/examination/GitClone/GitUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="034ae2e7-8322-4ed8-afdc-947b4127e638" name="变更" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/adalab/examination/entity/GitHubUser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/GitLoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/GitLoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/adalab/examination/controller/StudentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/adalab/examination/controller/StudentController.class" afterDir="false" />
     </list>
@@ -63,7 +59,7 @@
       <recent name="C:\myCode\ada_examination\adalab-examination\src\main\java\com\example\adalabexamination\plugin" />
     </key>
   </component>
-  <component name="RunManager" selected="应用程序.AdalabExaminationApplication">
+  <component name="RunManager" selected="Spring Boot.AdalabExaminationApplication (1)">
     <configuration name="AdalabExaminationApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.adalab.examination.AdalabExaminationApplication" />
       <module name="adalab-examination" />
@@ -86,6 +82,38 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="adalabExamination" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <kind value="FILE" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+      <module name="adalabExamination" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="adalabExamination" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="adalabExamination" />
+      <option name="filePath" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -120,6 +148,7 @@
       <option name="presentableId" value="Default" />
       <updated>1661157461508</updated>
       <workItem from="1661157467022" duration="6294000" />
+      <workItem from="1661157467022" duration="16607000" />
     </task>
     <task id="LOCAL-00001" summary="mybatisplus-&gt;student table">
       <created>1661161935116</created>
@@ -135,7 +164,21 @@
       <option name="project" value="LOCAL" />
       <updated>1661166587849</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="   @GetMapping(&quot;getRanking&quot;)">
+      <created>1661222359477</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1661222359478</updated>
+    </task>
+    <task id="LOCAL-00004" summary="github-login">
+      <created>1661243227753</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1661243227753</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -151,9 +194,12 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="mybatisplus-&gt;student table" />
+    <MESSAGE value="   @GetMapping(&quot;getRanking&quot;)" />
+    <MESSAGE value="github-login" />
     <option name="LAST_COMMIT_MESSAGE" value="mybatisplus-&gt;student table" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
