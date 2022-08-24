@@ -9,8 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.HttpHandler;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.util.List;
@@ -39,9 +41,27 @@ public class StudentController {
         return "pong";
     }
 
+    /**
+     *
+     * @return 所有学生数据组成的LIST
+     */
     @GetMapping("getRanking")
     public List<Student> getRanking(){
         return studentService.list();
+    }
+
+    /**根据需求会有一个闯关页面收集学员更详细信息
+     *
+     * @param student
+     * @return
+     */
+    @PostMapping("updateStudent")
+    public String update(@RequestBody Student student){
+        if(studentService.updateById(student)){
+            return "success";
+        }else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
     //在resources文件夹下根据学员姓名生成文件夹 clone学员的代码
