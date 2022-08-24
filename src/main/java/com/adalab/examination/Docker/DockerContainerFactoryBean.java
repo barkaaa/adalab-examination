@@ -4,10 +4,6 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.*;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 
 @Component
@@ -18,15 +14,12 @@ public class DockerContainerFactoryBean {
         this.client = client;
     }
 
-    public String createContainer(Map<String, String> binds, String imageId, String name, String workFile, String[] cmd) {
+    public String createContainer(String stu, String testCode, String imageId, String name, String workFile, String[] cmd) {
         HostConfig hostConfig = newHostConfig();
+        Bind stuCodeMounting = new Bind(stu, new Volume(workFile));
+        Bind testCodeMounting = new Bind(testCode, new Volume(workFile + stu.substring(stu.lastIndexOf("/"))));
 
-        List<Bind> bindList = new ArrayList<>();
-
-        for (Map.Entry<String, String> entry : binds.entrySet()) {
-            bindList.add(new Bind(entry.getKey(), new Volume(entry.getValue())));
-        }
-        hostConfig.setBinds(bindList.toArray(Bind[]::new));
+        hostConfig.setBinds(stuCodeMounting, testCodeMounting);
         return client.createContainerCmd(imageId)
                 .withName(name)
                 .withHostConfig(hostConfig)
