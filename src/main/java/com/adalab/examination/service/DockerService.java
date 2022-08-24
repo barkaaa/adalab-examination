@@ -31,7 +31,7 @@ public class DockerService {
         this.containerFactoryBean = containerFactoryBean;
         Resource resource = new ClassPathResource("application.properties");
         Properties props = PropertiesLoaderUtils.loadProperties(resource);
-        this.resultFileName = props.getProperty("resultFileName");
+        this.resultFileName = props.getProperty("test.resultFileName");
     }
 
 
