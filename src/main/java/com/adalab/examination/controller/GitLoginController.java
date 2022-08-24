@@ -8,41 +8,53 @@ import com.adalab.examination.service.StudentService;
 import com.alibaba.fastjson.JSON;
 import okhttp3.*;
 
+import okhttp3.RequestBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-
-@RestController("/api/git")
+@RestController
+@RequestMapping
+@CrossOrigin
 public class GitLoginController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     StudentService studentService;
 
-    public final String CLIENTID = "d9f9e0e5413419ab273e";
+    public final String CLIENT_ID = "d9f9e0e5413419ab273e";
 
-    public final String CLIENTSECRET = "ba1e86d41d2382078aea528d7c7410dc560e128b";
+    public final String CLIENT_SECRET = "ba1e86d41d2382078aea528d7c7410dc560e128b";
 
     public final String URL = "http://localhost:8080/callback";
 
-    @GetMapping("sendLogin")
-    public void sendLogin(HttpSession session) {
-        //TODO
+    @RequestMapping("sendLogin")
+    public Response sendLogin() {
+        OkHttpClient client = new OkHttpClient();
+        //https://github.com/login/oauth/authorize?client_id=d9f9e0e5413419ab273e&redirect_uri=http://localhost:8080/callback&scope=user&state=1
+        Request request = new Request.Builder()
+                .url("https://github.com/login/oauth/authorize" +
+                        "?client_id="+ CLIENT_ID +
+                        "&redirect_uri="+URL +
+                        "&scope=user" +
+                        "&state=1")
+                .get().build();
+        try {
+            client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     @GetMapping("/callback")
     public Student getAccessToken(@RequestParam(name="code") String code,
                                  @RequestParam(name = "state") String state) {
 
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
-        accessTokenDTO.setClient_id(CLIENTID);
-        accessTokenDTO.setClient_secret(CLIENTSECRET);
+        accessTokenDTO.setClient_id(CLIENT_ID);
+        accessTokenDTO.setClient_secret(CLIENT_SECRET);
         accessTokenDTO.setCode(code);
         accessTokenDTO.setRedirect_uri(URL);
         accessTokenDTO.setState(state);
@@ -64,8 +76,11 @@ public class GitLoginController {
             String string = response.body().string();
             logger.info(string);
             GitHubUser gitHubUser = JSON.parseObject(string, GitHubUser.class);//将string解析成GitHub对象
-            Student student = uploadDatabase(gitHubUser);
-            return student;
+            Student student =studentService.getById(gitHubUser.getId());
+            if(student==null){
+                 return uploadDatabase(gitHubUser);
+            }
+                return student;
         } catch (IOException e) {
             return null;
         }
