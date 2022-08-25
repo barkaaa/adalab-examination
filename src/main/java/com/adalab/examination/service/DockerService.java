@@ -75,7 +75,7 @@ public class DockerService {
         cmd[0] = runCMD.substring(0, index);
         cmd[1] = runCMD.substring(index + 1);
         try {
-            return containerFactoryBean.createContainer(stuCodeFileName, testFileName, imageId, name, workDir, cmd);
+            return containerFactoryBean.createContainer(findLastPost(stuCodeFileName), testFileName, imageId, name, workDir, cmd);
         } catch (IOException e) {
             return null;
         }
@@ -87,10 +87,9 @@ public class DockerService {
      * @return 测试文件结果
      */
     public TestResult getResult(String stuFileName) {
-        File file = new File("src/main/resources");
         try {
-            String resourcePath = file.getCanonicalPath();
-            File res = new File(resourcePath + "/studentCode/" + stuFileName + "/" + resultFileName);
+            String lastPost = findLastPost(stuFileName);
+            File res = new File(lastPost + "/" + resultFileName);
             return new TestResult(res);
         } catch (IOException e) {
             TestResult result = new TestResult();
@@ -98,6 +97,17 @@ public class DockerService {
             return result;
         }
 
+    }
+
+    private String findLastPost(String stuFileName) throws IOException {
+        File file = new File("src/main/resources");
+        String resourcePath = file.getCanonicalPath();
+        File stuFileRepo = new File(resourcePath + "/studentCode/" + stuFileName);
+        var files = stuFileRepo.list();
+        if (files == null) throw new RuntimeException("目录没有文件");
+        var lastCodeFile = Arrays.stream(files).min((a, b) -> -a.compareTo(b));
+        if (lastCodeFile.isEmpty()) throw new RuntimeException("目录没有文件");
+        return stuFileRepo.getCanonicalPath() + "/" + lastCodeFile.get();
     }
 
     public void startContainer(String containerId) {
@@ -115,6 +125,7 @@ public class DockerService {
     public boolean checkContainer(String containerId) {
         return dockerClient.listContainersCmd().withIdFilter(List.of(containerId)).exec().isEmpty();
     }
+
     public List<Image> getImages() {
         return dockerClient.listImagesCmd().exec();
     }
