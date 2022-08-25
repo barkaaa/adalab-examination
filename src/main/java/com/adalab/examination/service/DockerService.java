@@ -4,6 +4,7 @@ import com.adalab.examination.Docker.DockerContainerFactoryBean;
 import com.adalab.examination.Docker.DockerImageFactoryBean;
 import com.adalab.examination.entity.TestResult;
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.model.Image;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +38,11 @@ public class DockerService {
 
     }
 
-
+    /**
+     * @param fileName dockerFile位置
+     * @param tags     生产镜像的标签
+     * @return 镜像的服务器ID
+     */
     public String createImage(String fileName, String... tags) {
         try {
             return imageFactoryBean.createImage(fileName, Arrays.stream(tags).collect(Collectors.toSet()));
@@ -103,5 +110,12 @@ public class DockerService {
 
     public void removeImage(String imageId) {
         dockerClient.removeImageCmd(imageId).exec();
+    }
+
+    public boolean checkContainer(String containerId) {
+        return dockerClient.listContainersCmd().withIdFilter(List.of(containerId)).exec().isEmpty();
+    }
+    public List<Image> getImages() {
+        return dockerClient.listImagesCmd().exec();
     }
 }

@@ -19,8 +19,13 @@ public class TestController {
         String containerId = service.createContainer(imageId,
                 "2022",
                 "test.py", "/test", "test_container", "python3 test.py");
+
         service.startContainer(containerId);
-        Thread.sleep(1000);
+
+        while (!service.checkContainer(containerId)) {
+            Thread.sleep(500);
+        }
+
         service.removeContainer(containerId);
         return service.getResult("2022");
     }

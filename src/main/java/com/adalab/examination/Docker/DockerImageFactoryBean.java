@@ -20,7 +20,6 @@ public class DockerImageFactoryBean {
     public String createImage(String fileName, Set<String> tags) throws IOException {
         File file = new File("src/main/resources");
         String resourcePath = file.getCanonicalPath();
-
         return client.buildImageCmd(new File(resourcePath + "/dockerFiles/" + fileName))
                 .withTags(tags)
                 .exec(new BuildImageResultCallback())
