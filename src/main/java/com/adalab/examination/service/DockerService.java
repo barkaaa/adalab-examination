@@ -20,11 +20,11 @@ import java.util.stream.Collectors;
 @Service
 public class DockerService {
 
-    DockerClient dockerClient;
-    DockerImageFactoryBean imageFactoryBean;
-    DockerContainerFactoryBean containerFactoryBean;
+    private final  DockerClient dockerClient;
+    private final DockerImageFactoryBean imageFactoryBean;
+    private final  DockerContainerFactoryBean containerFactoryBean;
     //在application.properties中获取
-    String resultFileName;
+    private final String resultFileName;
 
     DockerService(DockerClient dockerClient,
                   DockerImageFactoryBean imageFactoryBean,

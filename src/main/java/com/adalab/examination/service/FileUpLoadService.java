@@ -12,7 +12,7 @@ import java.util.UUID;
 @Service
 public class FileUpLoadService {
 
-    DockerService dockerService;
+    private final DockerService dockerService;
 
     FileUpLoadService(DockerService dockerService) {
         this.dockerService = dockerService;

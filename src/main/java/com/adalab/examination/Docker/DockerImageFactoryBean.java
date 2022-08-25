@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Component
 public class DockerImageFactoryBean {
-    DockerClient client;
+    private final  DockerClient client;
 
     DockerImageFactoryBean(DockerClient client) {
         this.client = client;
