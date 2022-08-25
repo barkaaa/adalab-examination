@@ -58,6 +58,16 @@ public class StudentController {
         return studentService.list();
     }
 
+    @GetMapping("getStudent/{id}")
+    public Student getStudent(@PathVariable int id){
+        Student student = studentService.getById(id);
+        if(student!=null){
+            return student;
+        }else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     /**根据需求会有一个闯关页面收集学员更详细信息
      *
      * @param student

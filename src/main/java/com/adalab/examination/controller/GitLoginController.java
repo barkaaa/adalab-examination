@@ -6,6 +6,7 @@ import com.adalab.examination.entity.GitHubUser;
 import com.adalab.examination.entity.Student;
 import com.adalab.examination.service.StudentService;
 import com.alibaba.fastjson.JSON;
+import lombok.SneakyThrows;
 import okhttp3.*;
 
 import okhttp3.RequestBody;
@@ -14,7 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.http.HttpResponse;
+
 @RestController
 @RequestMapping
 @CrossOrigin
@@ -30,27 +34,13 @@ public class GitLoginController {
 
     public final String URL = "http://localhost:8080/callback";
 
-    @RequestMapping("sendLogin")
-    public Response sendLogin() {
-        OkHttpClient client = new OkHttpClient();
-        //https://github.com/login/oauth/authorize?client_id=d9f9e0e5413419ab273e&redirect_uri=http://localhost:8080/callback&scope=user&state=1
-        Request request = new Request.Builder()
-                .url("https://github.com/login/oauth/authorize" +
-                        "?client_id="+ CLIENT_ID +
-                        "&redirect_uri="+URL +
-                        "&scope=user" +
-                        "&state=1")
-                .get().build();
-        try {
-            client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
+    @SneakyThrows
     @GetMapping("/callback")
-    public Student getAccessToken(@RequestParam(name="code") String code,
-                                 @RequestParam(name = "state") String state) {
+    public void getAccessToken(@RequestParam(name="code") String code,
+                                 @RequestParam(name = "state") String state,
+                               HttpServletResponse resp
+    ) {
 
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(CLIENT_ID);
@@ -60,9 +50,14 @@ public class GitLoginController {
         accessTokenDTO.setState(state);
         //进行doPost请求，获取access_token
         String token = getAccessToken(accessTokenDTO);
+        if(token==null){
+            resp.sendRedirect("http://localhost:8001/student");
+            //TODO
+//            return "redirect:http://localhost:8001/student";
+        }
         Student student = getUser(token);
-
-        return student;
+        resp.sendRedirect("http://localhost:8001/challenge");
+//        return "redirect:http://localhost:8001/markdown";
     }
 
     public Student getUser(String accessToken){
