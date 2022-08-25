@@ -74,6 +74,7 @@ public class GitLoginController {
         try {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
+            System.out.println(string);
             logger.info(string);
             GitHubUser gitHubUser = JSON.parseObject(string, GitHubUser.class);//将string解析成GitHub对象
             Student student =studentService.getById(gitHubUser.getId());
