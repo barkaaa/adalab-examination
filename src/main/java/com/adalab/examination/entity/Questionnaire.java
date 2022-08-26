@@ -34,5 +34,9 @@ public class Questionnaire implements Serializable {
 
     private String option;
 
+    private String isMultiple;
+
+    private String isAddtional;
+
 
 }

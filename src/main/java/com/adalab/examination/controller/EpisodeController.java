@@ -25,9 +25,17 @@ public class EpisodeController {
         this.episodeService = episodeService;
     }
 
-    String uploadDockerFile() {
-        //todo
-        return null;
+    /**
+     * upload Docker File
+     * @param file docker file
+     * @param tags 用户输入的tag
+     * @return
+     */
+    @GetMapping("/docker")
+    String uploadDockerFile(@RequestPart("docker") MultipartFile file,@RequestParam("tag[]")String[]tags) {
+
+
+        return dockerService.createImage(file.getName(),tags);
     }
 
     @PostMapping("/createEpisode")
@@ -44,6 +52,7 @@ public class EpisodeController {
         return "上传成功";
     }
 
+    @GetMapping("/test")
     TestResult doTest() {
         //todo
         return null;

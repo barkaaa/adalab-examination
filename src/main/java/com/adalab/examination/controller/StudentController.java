@@ -6,6 +6,7 @@ import com.adalab.examination.service.StudentService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -83,6 +84,14 @@ public class StudentController {
         student.setBeginTime(localDateTime);
         studentService.updateById(student);
         return localDateTime.plusDays(CHALLENGE_TIME);
+    }
+
+    @PostMapping("/getDetail")
+    public Student getDetail(@NotNull @RequestBody Student student){
+        LambdaQueryWrapper<Student> studentQuery = new LambdaQueryWrapper<>();
+        studentQuery.eq(Student::getName,student.getName());
+        Student one = studentService.getOne(studentQuery);
+        return one;
     }
 
     /**根据需求会有一个闯关页面收集学员更详细信息
