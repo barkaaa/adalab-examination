@@ -2,10 +2,7 @@ package com.adalab.examination.controller;
 
 import com.adalab.examination.service.impl.OSSService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.OutputStream;
@@ -79,10 +76,13 @@ public class OSSController {
      * @param fileName
      * @param expSeconds
      */
-    @PostMapping(value = "/getSingeNatureUrl")
+    @GetMapping(value = "/getSingeNatureUrl")
+
     public String getSingeNatureUrl(@RequestParam("fileName") String fileName, @RequestParam("expSeconds") int expSeconds) {
         return ossService.getSingeNatureUrl(fileName, expSeconds);
     }
+
+
 
     /**
      * 设置文件访问权限
