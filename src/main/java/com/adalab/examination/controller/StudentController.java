@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
+import java.security.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
 import java.util.Locale;
@@ -41,8 +43,12 @@ import static com.adalab.examination.GitClone.GitUtils.getFiles;
 @CrossOrigin
 public class StudentController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     StudentService studentService;
+
+    //挑战规定的时间
+    private final int CHALLENGE_TIME = 5;
 
     @GetMapping("/ping")
     public String ping(){
@@ -66,6 +72,20 @@ public class StudentController {
         }else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    /**
+     * 前端点下开始闯关按钮，调用这个接口，数据库中放入开始时间
+     * @param id 根据id查学生
+     * @return 这个学生的挑战截至时间
+     */
+    @GetMapping("begin/{id}")
+    public LocalDateTime begin(@PathVariable int id){
+        Student student = studentService.getById(id);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        student.setBeginTime(localDateTime);
+        studentService.updateById(student);
+        return localDateTime.plusDays(CHALLENGE_TIME);
     }
 
     /**根据需求会有一个闯关页面收集学员更详细信息
