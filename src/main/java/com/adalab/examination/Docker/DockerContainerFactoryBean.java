@@ -13,7 +13,7 @@ import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 
 @Component
 public class DockerContainerFactoryBean {
-    private final   DockerClient client;
+    private final DockerClient client;
 
     DockerContainerFactoryBean(DockerClient client) {
         this.client = client;

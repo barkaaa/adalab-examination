@@ -21,11 +21,12 @@ public class MybatisPlusGenerator {
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir("src/main/java");
-        gc.setServiceName("%sService");	//去掉Service接口的首字母I
+        gc.setServiceName("%sService");    //去掉Service接口的首字母I
         gc.setAuthor("Karl");
         gc.setOpen(false);
 //        gc.setFileOverride(true);
         mpg.setGlobalConfig(gc);
+
 
         // 3、数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
@@ -52,7 +53,8 @@ public class MybatisPlusGenerator {
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
 
-        strategy.setInclude("student");
+        strategy.setInclude("student", "episode");
+
 
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
 
