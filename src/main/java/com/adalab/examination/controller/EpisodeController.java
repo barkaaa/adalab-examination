@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/api/episode")
@@ -27,29 +32,28 @@ public class EpisodeController {
 
     /**
      * upload Docker File
+     *
      * @param file docker file
      * @param tags 用户输入的tag
      * @return
      */
     @GetMapping("/docker")
-    String uploadDockerFile(@RequestPart("docker") MultipartFile file,@RequestParam("tag[]")String[]tags) {
+    String uploadDockerFile(@RequestPart("docker") MultipartFile file, @RequestParam("tag[]") String[] tags) {
 
-
-        return dockerService.createImage(file.getName(),tags);
+        return dockerService.createImage(file.getName(), tags);
     }
 
-    @PostMapping("/createEpisode")
-    String uploadTestFile(@RequestPart("test") MultipartFile file, @RequestPart("episode") Episode episode, HttpServletResponse response) {
-        String newName = fileUpLoadService.uploadTestFile(file);
-        if (file.getOriginalFilename() == null) {
-            response.setStatus(400);
-            return "400 BadRequest";
-        }
-        episode.setTestFileUrl(newName);
-        episode.setCmd(episode.getCmd().replaceFirst(file.getOriginalFilename(), newName));
-        episodeService.save(episode);
+    @PostMapping("/episode")
+    String uploadTestFile(@RequestPart(value = "test") MultipartFile[] files, @RequestPart(value = "episode") Episode episode, HttpServletResponse response) {
 
-        return "上传成功";
+            String newName = fileUpLoadService.uploadTestFile(files);
+
+            episode.setTestFileUrl(newName);
+
+            episodeService.saveOrUpdate(episode);
+
+            return "上传成功";
+
     }
 
     @GetMapping("/test")
@@ -58,5 +62,17 @@ public class EpisodeController {
         return null;
     }
 
+
+    @DeleteMapping("/episode/{id}")
+    String delete(@PathVariable("id") int id) {
+        Episode episode = episodeService.getById(id);
+        episodeService.removeById(id);
+        try {
+            Files.delete(Paths.get("src/main/resources/testFile/" + episode.getTestFileUrl()));
+        } catch (IOException e) {
+            return "删除失败";
+        }
+        return "删除成功";
+    }
 
 }

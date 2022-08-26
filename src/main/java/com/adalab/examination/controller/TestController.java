@@ -20,10 +20,10 @@ public class TestController {
 
     @GetMapping("/test")
     TestResult test() throws InterruptedException {
-        String imageId = service.createImage("DockerFile", "spring_test_image2");
+        String imageId = service.createImage("DockerFile", "spring_test_image3");
         String containerId = service.createContainer(imageId,
-                "Ayaya", 1,
-                "test.py", "/test", "test_container", "python3 test.py");
+                "Ayaya", 2,
+                "6fcf23b8-ea87-466c-852a-6c6c9f589824", "/test", "test_container", "python3 test.py");
 
         service.startContainer(containerId);
 
@@ -41,8 +41,8 @@ public class TestController {
      */
 
     @PostMapping("/uploadT")
-    public String uploadT(@RequestPart("test") MultipartFile file) {
-        return fileUpLoadService.uploadTestFile(file);
+    public String uploadT(@RequestPart("test") MultipartFile[] files) {
+        return fileUpLoadService.uploadTestFile(files);
     }
 
     /**

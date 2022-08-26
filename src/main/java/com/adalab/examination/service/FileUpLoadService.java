@@ -21,23 +21,21 @@ public class FileUpLoadService {
     /**
      * @return 返回""则失败
      */
-    public String uploadTestFile(MultipartFile file) {
-        if (!file.isEmpty()) {
+    public String uploadTestFile(MultipartFile[] files) {
+        if (files.length != 0) {
             try {
                 File sourceFile = new File("src/main/resources");
                 String resourcePath = sourceFile.getCanonicalPath();
-
-                String OriginalFilename = file.getOriginalFilename();//获取原文件名
-                if (OriginalFilename == null) {
+                //重新随机生成名字
+                String filename = UUID.randomUUID() + "";
+                File newFile = new File(resourcePath + "/" + filename);
+                if (!newFile.mkdir()) {
                     return "";
                 }
-
-                String suffixName = OriginalFilename.substring(OriginalFilename.lastIndexOf("."));//获取文件后缀名
-                //重新随机生成名字
-                String filename = UUID.randomUUID() + suffixName;
-                File localFile = new File(resourcePath + "/testFile/" + filename);
-
-                file.transferTo(localFile); //把上传的文件保存至本地
+                for (MultipartFile f : files) {
+                    File temp = new File(newFile.getCanonicalPath() + "/" + f.getOriginalFilename());
+                    f.transferTo(temp);
+                }
                 return filename;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -58,7 +56,7 @@ public class FileUpLoadService {
             file.transferTo(localFile);
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
             String now3 = df.format(System.currentTimeMillis());
-            return dockerService.createImage("DockerFile",now3);
+            return dockerService.createImage("DockerFile", now3);
         } catch (IOException e) {
             e.printStackTrace();
             return "";

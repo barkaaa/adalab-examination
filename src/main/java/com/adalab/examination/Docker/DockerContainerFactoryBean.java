@@ -33,7 +33,7 @@ public class DockerContainerFactoryBean {
         return client.createContainerCmd(imageId)
                 .withName(name)
                 .withHostConfig(hostConfig)
-                .withWorkingDir(workFile)
+                .withWorkingDir(workFile + "/" + testFileName)
                 .withCmd(cmd)
                 .exec().getId();
     }
