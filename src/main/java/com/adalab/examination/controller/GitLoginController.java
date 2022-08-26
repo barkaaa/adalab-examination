@@ -7,17 +7,15 @@ import com.adalab.examination.entity.Student;
 import com.adalab.examination.service.StudentService;
 import com.alibaba.fastjson.JSON;
 import lombok.SneakyThrows;
-import okhttp3.*;
-
 import okhttp3.RequestBody;
+import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.http.HttpResponse;
+import java.util.Objects;
 
 @RestController
 @RequestMapping
@@ -25,7 +23,7 @@ import java.net.http.HttpResponse;
 public class GitLoginController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Autowired
+    final
     StudentService studentService;
 
     public final String CLIENT_ID = "d9f9e0e5413419ab273e";
@@ -33,6 +31,10 @@ public class GitLoginController {
     public final String CLIENT_SECRET = "ba1e86d41d2382078aea528d7c7410dc560e128b";
 
     public final String URL = "http://localhost:8080/callback";
+
+    public GitLoginController(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
 
     @SneakyThrows
@@ -77,11 +79,7 @@ public class GitLoginController {
             } else {
                 Student student = studentService.getById(gitHubUser.getId());
                 //student为null，新用户，需要上传数据库，老用户直接返回
-                if (student == null) {
-                    return uploadDatabase(gitHubUser);
-                } else {
-                    return student;
-                }
+                return Objects.requireNonNullElseGet(student, () -> uploadDatabase(gitHubUser));
             }
         } catch (IOException e) {
             logger.error("getUser Error");
@@ -121,8 +119,7 @@ public class GitLoginController {
             String string = response.body().string();
             logger.info("token:" + string);
             String[] split = string.split("&");
-            String token = split[0].split("=")[1];
-            return token;
+            return split[0].split("=")[1];
         } catch (IOException e) {
             logger.error("获取githubToken时网络出错");
         }

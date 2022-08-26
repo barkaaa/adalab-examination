@@ -1,7 +1,6 @@
 package com.adalab.examination.controller;
 
 import com.adalab.examination.service.impl.OSSService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,8 +15,11 @@ import java.util.List;
 @RequestMapping("/api/oss")
 public class OSSController {
 
-    @Autowired
-    private OSSService ossService;
+    private final OSSService ossService;
+
+    public OSSController(OSSService ossService) {
+        this.ossService = ossService;
+    }
 
     /**
      * 上传文件

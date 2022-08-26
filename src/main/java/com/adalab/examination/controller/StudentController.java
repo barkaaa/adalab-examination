@@ -1,35 +1,25 @@
 package com.adalab.examination.controller;
 
 
-import com.adalab.examination.GitClone.DirectoryUtils;
 import com.adalab.examination.entity.Student;
 import com.adalab.examination.service.StudentService;
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.HttpHandler;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
-import java.security.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
 import static com.adalab.examination.GitClone.GitUtils.delAllFile;
-import static com.adalab.examination.GitClone.GitUtils.getFiles;
 
 /**
  * <p>
@@ -45,11 +35,15 @@ import static com.adalab.examination.GitClone.GitUtils.getFiles;
 public class StudentController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
+    final
     StudentService studentService;
 
     //挑战规定的时间
     private final int CHALLENGE_TIME = 5;
+
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
     @GetMapping("/ping")
     public String ping(){
