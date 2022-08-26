@@ -16,6 +16,7 @@ public class DirectoryUtils {
                 for (File value : files) {
                     if (!value.isDirectory()) {
                         list.add(value.getName());
+                        //把傻嗨/.git踢出去
                     } else if (!value.getName().endsWith(".git")){
                         list.add(traverseDir(value.getAbsolutePath()));
                     }

@@ -112,11 +112,11 @@ public class StudentController {
         String gitURL = map.get("url");
         String path = System.getProperty("user.dir");
         String name = "/"+map.get("name");
-        String pattern = "MM-dd-HH:mm:ss";
+//        String pattern = "MM-dd-HH:mm:ss";
         //获取当地时区
         Locale locale = Locale.getDefault();
         //利用SimpleDateFormat 进行时间格式的转换
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern,locale);
+//        SimpleDateFormat sdf = new SimpleDateFormat(pattern,locale);
 //        String time = "/"+sdf.format(new Date());
         String time = "/"+System.currentTimeMillis();
 

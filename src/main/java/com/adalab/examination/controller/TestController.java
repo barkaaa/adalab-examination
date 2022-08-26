@@ -22,7 +22,7 @@ public class TestController {
 
     @GetMapping("/test")
     TestResult test() throws InterruptedException {
-        String imageId = service.createImage("DockerFile", "spring_test_image");
+        String imageId = service.createImage("DockerFile", "spring_test_image2");
         String containerId = service.createContainer(imageId,
                 "2022",
                 "test.py", "/test", "test_container", "python3 test.py");
