@@ -61,9 +61,9 @@ public class OSSService {
                 objectMetadata.setContentType(file.getContentType());
             }
             objectMetadata.setContentDisposition("inline;filename=" + fileName);
-            fileName = storagePath + "/" + fileName;
+            String newFileName = storagePath + "/" + fileName;
             // 上传文件
-            ossClient.putObject(ossConfiguration.getBucketName(), fileName, inputStream, objectMetadata);
+            ossClient.putObject(ossConfiguration.getBucketName(), newFileName, inputStream, objectMetadata);
         } catch (IOException e) {
             log.error("Error occurred: {}", e.getMessage(), e);
         }
