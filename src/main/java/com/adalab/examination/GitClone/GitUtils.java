@@ -54,4 +54,32 @@ public class GitUtils {
         }
         return flag;
     }
+    /**
+     * 递归获取某路径下的所有文件，文件夹，并输出
+     */
+    public static void getFiles(String clientBase) {
+        File file = new File(clientBase);
+        // 如果这个路径是文件夹
+        if (file.isDirectory()) {
+            // 获取路径下的所有文件
+            File[] files = file.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                // 如果还是文件夹 递归获取里面的文件 文件夹
+                if (files[i].isDirectory()&&!files[i].getName().endsWith(".git")) {
+
+                    System.out.println("目录：" + files[i].getName());
+                    //继续读取文件夹里面的所有文件
+                    getFiles(files[i].getPath());
+                } else {
+                    if (!files[i].getName().endsWith(".git")){
+                        System.out.println("文件：" + files[i].getName());
+
+                    }
+
+                }
+            }
+        } else {
+            System.out.println("文件：" + file.getPath());
+        }
+    }
 }

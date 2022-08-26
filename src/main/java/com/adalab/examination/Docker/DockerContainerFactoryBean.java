@@ -2,31 +2,34 @@ package com.adalab.examination.Docker;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.*;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 
 @Component
 public class DockerContainerFactoryBean {
-    DockerClient client;
+    private final   DockerClient client;
 
     DockerContainerFactoryBean(DockerClient client) {
         this.client = client;
+
     }
 
-    public String createContainer(Map<String, String> binds, String imageId, String name, String workFile, String[] cmd) {
+    public String createContainer(String stuFilePath, String testFileName, String imageId, String name, String workFile, String[] cmd) throws IOException {
         HostConfig hostConfig = newHostConfig();
+        File file = new File("src/main/resources");
+        String resourcePath = file.getCanonicalPath();
 
-        List<Bind> bindList = new ArrayList<>();
+        Bind stuCodeMounting = new Bind(stuFilePath, new Volume(workFile + "/target"));
 
-        for (Map.Entry<String, String> entry : binds.entrySet()) {
-            bindList.add(new Bind(entry.getKey(), new Volume(entry.getValue())));
-        }
-        hostConfig.setBinds(bindList.toArray(Bind[]::new));
+        Bind testCodeMounting = new Bind(resourcePath + "/testFile/" + testFileName, new Volume(workFile + "/" + testFileName));
+
+        hostConfig.setBinds(stuCodeMounting, testCodeMounting);
         return client.createContainerCmd(imageId)
                 .withName(name)
                 .withHostConfig(hostConfig)
@@ -34,5 +37,6 @@ public class DockerContainerFactoryBean {
                 .withCmd(cmd)
                 .exec().getId();
     }
+
 
 }
