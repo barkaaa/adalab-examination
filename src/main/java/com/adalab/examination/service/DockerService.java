@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 @Service
 public class DockerService {
 
-    private final  DockerClient dockerClient;
+    private final DockerClient dockerClient;
     private final DockerImageFactoryBean imageFactoryBean;
-    private final  DockerContainerFactoryBean containerFactoryBean;
+    private final DockerContainerFactoryBean containerFactoryBean;
     //在application.properties中获取
     private final String resultFileName;
 
@@ -61,7 +61,7 @@ public class DockerService {
      * @return 生成容器在docker服务的位置
      */
 
-    public String createContainer(String imageId, String stuCodeFileName,
+    public String createContainer(String imageId, String stuCodeFileName, int ep,
                                   String testFileName, String workDir,
                                   String name, String runCMD) {
         int index = 0;
@@ -75,7 +75,7 @@ public class DockerService {
         cmd[0] = runCMD.substring(0, index);
         cmd[1] = runCMD.substring(index + 1);
         try {
-            return containerFactoryBean.createContainer(findLastPost(stuCodeFileName), testFileName, imageId, name, workDir, cmd);
+            return containerFactoryBean.createContainer(findLastPost(stuCodeFileName, ep), testFileName, imageId, name, workDir, cmd);
         } catch (IOException e) {
             return null;
         }
@@ -86,9 +86,9 @@ public class DockerService {
      * @param stuFileName 学员代码文件夹名称
      * @return 测试文件结果
      */
-    public TestResult getResult(String stuFileName) {
+    public TestResult getResult(String stuFileName, int ep) {
         try {
-            String lastPost = findLastPost(stuFileName);
+            String lastPost = findLastPost(stuFileName, ep);
             File res = new File(lastPost + "/" + resultFileName);
             return new TestResult(res);
         } catch (IOException e) {
@@ -99,10 +99,10 @@ public class DockerService {
 
     }
 
-    private String findLastPost(String stuFileName) throws IOException {
+    private String findLastPost(String stuFileName, int ep) throws IOException {
         File file = new File("src/main/resources");
         String resourcePath = file.getCanonicalPath();
-        File stuFileRepo = new File(resourcePath + "/studentCode/" + stuFileName);
+        File stuFileRepo = new File(resourcePath + "/studentCode/" + stuFileName + "/step" + ep);
         var files = stuFileRepo.list();
         if (files == null) throw new RuntimeException("目录没有文件");
         var lastCodeFile = Arrays.stream(files).min((a, b) -> -a.compareTo(b));

@@ -6,8 +6,6 @@ import com.adalab.examination.service.FileUpLoadService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 
 @RestController
 @RequestMapping("api/test")
@@ -24,7 +22,7 @@ public class TestController {
     TestResult test() throws InterruptedException {
         String imageId = service.createImage("DockerFile", "spring_test_image2");
         String containerId = service.createContainer(imageId,
-                "2022",
+                "Ayaya", 1,
                 "test.py", "/test", "test_container", "python3 test.py");
 
         service.startContainer(containerId);
@@ -34,12 +32,12 @@ public class TestController {
         }
 
         service.removeContainer(containerId);
-        return service.getResult("2022");
+        return service.getResult("Ayaya", 1);
     }
 
     /**
-     * 1.文件保存在服务器，url地址保存在数据库
-     * 上传成功之后返回成功保存的url地址
+     * 1.文件保存在服务器，文件名保存在数据库
+     * 上传成功之后返回文件名
      */
 
     @PostMapping("/uploadT")
@@ -47,6 +45,9 @@ public class TestController {
         return fileUpLoadService.uploadTestFile(file);
     }
 
+    /**
+     * 上传dockerFile自动生成镜像不进行保存
+     */
     @PostMapping("/uploadD")
     public String uploadD(@RequestPart("docker") MultipartFile file) {
         return fileUpLoadService.uploadDockerFile(file);
