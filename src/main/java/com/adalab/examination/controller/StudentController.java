@@ -6,6 +6,7 @@ import com.adalab.examination.entity.Student;
 import com.adalab.examination.service.StudentService;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.slf4j.Logger;
@@ -61,7 +62,9 @@ public class StudentController {
      */
     @GetMapping("getRanking")
     public List<Student> getRanking(){
-        return studentService.list();
+        LambdaQueryWrapper<Student> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        studentLambdaQueryWrapper.orderByDesc(Student::getRanking);
+        return studentService.list(studentLambdaQueryWrapper);
     }
 
     @GetMapping("getStudent/{id}")
@@ -139,14 +142,14 @@ public class StudentController {
 
 
     //获取学员代码提交历史记录的文件结构树
-    @PostMapping("/studentCode/FilesTree")
-    public Object getFilesTree(){
+    @PostMapping("/studentCode/FilesTree/{name}")
+    public  HashMap<String, Object> getFilesTree(){
 
         String localPath = System.getProperty("user.dir")+"/src/main/resources/studentCode";
         HashMap<String, Object> hashMap = traverseDir(localPath);
-        JSONObject json = new JSONObject(hashMap);
-        logger.info("获取到结构树:"+ json);
-        return json;
+
+        logger.info("获取到结构树:");
+        return hashMap;
     }
 
 
