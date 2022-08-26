@@ -1,20 +1,17 @@
 package com.adalab.examination.controller;
 
 
-import com.adalab.examination.GitClone.DirectoryUtils;
 import com.adalab.examination.entity.Student;
 import com.adalab.examination.service.StudentService;
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.HttpHandler;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,7 +26,6 @@ import java.util.Map;
 
 import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
 import static com.adalab.examination.GitClone.GitUtils.delAllFile;
-import static com.adalab.examination.GitClone.GitUtils.getFiles;
 
 /**
  * <p>
@@ -89,6 +85,14 @@ public class StudentController {
         student.setBeginTime(localDateTime);
         studentService.updateById(student);
         return localDateTime.plusDays(CHALLENGE_TIME);
+    }
+
+    @PostMapping("/getDetail")
+    public Student getDetail(@NotNull @RequestBody Student student){
+        LambdaQueryWrapper<Student> studentQuery = new LambdaQueryWrapper<>();
+        studentQuery.eq(Student::getName,student.getName());
+        Student one = studentService.getOne(studentQuery);
+        return one;
     }
 
     /**根据需求会有一个闯关页面收集学员更详细信息
