@@ -49,7 +49,7 @@ public class TestController {
      * 上传dockerFile自动生成镜像不进行保存
      */
     @PostMapping("/uploadD")
-    public String uploadD(@RequestPart("docker") MultipartFile file, @RequestPart("name") String name) {
-        return fileUpLoadService.uploadDockerFile(file, name);
+    public String uploadD(@RequestPart("docker") MultipartFile file) {
+        return fileUpLoadService.uploadDockerFile(file);
     }
 }
