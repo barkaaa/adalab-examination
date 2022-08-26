@@ -21,12 +21,11 @@ public class MybatisPlusGenerator {
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir("src/main/java");
-        gc.setServiceName("%sService");    //去掉Service接口的首字母I
+        gc.setServiceName("%sService");	//去掉Service接口的首字母I
         gc.setAuthor("Karl");
         gc.setOpen(false);
 //        gc.setFileOverride(true);
         mpg.setGlobalConfig(gc);
-
 
         // 3、数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
