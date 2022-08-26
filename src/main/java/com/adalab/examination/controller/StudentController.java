@@ -108,19 +108,12 @@ public class StudentController {
     //在resources文件夹下根据学员姓名生成文件夹 clone学员的代码
     @PostMapping("/studentCode")
     public String cloneCode(@RequestBody Map<String,String>map){
-
+        String step = "/step"+map.get("step");
         String gitURL = map.get("url");
         String path = System.getProperty("user.dir");
         String name = "/"+map.get("name");
-//        String pattern = "MM-dd-HH:mm:ss";
-        //获取当地时区
-        Locale locale = Locale.getDefault();
-        //利用SimpleDateFormat 进行时间格式的转换
-//        SimpleDateFormat sdf = new SimpleDateFormat(pattern,locale);
-//        String time = "/"+sdf.format(new Date());
         String time = "/"+System.currentTimeMillis();
-
-        String localPath = path+"/src/main/resources/studentCode"+name+time;//+studentName
+        String localPath = path+"/src/main/resources/studentCode"+name+step+time;
         File file = new File(localPath);
         if (file.exists()){
             logger.info("删除文件结果:"+delAllFile(localPath));
@@ -141,14 +134,14 @@ public class StudentController {
     }
 
 
-    //获取学员代码提交历史记录的文件结构树
+    //获取学员代码提交历史记录的文件结构树 精确到关卡
     @PostMapping("/studentCode/FilesTree/{name}")
-    public  HashMap<String, Object> getFilesTree(){
-
-        String localPath = System.getProperty("user.dir")+"/src/main/resources/studentCode";
+    public  HashMap<String, Object> getFilesTree(@RequestBody Map<String,String>map,@PathVariable String name){
+        String userName = "/"+name;
+        String step = "/step"+map.get("step");
+        String localPath = System.getProperty("user.dir")+"/src/main/resources/studentCode"+userName+step;
         HashMap<String, Object> hashMap = traverseDir(localPath);
-
-        logger.info("获取到结构树:");
+        logger.info("获取到结构树");
         return hashMap;
     }
 
