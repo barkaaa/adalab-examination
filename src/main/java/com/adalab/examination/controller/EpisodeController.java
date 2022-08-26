@@ -6,6 +6,7 @@ import com.adalab.examination.service.EpisodeService;
 import com.adalab.examination.service.FileUpLoadService;
 import com.adalab.examination.service.impl.EpisodeServiceImpl;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/episode")
@@ -22,9 +23,17 @@ public class EpisodeController {
         this.episodeService = episodeService;
     }
 
-    String uploadDockerFile() {
-        //todo
-        return null;
+    /**
+     * upload Docker File
+     * @param file docker file
+     * @param tags 用户输入的tag
+     * @return
+     */
+    @GetMapping("/docker")
+    String uploadDockerFile(@RequestPart("docker") MultipartFile file,@RequestParam("tag[]")String[]tags) {
+
+
+        return dockerService.createImage(file.getName(),tags);
     }
 
     String uploadTestFile() {
@@ -32,6 +41,7 @@ public class EpisodeController {
         return null;
     }
 
+    @GetMapping("/test")
     TestResult doTest() {
         //todo
         return null;
