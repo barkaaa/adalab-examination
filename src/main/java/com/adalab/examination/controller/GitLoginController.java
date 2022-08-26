@@ -128,6 +128,4 @@ public class GitLoginController {
         }
         return null;
     }
-
-
 }

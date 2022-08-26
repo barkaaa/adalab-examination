@@ -39,7 +39,7 @@ public class DockerService {
     }
 
     /**
-     * @param fileName dockerFile name
+     * @param fileName dockerFile位置
      * @param tags     生产镜像的标签
      * @return 镜像的服务器ID
      */
@@ -84,7 +84,6 @@ public class DockerService {
 
     /**
      * @param stuFileName 学员代码文件夹名称
-     * @param ep 第几关
      * @return 测试文件结果
      */
     public TestResult getResult(String stuFileName, int ep) {
