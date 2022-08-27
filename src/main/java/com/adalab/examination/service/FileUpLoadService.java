@@ -28,7 +28,7 @@ public class FileUpLoadService {
                 String resourcePath = sourceFile.getCanonicalPath();
                 //重新随机生成名字
                 String filename = UUID.randomUUID() + "";
-                File newFile = new File(resourcePath + "/" + filename);
+                File newFile = new File(resourcePath + "/testFile/" + filename);
                 if (!newFile.mkdir()) {
                     return "";
                 }

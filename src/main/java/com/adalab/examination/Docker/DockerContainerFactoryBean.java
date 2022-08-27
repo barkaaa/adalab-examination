@@ -1,13 +1,13 @@
 package com.adalab.examination.Docker;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.model.*;
-import org.springframework.core.io.ClassPathResource;
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.Volume;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 import static com.github.dockerjava.api.model.HostConfig.newHostConfig;
 
