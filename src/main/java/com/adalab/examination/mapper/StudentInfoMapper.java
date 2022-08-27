@@ -1,6 +1,6 @@
 package com.adalab.examination.mapper;
 
-import com.adalab.examination.entity.Questionnaire;
+import com.adalab.examination.entity.StudentInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author Karl
  * @since 2022-08-27
  */
-public interface QuestionnaireMapper extends BaseMapper<Questionnaire> {
+public interface StudentInfoMapper extends BaseMapper<StudentInfo> {
 
 }

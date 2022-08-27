@@ -24,7 +24,7 @@ public class MybatisPlusGenerator {
         gc.setServiceName("%sService");	//去掉Service接口的首字母I
         gc.setAuthor("Karl");
         gc.setOpen(false);
-//        gc.setFileOverride(true);
+//       gc.setFileOverride(true);
         mpg.setGlobalConfig(gc);
 
         // 3、数据源配置
@@ -52,7 +52,7 @@ public class MybatisPlusGenerator {
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
 
-        strategy.setInclude("student", "episode");
+        strategy.setInclude("questionnaire");
 
 
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略

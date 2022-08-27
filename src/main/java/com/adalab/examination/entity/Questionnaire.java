@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author Karl
- * @since 2022-08-26
+ * @since 2022-08-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -27,15 +27,40 @@ public class Questionnaire implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private Integer type;
+    /**
+     * 问题类型，填空1、选择2
+     */
+    private Integer questionType;
 
+    /**
+     * 题干
+     */
     private String theme;
 
-    private String option;
+    /**
+     * 选项
+     */
+    private String options;
 
+    /**
+     * 是否多选
+     */
     private String isMultiple;
 
+    /**
+     * 是否选项有其他
+     */
     private String isAddtional;
+
+    /**
+     * 第几关
+     */
+    private Integer missionNumber;
+
+    /**
+     * 第几关的第几个
+     */
+    private Integer questionNumber;
 
 
 }

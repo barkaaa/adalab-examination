@@ -1,6 +1,6 @@
 package com.adalab.examination.service;
 
-import com.adalab.examination.entity.Questionnaire;
+import com.adalab.examination.entity.StudentInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author Karl
  * @since 2022-08-27
  */
-public interface QuestionnaireService extends IService<Questionnaire> {
+public interface StudentInfoService extends IService<StudentInfo> {
 
 }
