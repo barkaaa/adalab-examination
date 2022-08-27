@@ -86,6 +86,11 @@ public class StudentController {
         return localDateTime.plusDays(CHALLENGE_TIME);
     }
 
+    /**
+     * 获取单个 student 的所有信息
+     * @param student 学生的姓名
+     * @return 学生信息
+     */
     @PostMapping("/getDetail")
     public Student getDetail(@NotNull @RequestBody Student student){
         LambdaQueryWrapper<Student> studentQuery = new LambdaQueryWrapper<>();

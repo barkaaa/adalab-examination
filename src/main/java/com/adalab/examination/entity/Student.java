@@ -47,6 +47,4 @@ public class Student implements Serializable {
     private String phone;
 
     private LocalDateTime beginTime;
-
-
 }
