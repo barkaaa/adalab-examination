@@ -3,11 +3,9 @@ package com.adalab.examination.controller;
 import com.adalab.examination.entity.Episode;
 import com.adalab.examination.entity.StudentInfo;
 import com.adalab.examination.entity.TestResult;
-import com.adalab.examination.service.DockerService;
-import com.adalab.examination.service.EpisodeService;
-import com.adalab.examination.service.FileUpLoadService;
-import com.adalab.examination.service.StudentInfoService;
+import com.adalab.examination.service.*;
 import com.github.dockerjava.api.model.Image;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,25 +24,34 @@ public class EpisodeController {
     DockerService dockerService;
     FileUpLoadService fileUpLoadService;
     EpisodeService episodeService;
-
     StudentInfoService studentService;
+    GitService gitService;
 
-    EpisodeController(DockerService dockerService, FileUpLoadService fileUpLoadService, EpisodeService episodeService, StudentInfoService studentService) {
+    EpisodeController(DockerService dockerService, FileUpLoadService fileUpLoadService,
+                      EpisodeService episodeService, StudentInfoService studentService,
+                      GitService gitService) {
         this.dockerService = dockerService;
         this.fileUpLoadService = fileUpLoadService;
         this.episodeService = episodeService;
         this.studentService = studentService;
+        this.gitService = gitService;
     }
 
     /**
      * upload Docker File
      *
      * @param file docker file
-     * @param tags 用户输入的tag
+     *
      */
-    @GetMapping("/docker")
-    String uploadDockerFile(@RequestPart("docker") MultipartFile file, @RequestParam("tag") String[] tags) {
-        return dockerService.createImage(file.getName(), tags);
+    @PostMapping("/docker")
+    String uploadDockerFile(@RequestPart("docker") MultipartFile file, @RequestParam("tag") String tag, HttpServletResponse response) {
+
+        if (fileUpLoadService.uploadDockerFile(file, tag).equals("")) {
+            response.setStatus(400);
+            return "上传失败";
+        }
+
+        return "上传成功";
     }
 
     @PostMapping("/episode")
@@ -71,14 +78,21 @@ public class EpisodeController {
     }
 
     @GetMapping("/test/{id}")
-    TestResult doTest(@PathVariable("id") int episodeId) throws InterruptedException {
-        //todo
-        int stuId = 1;
+    TestResult doTest(@PathVariable("id") int episodeId, @CookieValue("id") int id, HttpServletResponse response) throws InterruptedException {
+        StudentInfo studentInfo = studentService.getById(id);
+
+        try {
+            gitService.gitClone(id + "", studentInfo.getWebPage(), episodeId + "");
+        } catch (GitAPIException e) {
+            response.setStatus(400);
+            return null;
+        }
+
         Episode episode = episodeService.getById(episodeId);
 
         int time = episode.getTimeOut();
 
-        String containerId = dockerService.createContainer(episode.getImgId(), stuId + "",
+        String containerId = dockerService.createContainer(episode.getImgId(), id + "",
                 episodeId, episode.getTestFileName(),
                 "/test", "testContainer", episode.getCmd());
 
@@ -88,7 +102,7 @@ public class EpisodeController {
         while (System.currentTimeMillis() - t <= time && !dockerService.checkContainer(containerId)) {
             Thread.sleep(500);
         }
-        return dockerService.getResult(stuId + "", episodeId);
+        return dockerService.getResult(id + "", episodeId);
 
     }
 
