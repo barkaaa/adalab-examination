@@ -1,6 +1,11 @@
 package com.adalab.examination.controller;
 
 
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.*;
 import com.adalab.examination.entity.Student;
 import com.adalab.examination.entity.StudentInfo;
 import com.adalab.examination.service.StudentInfoService;
@@ -8,6 +13,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
+import static com.adalab.examination.GitClone.GitUtils.delAllFile;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,6 +33,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/examination/student-info")
 public class StudentInfoController {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+
+    //获取学员代码提交历史记录的文件结构树 精确到关卡
+    @PostMapping("/studentCode/FilesTree/{name}")
+    public HashMap<String, Object> getFilesTree(@RequestBody Map<String,String>map, @PathVariable String name){
+        String userName = "/"+name;
+        String step = "/step"+map.get("step");
+        String localPath = System.getProperty("user.dir")+"/src/main/resources/studentCode"+userName+step;
+        HashMap<String, Object> hashMap = traverseDir(localPath);
+        logger.info("获取到结构树");
+        return hashMap;
+    }
 
     final
     StudentInfoService studentInfoService;

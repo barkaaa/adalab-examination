@@ -113,45 +113,7 @@ public class StudentController {
         }
     }
 
-    //在resources文件夹下根据学员姓名生成文件夹 clone学员的代码
-    @PostMapping("/studentCode")
-    public String cloneCode(@RequestBody Map<String,String>map){
-        String step = "/step"+map.get("step");
-        String gitURL = map.get("url");
-        String path = System.getProperty("user.dir");
-        String name = "/"+map.get("name");
-        String time = "/"+System.currentTimeMillis();
-        String localPath = path+"/src/main/resources/studentCode"+name+step+time;
-        File file = new File(localPath);
-        if (file.exists()){
-            logger.info("删除文件结果:"+delAllFile(localPath));
-        }
 
-        try {
-            Git git = Git.cloneRepository()
-                    .setURI(gitURL)
-                    .setDirectory(new File(localPath))
-                    .call();
-            logger.info("clone成功!"+git.toString());
-        } catch (GitAPIException e) {
-            logger.error("clone失败!");
-            e.printStackTrace();
-            return "克隆失败";
-        }
-        return "OK";
-    }
-
-
-    //获取学员代码提交历史记录的文件结构树 精确到关卡
-    @PostMapping("/studentCode/FilesTree/{name}")
-    public  HashMap<String, Object> getFilesTree(@RequestBody Map<String,String>map,@PathVariable String name){
-        String userName = "/"+name;
-        String step = "/step"+map.get("step");
-        String localPath = System.getProperty("user.dir")+"/src/main/resources/studentCode"+userName+step;
-        HashMap<String, Object> hashMap = traverseDir(localPath);
-        logger.info("获取到结构树");
-        return hashMap;
-    }
 
 
 }
