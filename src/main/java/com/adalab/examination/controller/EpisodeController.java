@@ -41,7 +41,6 @@ public class EpisodeController {
      * upload Docker File
      *
      * @param file docker file
-     *
      */
     @PostMapping("/docker")
     String uploadDockerFile(@RequestPart("docker") MultipartFile file, @RequestParam("tag") String tag, HttpServletResponse response) {
@@ -78,7 +77,8 @@ public class EpisodeController {
     }
 
     @GetMapping("/test/{id}")
-    TestResult doTest(@PathVariable("id") int episodeId, @CookieValue("id") int id, HttpServletResponse response) throws InterruptedException {
+    TestResult doTest(@PathVariable("id") int episodeId, HttpServletResponse response) throws InterruptedException {
+        int id = 1;
         StudentInfo studentInfo = studentService.getById(id);
 
         try {
@@ -102,6 +102,11 @@ public class EpisodeController {
         while (System.currentTimeMillis() - t <= time && !dockerService.checkContainer(containerId)) {
             Thread.sleep(500);
         }
+
+        if (!dockerService.checkContainer(containerId)) {
+            dockerService.stopContainer(containerId);
+        }
+        dockerService.removeContainer(containerId);
         return dockerService.getResult(id + "", episodeId);
 
     }
