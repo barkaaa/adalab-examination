@@ -28,19 +28,15 @@ public class Episode implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String mdUrl;
-
-    private String testFileUrl;
+    private String testFileName;
 
     private String cmd;
 
     private Integer timeOut;
 
-    private Integer imgId;
+    private String imgId;
 
-    private Integer isTest;
-
-    private Integer next;
+    private boolean testRequired;
 
 
 }

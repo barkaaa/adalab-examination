@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author Karl
@@ -16,5 +16,24 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class EpisodeServiceImpl extends ServiceImpl<EpisodeMapper, Episode> implements EpisodeService {
+    final
+    EpisodeMapper episodeMapper;
 
+    public EpisodeServiceImpl(EpisodeMapper episodeMapper) {
+        this.episodeMapper = episodeMapper;
+    }
+
+    @Override
+    public void delete(int id) {
+        removeById(id);
+        episodeMapper.downAfterId(id);
+        episodeMapper.refreshIncreaseId(episodeMapper.getCount() + 1);
+    }
+
+    @Override
+    public void insert(Episode episode) {
+        episodeMapper.upAfterId(episode.getId());
+        episodeMapper.insertById(episode);
+        episodeMapper.refreshIncreaseId(episodeMapper.getCount() + 1);
+    }
 }

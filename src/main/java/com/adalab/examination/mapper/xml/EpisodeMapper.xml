@@ -2,4 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.adalab.examination.mapper.EpisodeMapper">
 
+    <select id="getCount" resultType="int">
+        select count(1)
+        from episode;
+    </select>
+
+    <update id="refreshIncreaseId" parameterType="int">
+        alter table episode AUTO_INCREMENT = #{id}
+    </update>
+
+    <update id="upAfterId" parameterType="int">
+        UPDATE episode
+        SET id=id + 1
+        WHERE id >= #{id};
+    </update>
+
+    <update id="downAfterId" parameterType="int">
+        UPDATE episode
+        SET id=id - 1
+        WHERE id > #{id};
+    </update>
+
+    <insert id="insertById">
+        insert into episode(id,test_file_name,cmd,time_out,img_id,test_required)
+        values (#{id},#{testFileName},#{cmd},#{timeOut},#{imgId},#{testRequired});
+    </insert>
+
 </mapper>
