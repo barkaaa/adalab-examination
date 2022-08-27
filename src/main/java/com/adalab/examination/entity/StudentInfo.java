@@ -1,7 +1,6 @@
 package com.adalab.examination.entity;
 
 import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +8,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author Karl
@@ -40,10 +39,19 @@ public class StudentInfo implements Serializable {
 
     private LocalDateTime actualDays;
 
-//    @TableField("Last Edited")
-//    private LocalDateTime Last Edited;
+    private LocalDateTime lastEdited;
 
     private String type;
+
+    private LocalDateTime beginDate;
+
+    private Integer episode;
+
+    private String avatar;
+
+    private Integer age;
+
+    private String email;
 
 
 }
