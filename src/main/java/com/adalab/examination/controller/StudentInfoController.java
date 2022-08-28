@@ -81,7 +81,7 @@ public class StudentInfoController {
     @GetMapping("getList")
     public List<StudentInfo> getList(){
         LambdaQueryWrapper<StudentInfo> studentInfoLambdaQueryWrapper = new LambdaQueryWrapper<>();
-//        studentInfoLambdaQueryWrapper.orderByDesc(StudentInfo::getRanking);
+//        studentInfoLambdaQueryWrapper.Desc(StudentInfo::getRanking);
         return studentInfoService.list(studentInfoLambdaQueryWrapper);
     }
 }

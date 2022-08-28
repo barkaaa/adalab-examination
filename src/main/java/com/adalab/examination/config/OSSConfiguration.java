@@ -16,7 +16,7 @@ public class OSSConfiguration {
 
     private volatile static OSSClientBuilder ossClientBuilder;
 
-    private static String endpoint;
+    public static String endpoint;
 
     private static String accessKeyId;
 

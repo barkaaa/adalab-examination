@@ -1,8 +1,11 @@
 package com.adalab.examination.service.impl;
 
 import com.adalab.examination.config.OSSConfiguration;
+import com.adalab.examination.vo.UploadVo;
 import com.aliyun.oss.*;
+import com.aliyun.oss.internal.OSSHeaders;
 import com.aliyun.oss.model.*;
+import com.google.common.io.Files;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,37 +40,60 @@ public class OSSService {
      * 链接：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/upload_object.html?spm=5176.docoss/user_guide/upload_object
      *
      * @param file
-     * @param storagePath
      * @return
      */
-    public String uploadFile(MultipartFile file, String storagePath) {
+    public UploadVo uploadFile(MultipartFile file) {
         String fileName = "";
+        UploadVo uploadVo = new UploadVo();
         try {
+            String[] split = file.getOriginalFilename().split("\\.");
+            String fileType = split[split.length - 1];
             // 创建一个唯一的文件名，类似于id，就是保存在OSS服务器上文件的文件名
-            fileName = UUID.randomUUID().toString();
+            fileName = UUID.randomUUID().toString() + "." + fileType;
+            String newFileName = fileType + "/" + fileName;
             InputStream inputStream = file.getInputStream();
+            PutObjectRequest putObjectRequest = new PutObjectRequest(ossConfiguration.getBucketName(), newFileName, inputStream);
+
             // 设置对象
             ObjectMetadata objectMetadata = new ObjectMetadata();
             // 设置数据流里有多少个字节可以读取
             objectMetadata.setContentLength(inputStream.available());
             objectMetadata.setCacheControl("no-cache");
+            objectMetadata.setContentDisposition("inline;filename=" + fileName);
             objectMetadata.setHeader("Pragma", "no-cache");
-
-            String[] split = file.getOriginalFilename().split("\\.");
-            String fileType = split[split.length - 1];
             if (fileType.equals("md")) {
                 objectMetadata.setContentType("text/markdown;charset=utf-8");
             } else {
                 objectMetadata.setContentType(file.getContentType());
             }
-            objectMetadata.setContentDisposition("inline;filename=" + fileName);
-            String newFileName = storagePath + "/" + fileName;
+            putObjectRequest.setMetadata(objectMetadata);
             // 上传文件
-            ossClient.putObject(ossConfiguration.getBucketName(), newFileName, inputStream, objectMetadata);
+            ossClient.putObject(putObjectRequest);
+            uploadVo.setFileName(fileName);
+            uploadVo.setUrl("https://" + ossConfiguration.getBucketName() + "." + OSSConfiguration.endpoint + "/" + newFileName);
         } catch (IOException e) {
             log.error("Error occurred: {}", e.getMessage(), e);
         }
-        return fileName;
+
+
+        return uploadVo;
+    }
+
+
+    public UploadVo saveMarkdown(String content) {
+        UploadVo uploadVo = new UploadVo();
+        String fileName = UUID.randomUUID().toString();
+        String newFileName = "md/" + fileName;
+
+        // 创建PutObjectRequest对象。
+        PutObjectRequest putObjectRequest = new PutObjectRequest(ossConfiguration.getBucketName(), newFileName, new ByteArrayInputStream(content.getBytes()));
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType("text/markdown;charset=utf-8");
+        putObjectRequest.setMetadata(objectMetadata);
+        ossClient.putObject(putObjectRequest);
+        uploadVo.setFileName(fileName);
+        uploadVo.setUrl("https://" + ossConfiguration.getBucketName() + "." + OSSConfiguration.endpoint + "/" + newFileName);
+        return uploadVo;
     }
 
     /**
@@ -171,4 +197,6 @@ public class OSSService {
     public void setObjectAcl(String fileName) {
         ossClient.setObjectAcl(ossConfiguration.getBucketName(), fileName, CannedAccessControlList.PublicRead);
     }
+
+
 }

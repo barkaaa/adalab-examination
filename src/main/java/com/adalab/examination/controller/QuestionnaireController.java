@@ -9,9 +9,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author Karl
@@ -26,17 +28,17 @@ public class QuestionnaireController {
     QuestionnaireService questionnaireService;
 
     @PutMapping("addorupdate")
-    public String addOrUpdate(@RequestBody MissionInfo missionInfo){
+    public String addOrUpdate(@RequestBody MissionInfo missionInfo) {
         Questionnaire questionnaire = new Questionnaire();
         //第几关
         questionnaire.setMissionNumber(missionInfo.getMissionNumber());
 
         int i = 1;
-        for(TextContents textContents : missionInfo.getTextContents()){
+        for (TextContents textContents : missionInfo.getTextContents()) {
 
-            if(textContents.getQuestionType().equals("选择")){
+            if (textContents.getQuestionType().equals("选择")) {
                 questionnaire.setQuestionType(2);
-            }else{
+            } else {
                 questionnaire.setQuestionType(1);
             }
 
@@ -53,14 +55,14 @@ public class QuestionnaireController {
             questionnaire.setOptions(sb.toString());
 
             QueryWrapper<Questionnaire> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("mission_number",questionnaire.getMissionNumber());
-            queryWrapper.eq("question_number",i);
+            queryWrapper.eq("mission_number", questionnaire.getMissionNumber());
+            queryWrapper.eq("question_number", i);
             Questionnaire query = questionnaireService.getOne(queryWrapper);
 
-            if(query == null){
+            if (query == null) {
                 questionnaireService.save(questionnaire);
-            }else {
-                questionnaireService.update(questionnaire,queryWrapper);
+            } else {
+                questionnaireService.update(questionnaire, queryWrapper);
             }
             i++;
         }
@@ -68,4 +70,11 @@ public class QuestionnaireController {
         return "ok";
     }
 
+
+    @GetMapping("getone")
+    public List<Questionnaire> getOne(int missionNum) {
+        QueryWrapper<Questionnaire> qw = new QueryWrapper<Questionnaire>().eq("mission_number", missionNum);
+        List<Questionnaire> list = questionnaireService.list(qw);
+        return list;
+    }
 }
