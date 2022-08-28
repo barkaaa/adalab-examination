@@ -56,7 +56,7 @@ public class FileUpLoadService {
             file.transferTo(localFile);
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
             String now3 = df.format(System.currentTimeMillis());
-            return dockerService.createImage("DockerFile", now3, tag);
+            return dockerService.createImage("dockerFiles", now3, tag);
         } catch (IOException e) {
             e.printStackTrace();
             return "";

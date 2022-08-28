@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 
@@ -56,15 +55,6 @@ public class EpisodeController {
     @PostMapping("/episode")
     String createEp(@RequestPart(value = "test", required = false) MultipartFile[] files, @RequestPart(value = "episode") Episode episode, HttpServletResponse response) {
         if (files != null) {
-            File file = new File("src/main/resources/testFile/" + episode.getTestFileName());
-            if (file.exists()) {
-                try {
-                    Files.delete(Paths.get(file.toURI()));
-                } catch (IOException e) {
-                    response.setStatus(500);
-                    return "更新文件时发生错误";
-                }
-            }
             String newName = fileUpLoadService.uploadTestFile(files);
             episode.setTestFileName(newName);
         }
@@ -159,5 +149,9 @@ public class EpisodeController {
         return episodeService.list();
     }
 
+    @DeleteMapping("/images")
+    void delImg(@RequestParam("id") String id) {
+        dockerService.removeImage(id);
+    }
 
 }
