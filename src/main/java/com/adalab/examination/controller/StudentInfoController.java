@@ -7,8 +7,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +32,17 @@ import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
 public class StudentInfoController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    //设置最大挑战时间
+    private final int CHALLENGE_TIME = 5;
+
+    final
+    StudentInfoService studentInfoService;
+
+    public StudentInfoController(StudentInfoService studentInfoService) {
+        this.studentInfoService = studentInfoService;
+    }
+
+
 
     //获取学员代码提交历史记录的文件结构树 精确到关卡
     @PostMapping("/studentCode/FilesTree/{name}")
@@ -40,17 +55,60 @@ public class StudentInfoController {
         return hashMap;
     }
 
-    final
-    StudentInfoService studentInfoService;
+    /**
+     * 闯关结束后则调用这个接口
+     * 设置实际所用了多少小时
+     * @param id
+     * @return
+     */
+    @GetMapping("success/{id}")
+    public String end(@PathVariable int id){
+        StudentInfo studentInfo = studentInfoService.getById(id);
+        int actual = (int)Duration.between(studentInfo.getBeginDate(), LocalDateTime.now()).toHours();
+        studentInfo.setActualHours(actual);
+        if(studentInfoService.save(studentInfo)){
+            return "success";
+        }else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
 
-    public StudentInfoController(StudentInfoService studentInfoService) {
-        this.studentInfoService = studentInfoService;
+    }
+    /**
+     * 在前端按下开始按钮开始闯关
+     * @param id
+     * @return 和前端沟通后再修改返回值
+     */
+    @GetMapping("begin/{id}")
+    public String begin(@PathVariable int id){
+        StudentInfo studentInfo = studentInfoService.getById(id);
+        studentInfo.setBeginDate(LocalDateTime.now());
+        if(studentInfoService.save(studentInfo)){
+            return "success";
+        }else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
-     * zxear专用
+     * 通过id得到学生信息
+     * @param id cookie存的是string类型的ID，这里也按照string处理
+     * @return 学生信息
+     */
+    @GetMapping("getStudent/{id}")
+    public StudentInfo getStudentById(@PathVariable String id){
+        int studentId = Integer.parseInt(id);
+        LambdaQueryWrapper<StudentInfo> lqw = new LambdaQueryWrapper<>();
+        StudentInfo studentInfo = studentInfoService.getById(studentId);
+        if(studentInfo!=null){
+            return studentInfo;
+        }else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    /**
      * 获取单个 student 的所有信息
-     *
      * @param studentInfo 学生的姓名
      * @return 学生信息
      */
@@ -63,7 +121,7 @@ public class StudentInfoController {
         objectHashMap.put("name", one.getName());
         objectHashMap.put("Date Created", one.getCreatedDate());
         objectHashMap.put("Days needed", one.getDaysNeeded());
-        objectHashMap.put("Actual Days", one.getActualDays());
+        objectHashMap.put("Actual Hours", one.getActualHours());
         objectHashMap.put("Last Edited", one.getLastEdited());
         objectHashMap.put("Current Week", one.getId());
         objectHashMap.put("type", one.getType());
