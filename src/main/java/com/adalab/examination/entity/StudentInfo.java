@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Karl
@@ -37,7 +37,7 @@ public class StudentInfo implements Serializable {
 
     private LocalDateTime daysNeeded;
 
-    private LocalDateTime actualDays;
+    private int actualHours;
 
     private LocalDateTime lastEdited;
 

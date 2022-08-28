@@ -21,7 +21,7 @@ public class GitService {
     //需要传过来学生代码仓库url 学生id
     public void gitClone(String studentID,String url,String step) throws GitAPIException {
         String time = "/"+System.currentTimeMillis();
-        String localPath = path+"/src/main/resources/studentCode"+studentID+step+time;
+        String localPath = path+"/src/main/resources/studentCode"+"/"+studentID+"/step"+step+time;
         File file = new File(localPath);
         if (file.exists()){
             logger.info("删除文件结果:"+delAllFile(localPath));

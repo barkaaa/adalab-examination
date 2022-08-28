@@ -1,26 +1,23 @@
 package com.adalab.examination.controller;
 
 
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
-import com.adalab.examination.entity.Student;
 import com.adalab.examination.entity.StudentInfo;
 import com.adalab.examination.service.StudentInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.io.File;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
-import static com.adalab.examination.GitClone.GitUtils.delAllFile;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * <p>
@@ -31,21 +28,12 @@ import java.util.List;
  * @since 2022-08-27
  */
 @RestController
-@RequestMapping("/api/examination/student-info")
+@RequestMapping("/api/studentInfo")
 public class StudentInfoController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-
-    //获取学员代码提交历史记录的文件结构树 精确到关卡
-    @PostMapping("/studentCode/FilesTree/{name}")
-    public HashMap<String, Object> getFilesTree(@RequestBody Map<String,String>map, @PathVariable String name){
-        String userName = "/"+name;
-        String step = "/step"+map.get("step");
-        String localPath = System.getProperty("user.dir")+"/src/main/resources/studentCode"+userName+step;
-        HashMap<String, Object> hashMap = traverseDir(localPath);
-        logger.info("获取到结构树");
-        return hashMap;
-    }
+    //设置最大挑战时间
+    private final int CHALLENGE_TIME = 5;
 
     final
     StudentInfoService studentInfoService;
@@ -54,7 +42,72 @@ public class StudentInfoController {
         this.studentInfoService = studentInfoService;
     }
 
-    /** zxear专用
+
+
+    //获取学员代码提交历史记录的文件结构树 精确到关卡
+    @PostMapping("/studentCode/FilesTree/{name}")
+    public HashMap<String, Object> getFilesTree(@RequestBody Map<String, String> map, @PathVariable String name) {
+        String userName = "/" + name;
+        String step = "/step" + map.get("step");
+        String localPath = System.getProperty("user.dir") + "/src/main/resources/studentCode" + userName + step;
+        HashMap<String, Object> hashMap = traverseDir(localPath);
+        logger.info("获取到结构树");
+        return hashMap;
+    }
+
+    /**
+     * 闯关结束后则调用这个接口
+     * 设置实际所用了多少小时
+     * @param id
+     * @return
+     */
+    @GetMapping("success/{id}")
+    public String end(@PathVariable int id){
+        StudentInfo studentInfo = studentInfoService.getById(id);
+        int actual = (int)Duration.between(studentInfo.getBeginDate(), LocalDateTime.now()).toHours();
+        studentInfo.setActualHours(actual);
+        if(studentInfoService.save(studentInfo)){
+            return "success";
+        }else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+    }
+    /**
+     * 在前端按下开始按钮开始闯关
+     * @param id
+     * @return 和前端沟通后再修改返回值
+     */
+    @GetMapping("begin/{id}")
+    public String begin(@PathVariable int id){
+        StudentInfo studentInfo = studentInfoService.getById(id);
+        studentInfo.setBeginDate(LocalDateTime.now());
+        if(studentInfoService.save(studentInfo)){
+            return "success";
+        }else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * 通过id得到学生信息
+     * @param id cookie存的是string类型的ID，这里也按照string处理
+     * @return 学生信息
+     */
+    @GetMapping("getStudent/{id}")
+    public StudentInfo getStudentById(@PathVariable String id){
+        int studentId = Integer.parseInt(id);
+        LambdaQueryWrapper<StudentInfo> lqw = new LambdaQueryWrapper<>();
+        StudentInfo studentInfo = studentInfoService.getById(studentId);
+        if(studentInfo!=null){
+            return studentInfo;
+        }else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    /**
      * 获取单个 student 的所有信息
      * @param studentInfo 学生的姓名
      * @return 学生信息
@@ -65,13 +118,13 @@ public class StudentInfoController {
         studentQuery.eq(StudentInfo::getName, studentInfo.getName());
         StudentInfo one = studentInfoService.getOne(studentQuery);
         HashMap<Object, Object> objectHashMap = new HashMap<>();
-        objectHashMap.put("name",one.getName());
-        objectHashMap.put("Date Created",one.getCreatedDate());
-        objectHashMap.put("Days needed",one.getDaysNeeded());
-        objectHashMap.put("Actual Days",one.getActualDays());
-        objectHashMap.put("Last Edited",one.getLastEdited());
-        objectHashMap.put("Current Week",one.getId());
-        objectHashMap.put("type",one.getType());
+        objectHashMap.put("name", one.getName());
+        objectHashMap.put("Date Created", one.getCreatedDate());
+        objectHashMap.put("Days needed", one.getDaysNeeded());
+        objectHashMap.put("Actual Hours", one.getActualHours());
+        objectHashMap.put("Last Edited", one.getLastEdited());
+        objectHashMap.put("Current Week", one.getId());
+        objectHashMap.put("type", one.getType());
         return objectHashMap;
     }
 
@@ -79,10 +132,18 @@ public class StudentInfoController {
      * @return 所有学生数据组成的LIST
      */
     @GetMapping("getList")
-    public List<StudentInfo> getList(){
+    public List<StudentInfo> getList() {
         LambdaQueryWrapper<StudentInfo> studentInfoLambdaQueryWrapper = new LambdaQueryWrapper<>();
 //        studentInfoLambdaQueryWrapper.Desc(StudentInfo::getRanking);
         return studentInfoService.list(studentInfoLambdaQueryWrapper);
     }
+
+    @GetMapping("getRanking")
+    public List<StudentInfo> getRanking() {
+        LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        studentLambdaQueryWrapper.orderByDesc(StudentInfo::getEpisode);
+        return studentInfoService.list(studentLambdaQueryWrapper);
+    }
+
 }
 

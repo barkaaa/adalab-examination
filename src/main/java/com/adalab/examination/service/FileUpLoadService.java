@@ -48,7 +48,7 @@ public class FileUpLoadService {
         }
     }
 
-    public String uploadDockerFile(MultipartFile file) {
+    public String uploadDockerFile(MultipartFile file, String tag) {
         try {
             File sourceFile = new File("src/main/resources");
             String resourcePath = sourceFile.getCanonicalPath();
@@ -56,7 +56,7 @@ public class FileUpLoadService {
             file.transferTo(localFile);
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
             String now3 = df.format(System.currentTimeMillis());
-            return dockerService.createImage("DockerFile", now3);
+            return dockerService.createImage("dockerFiles", now3, tag);
         } catch (IOException e) {
             e.printStackTrace();
             return "";

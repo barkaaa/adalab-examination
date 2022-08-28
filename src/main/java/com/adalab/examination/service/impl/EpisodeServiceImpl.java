@@ -32,7 +32,9 @@ public class EpisodeServiceImpl extends ServiceImpl<EpisodeMapper, Episode> impl
 
     @Override
     public void insert(Episode episode) {
-        episodeMapper.upAfterId(episode.getId());
+        if (getById(episode.getId()) != null) {
+            episodeMapper.upAfterId(episode.getId());
+        }
         episodeMapper.insertById(episode);
         episodeMapper.refreshIncreaseId(episodeMapper.getCount() + 1);
     }
