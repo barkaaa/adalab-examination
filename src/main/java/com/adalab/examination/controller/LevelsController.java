@@ -2,35 +2,49 @@ package com.adalab.examination.controller;
 
 
 import com.adalab.examination.entity.Levels;
-import com.adalab.examination.mapper.LevelsMapper;
 import com.adalab.examination.service.LevelsService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/levels")
 public class LevelsController {
-    final
-    LevelsMapper levelsMapper;
-    final LevelsService levelsService;
 
-    public LevelsController(LevelsMapper levelsMapper, LevelsService levelsService) {
-        this.levelsMapper = levelsMapper;
-        this.levelsService = levelsService;
-    }
+
+    @Autowired
+    LevelsService levelsService;
 
 
     @GetMapping("/all")
     public List<Levels> getAll() {
-        return levelsMapper.selectList(null);
+        List<Levels> levels = levelsService.list(null);
+        return levels;
+    }
+
+    @GetMapping("/getone")
+    public Levels getOne(int stage) {
+        Levels one = levelsService.getOne(new QueryWrapper<Levels>().eq("stage", stage));
+        return one;
     }
 
 
     @PostMapping("/add")
     public String add(@RequestBody Levels levels) {
-
         levelsService.save(levels);
         return "添加成功";
+    }
+
+    @PutMapping("/update")
+    public void update(@RequestBody Levels levels) {
+        levelsService.updateById(levels);
+    }
+
+
+    @DeleteMapping("/batchdel")
+    public void batchDel(@RequestBody Map<String, List<Integer>>map) {
+        levelsService.removeByIds(map.get("ids"));
     }
 }

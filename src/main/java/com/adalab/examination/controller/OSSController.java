@@ -1,11 +1,14 @@
 package com.adalab.examination.controller;
 
 import com.adalab.examination.service.impl.OSSService;
+import com.adalab.examination.vo.UploadVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wupx
@@ -15,11 +18,8 @@ import java.util.List;
 @RequestMapping("/api/oss")
 public class OSSController {
 
-    private final OSSService ossService;
-
-    public OSSController(OSSService ossService) {
-        this.ossService = ossService;
-    }
+    @Autowired
+    private OSSService ossService;
 
     /**
      * 上传文件
@@ -28,8 +28,8 @@ public class OSSController {
      * @return
      */
     @PostMapping(value = "/uploadFiles")
-    public String uploadFiles(@RequestParam("file") MultipartFile file, @RequestParam("storagePath") String storagePath) {
-        return ossService.uploadFile(file, storagePath);
+    public UploadVo uploadFiles(@RequestParam("file") MultipartFile file) {
+        return ossService.uploadFile(file);
     }
 
     /**
@@ -85,7 +85,6 @@ public class OSSController {
     }
 
 
-
     /**
      * 设置文件访问权限
      *
@@ -94,5 +93,16 @@ public class OSSController {
     @PostMapping(value = "/setObjectAcl")
     public void setObjectAcl(@RequestParam("fileName") String fileName) {
         ossService.setObjectAcl(fileName);
+    }
+
+    /**
+     * 根据文件内容保存为markdown
+     *
+     * @param map
+     * @return
+     */
+    @PutMapping("/saveMarkdown")
+    public UploadVo saveMarkdown(@RequestBody Map<String, String> map) {
+        return ossService.saveMarkdown(map.get("content"));
     }
 }
