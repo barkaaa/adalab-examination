@@ -53,7 +53,7 @@ public class EpisodeController {
     }
 
     @PostMapping("/episode")
-    String createEp(@RequestPart(value = "test", required = false) MultipartFile[] files, @RequestPart(value = "episode") Episode episode, HttpServletResponse response) {
+    String createEp(@RequestPart(value = "test", required = false) MultipartFile[] files, @RequestPart(value = "episode") Episode episode) {
         if (files != null) {
             String newName = fileUpLoadService.uploadTestFile(files);
             episode.setTestFileName(newName);
