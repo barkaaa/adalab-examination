@@ -4,6 +4,8 @@ package com.adalab.examination.controller;
 import com.adalab.examination.entity.StudentInfo;
 import com.adalab.examination.service.StudentInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
 
@@ -143,6 +145,59 @@ public class StudentInfoController {
         LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
         studentLambdaQueryWrapper.orderByDesc(StudentInfo::getEpisode);
         return studentInfoService.list(studentLambdaQueryWrapper);
+    }
+
+
+    //获取总页数
+    @GetMapping("/getTotalPages/{piecesNum}")
+    public int getTotalPages(@PathVariable int piecesNum) {
+        int toalPieces = studentInfoService.count();
+        int pageNum = -1;
+        if (toalPieces%piecesNum==0)
+            pageNum= toalPieces/piecesNum;
+        else
+            pageNum = toalPieces/piecesNum+1;
+        return pageNum;
+    }
+
+    //分页获取排名
+    @PostMapping("/getPagingRanking/{page}")
+    public List<StudentInfo> getPagingRanking(@PathVariable int page) {
+        IPage pageParameter = new Page(page,12);
+
+
+        LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        studentLambdaQueryWrapper.orderByDesc(StudentInfo::getEpisode);
+        IPage<StudentInfo> toolPage = studentInfoService.page(pageParameter,studentLambdaQueryWrapper);
+        return toolPage.getRecords();
+    }
+
+    //获取提交信息表格行
+    @PostMapping("/getSubmission/{name}")
+    public List<Map<String, String>> getSubmission(@PathVariable String name) {
+        String userName = "/" + name;
+        String localPath = "src/main/resources/studentCode" + userName;
+//        String localPath ="src/main/resources/studentCode";
+        List<Map<String,String>> form = new ArrayList<>();
+        HashMap<String, Object> hashMap = traverseDir(localPath);
+        File file = new File(localPath);
+        for (String step:file.list()){
+            String innerPath = localPath + "/" + step;
+            for (String time:new File(innerPath).list()){
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String formatedTime = simpleDateFormat.format(new Date(Long.parseLong(time) * 1000L));
+                Map<String,String>  map = new HashMap<>();
+                map.put("time",formatedTime);
+                map.put("episodeName",step);
+                map.put("episode",step);
+                map.put("src",innerPath);
+                form.add(map);
+                System.out.println("list:"+step+formatedTime);
+
+            }
+        }
+
+        return form;
     }
 
 }
