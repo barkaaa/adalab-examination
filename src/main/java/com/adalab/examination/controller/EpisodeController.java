@@ -52,21 +52,42 @@ public class EpisodeController {
         return "上传成功";
     }
 
-//    @PostMapping("/createEp")
-//    String createEp(@RequestParam("url") String markdownUrl, @RequestParam("type") int type) {
-//
-//    }
+    @PostMapping("/createEp")
+    String createEp(@RequestBody Episode episode, HttpServletResponse response) {
+        try {
+            episodeService.insert(episode);
+        } catch (Exception e) {
+            response.setStatus(400);
+            return e.getMessage();
+        }
+        return "更新成功";
+    }
 
 
-    @PostMapping("/episode")
-    String upLoadEpConfig(@RequestPart(value = "test", required = false) MultipartFile[] files, @RequestPart(value = "episode") Episode episode) {
+    @PatchMapping("/update")
+    String upLoadEpConfig(@RequestPart(value = "test", required = false) MultipartFile[] files,
+                          @RequestPart(value = "episode") Episode episode, HttpServletResponse response) {
+
         if (files != null) {
+            Episode target = episodeService.getById(episode.getId());
+            if (target == null) {
+                response.setStatus(400);
+                return "试图更新不存在的关卡";
+            }
+            if (target.getTestFileName() != null) {
+                File file = new File("src/main/resources/testFile/" + target.getTestFileName());
+                try {
+                    delete(file);
+                } catch (IOException e) {
+                    System.err.print("更新文件时删除原文件失败");
+                }
+            }
+
             String newName = fileUpLoadService.uploadTestFile(files);
             episode.setTestFileName(newName);
         }
 
-
-        episodeService.insert(episode);
+        episodeService.updateById(episode);
 
         return "上传成功";
 
@@ -108,7 +129,7 @@ public class EpisodeController {
     }
 
 
-    @DeleteMapping("/episode/{id}")
+    @DeleteMapping("/delete/{id}")
     String delete(@PathVariable("id") int id) {
         Episode episode = episodeService.getById(id);
         episodeService.delete(id);
@@ -150,7 +171,7 @@ public class EpisodeController {
         return dockerService.getImages();
     }
 
-    @GetMapping("/episode")
+    @GetMapping("/get")
     List<Episode> getEpisode() {
         return episodeService.list();
     }
