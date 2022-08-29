@@ -2,6 +2,7 @@ package com.adalab.examination.config;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,5 +67,13 @@ public class OSSConfiguration {
             }
         }
         return ossClientBuilder;
+    }
+
+    /**
+     * 分页插件
+     */
+    @Bean
+    public PaginationInterceptor paginationInterceptor() {
+        return new PaginationInterceptor();
     }
 }
