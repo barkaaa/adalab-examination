@@ -86,7 +86,6 @@ public class EpisodeController {
             String newName = fileUpLoadService.uploadTestFile(files);
             episode.setTestFileName(newName);
         }
-
         episodeService.updateById(episode);
 
         return "上传成功";
@@ -176,6 +175,11 @@ public class EpisodeController {
         return episodeService.list();
     }
 
+
+    @GetMapping("/getOne")
+    Episode getOne (int id){
+        return episodeService.getById(id);
+    }
     @DeleteMapping("/images")
     void delImg(@RequestParam("id") String id) {
         dockerService.removeImage(id);

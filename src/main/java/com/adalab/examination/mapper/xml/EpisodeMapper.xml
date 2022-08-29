@@ -25,7 +25,7 @@
 
     <insert id="insertById">
         insert into episode(id, type, markdown_url)
-        values (#{id}, #{type}, #{markdown_url});
+        values (#{id}, #{type}, #{markdownUrl});
     </insert>
 
 </mapper>
