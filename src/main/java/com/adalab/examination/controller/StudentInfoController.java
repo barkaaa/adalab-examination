@@ -153,6 +153,9 @@ public class StudentInfoController {
     @GetMapping("/getTotalPages/{piecesNum}")
     public long getTotalPages(@PathVariable int piecesNum) {
         long toalPieces = studentInfoService.count();
+        int size = studentInfoService.list().size();
+        System.out.println(toalPieces);
+        System.out.println(size);
         long pageNum = -1;
         if (toalPieces%piecesNum==0)
             pageNum= toalPieces/piecesNum;
@@ -165,7 +168,7 @@ public class StudentInfoController {
     //分页获取排名
     @GetMapping("getPagingRanking/{page}")
     public List<StudentInfo> getPagingRanking(@PathVariable int page) {
-        IPage pageParameter = new Page(page,12);
+        IPage pageParameter = new Page(page,14);
 
         LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
         studentLambdaQueryWrapper.orderByDesc(StudentInfo::getEpisode);
@@ -176,6 +179,9 @@ public class StudentInfoController {
     //获取提交信息表格行
     @GetMapping("/getSubmission/{name}")
     public List<Map<String, String>> getSubmission(@PathVariable String name) {
+        LambdaQueryWrapper<StudentInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(StudentInfo::getName,name);
+        int episopde = studentInfoService.getOne(queryWrapper).getEpisode();
         String userName = "/" + name;
         String localPath = "src/main/resources/studentCode" + userName;
 //        String localPath ="src/main/resources/studentCode";
@@ -197,6 +203,7 @@ public class StudentInfoController {
                     map.put("link",step);
                     map.put("episode",step);
                     map.put("src",innerPath);
+                    map.put("curEpisode", String.valueOf(episopde));
                     form.add(map);
                     System.out.println("list:"+step+formatedTime);
 
@@ -204,6 +211,47 @@ public class StudentInfoController {
             }
         }
 
+        return form;
+    }
+
+    @GetMapping("/getSubmission2/{name}")
+    public List<Map<String, List<String>>> getSubmission2(@PathVariable String name) {
+        LambdaQueryWrapper<StudentInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(StudentInfo::getName,name);
+        int episopde = studentInfoService.getOne(queryWrapper).getEpisode();
+        String userName = "/" + name;
+        String localPath = "src/main/resources/studentCode" + userName;
+//        String localPath ="src/main/resources/studentCode";
+        List<Map<String,List<String>>> form = new ArrayList<>();
+        HashMap<String, Object> hashMap = traverseDir(localPath);
+        File file = new File(localPath);
+        if(file.exists()){
+            String[] stepList = file.list();
+            for (String step:stepList){
+                Map<String,List<String>>  map = new HashMap<>();
+                String innerPath = localPath + "/" + step;
+                String[] timeList = new File(innerPath).list();
+                for (String time:timeList){
+                    String innerInnerPath = localPath + "/" + timeList;
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String formatedTime = simpleDateFormat.format(new Date(Long.parseLong(time) * 1000L));
+
+
+
+
+                    String[] fileNameList = new File(innerInnerPath).list();
+                    List<String> resultFileNameList = new ArrayList<>();
+                    for (String fileName :fileNameList)
+                    {
+                        resultFileNameList.add(fileName);
+                    }
+                    map.put(formatedTime,resultFileNameList);
+                    System.out.println("list:"+step+formatedTime);
+                }
+                form.add(map);
+            }
+        }
+//        name=>step1,step2,step3=> step=> time:List
         return form;
     }
 
