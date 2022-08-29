@@ -2,14 +2,13 @@ package com.adalab.examination.service.impl;
 
 import com.adalab.examination.config.OSSConfiguration;
 import com.adalab.examination.vo.UploadVo;
-import com.aliyun.oss.*;
-import com.aliyun.oss.internal.OSSHeaders;
+import com.aliyun.oss.ClientException;
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.*;
-import com.google.common.io.Files;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,11 +28,14 @@ public class OSSService {
 
     public static Logger log = LoggerFactory.getLogger(OSSService.class);
 
-    @Autowired
-    private OSSConfiguration ossConfiguration;
+    private final OSSConfiguration ossConfiguration;
 
-    @Autowired
-    private OSS ossClient;
+    private final OSS ossClient;
+
+    public OSSService(OSSConfiguration ossConfiguration, OSS ossClient) {
+        this.ossConfiguration = ossConfiguration;
+        this.ossClient = ossClient;
+    }
 
     /**
      * 上传文件到阿里云 OSS 服务器
@@ -43,13 +45,13 @@ public class OSSService {
      * @return
      */
     public UploadVo uploadFile(MultipartFile file) {
-        String fileName = "";
+        String fileName;
         UploadVo uploadVo = new UploadVo();
         try {
             String[] split = file.getOriginalFilename().split("\\.");
             String fileType = split[split.length - 1];
             // 创建一个唯一的文件名，类似于id，就是保存在OSS服务器上文件的文件名
-            fileName = UUID.randomUUID().toString() + "." + fileType;
+            fileName = UUID.randomUUID() + "." + fileType;
             String newFileName = fileType + "/" + fileName;
             InputStream inputStream = file.getInputStream();
             PutObjectRequest putObjectRequest = new PutObjectRequest(ossConfiguration.getBucketName(), newFileName, inputStream);
@@ -130,7 +132,7 @@ public class OSSService {
      * @return
      */
     public String getSingeNatureUrl(String filename, int expSeconds) {
-        Date expiration = new Date(System.currentTimeMillis() + expSeconds * 1000);
+        Date expiration = new Date(System.currentTimeMillis() + expSeconds * 1000L);
         URL url = ossClient.generatePresignedUrl(ossConfiguration.getBucketName(), filename, expiration);
         if (url != null) {
             return url.toString();

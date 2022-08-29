@@ -20,14 +20,12 @@ public class LevelsController {
 
     @GetMapping("/all")
     public List<Levels> getAll() {
-        List<Levels> levels = levelsService.list(null);
-        return levels;
+        return levelsService.list(null);
     }
 
     @GetMapping("/getone")
     public Levels getOne(int stage) {
-        Levels one = levelsService.getOne(new QueryWrapper<Levels>().eq("stage", stage));
-        return one;
+        return levelsService.getOne(new QueryWrapper<Levels>().eq("stage", stage));
     }
 
 

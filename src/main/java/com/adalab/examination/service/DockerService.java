@@ -64,16 +64,8 @@ public class DockerService {
     public String createContainer(String imageId, String stuCodeFileName, int ep,
                                   String testFileName, String workDir,
                                   String name, String runCMD) {
-        int index = 0;
-        for (int i = 0; i < runCMD.length(); i++) {
-            if (runCMD.charAt(i) == ' ') {
-                index = i;
-                break;
-            }
-        }
-        String[] cmd = new String[2];
-        cmd[0] = runCMD.substring(0, index);
-        cmd[1] = runCMD.substring(index + 1);
+        String[] cmd = runCMD.split(" ");
+
         try {
             return containerFactoryBean.createContainer(findLastPost(stuCodeFileName, ep), testFileName, imageId, name, workDir, cmd);
         } catch (IOException e) {
@@ -127,10 +119,11 @@ public class DockerService {
     }
 
     public boolean checkContainer(String containerId) {
-        return dockerClient.listContainersCmd().withIdFilter(List.of(containerId)).exec().isEmpty();
+        return !dockerClient.listContainersCmd().withIdFilter(List.of(containerId)).exec().isEmpty();
     }
 
     public List<Image> getImages() {
         return dockerClient.listImagesCmd().exec();
     }
+
 }

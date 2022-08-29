@@ -6,7 +6,6 @@ import com.adalab.examination.entity.missionEntity.MissionInfo;
 import com.adalab.examination.entity.missionEntity.TextContents;
 import com.adalab.examination.service.QuestionnaireService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +23,12 @@ import java.util.List;
 @CrossOrigin
 public class QuestionnaireController {
 
-    @Autowired
+    final
     QuestionnaireService questionnaireService;
+
+    public QuestionnaireController(QuestionnaireService questionnaireService) {
+        this.questionnaireService = questionnaireService;
+    }
 
     @PutMapping("addorupdate")
     public String addOrUpdate(@RequestBody MissionInfo missionInfo) {
@@ -74,7 +77,6 @@ public class QuestionnaireController {
     @GetMapping("getone")
     public List<Questionnaire> getOne(int missionNum) {
         QueryWrapper<Questionnaire> qw = new QueryWrapper<Questionnaire>().eq("mission_number", missionNum);
-        List<Questionnaire> list = questionnaireService.list(qw);
-        return list;
+        return questionnaireService.list(qw);
     }
 }

@@ -52,8 +52,14 @@ public class EpisodeController {
         return "上传成功";
     }
 
+//    @PostMapping("/createEp")
+//    String createEp(@RequestParam("url") String markdownUrl, @RequestParam("type") int type) {
+//
+//    }
+
+
     @PostMapping("/episode")
-    String createEp(@RequestPart(value = "test", required = false) MultipartFile[] files, @RequestPart(value = "episode") Episode episode) {
+    String upLoadEpConfig(@RequestPart(value = "test", required = false) MultipartFile[] files, @RequestPart(value = "episode") Episode episode) {
         if (files != null) {
             String newName = fileUpLoadService.uploadTestFile(files);
             episode.setTestFileName(newName);
@@ -89,11 +95,11 @@ public class EpisodeController {
         dockerService.startContainer(containerId);
         long t = System.currentTimeMillis();
 
-        while (System.currentTimeMillis() - t <= time && !dockerService.checkContainer(containerId)) {
+        while (System.currentTimeMillis() - t <= time && dockerService.checkContainer(containerId)) {
             Thread.sleep(500);
         }
 
-        if (!dockerService.checkContainer(containerId)) {
+        if (dockerService.checkContainer(containerId)) {
             dockerService.stopContainer(containerId);
         }
         dockerService.removeContainer(containerId);

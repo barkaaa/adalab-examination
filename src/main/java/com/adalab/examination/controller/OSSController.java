@@ -18,8 +18,11 @@ import java.util.Map;
 @RequestMapping("/api/oss")
 public class OSSController {
 
-    @Autowired
-    private OSSService ossService;
+    private final OSSService ossService;
+
+    public OSSController(OSSService ossService) {
+        this.ossService = ossService;
+    }
 
     /**
      * 上传文件
