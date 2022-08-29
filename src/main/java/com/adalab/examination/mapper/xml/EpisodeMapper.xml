@@ -24,8 +24,8 @@
     </update>
 
     <insert id="insertById">
-        insert into episode(id,test_file_name,cmd,time_out,img_id,test_required)
-        values (#{id},#{testFileName},#{cmd},#{timeOut},#{imgId},#{testRequired});
+        insert into episode(id, type, markdown_url)
+        values (#{id}, #{type}, #{markdown_url});
     </insert>
 
 </mapper>
