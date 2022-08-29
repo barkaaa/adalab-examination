@@ -6,6 +6,7 @@ import com.adalab.examination.service.StudentInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -150,9 +151,9 @@ public class StudentInfoController {
 
     //获取总页数
     @GetMapping("/getTotalPages/{piecesNum}")
-    public int getTotalPages(@PathVariable int piecesNum) {
-        int toalPieces = studentInfoService.count();
-        int pageNum = -1;
+    public long getTotalPages(@PathVariable int piecesNum) {
+        long toalPieces = studentInfoService.count();
+        long pageNum = -1;
         if (toalPieces%piecesNum==0)
             pageNum= toalPieces/piecesNum;
         else
@@ -161,7 +162,7 @@ public class StudentInfoController {
     }
 
     //分页获取排名
-    @PostMapping("/getPagingRanking/{page}")
+    @GetMapping("getPagingRanking/{page}")
     public List<StudentInfo> getPagingRanking(@PathVariable int page) {
         IPage pageParameter = new Page(page,12);
 
@@ -173,7 +174,7 @@ public class StudentInfoController {
     }
 
     //获取提交信息表格行
-    @PostMapping("/getSubmission/{name}")
+    @GetMapping("/getSubmission/{name}")
     public List<Map<String, String>> getSubmission(@PathVariable String name) {
         String userName = "/" + name;
         String localPath = "src/main/resources/studentCode" + userName;
@@ -181,19 +182,25 @@ public class StudentInfoController {
         List<Map<String,String>> form = new ArrayList<>();
         HashMap<String, Object> hashMap = traverseDir(localPath);
         File file = new File(localPath);
-        for (String step:file.list()){
-            String innerPath = localPath + "/" + step;
-            for (String time:new File(innerPath).list()){
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String formatedTime = simpleDateFormat.format(new Date(Long.parseLong(time) * 1000L));
-                Map<String,String>  map = new HashMap<>();
-                map.put("time",formatedTime);
-                map.put("episodeName",step);
-                map.put("episode",step);
-                map.put("src",innerPath);
-                form.add(map);
-                System.out.println("list:"+step+formatedTime);
+        if(file.exists()){
+            String[] stepList = file.list();
+            ArrayUtils.reverse(stepList);
+            for (String step:stepList){
+                String innerPath = localPath + "/" + step;
+                String[] timeList = new File(innerPath).list();
+                ArrayUtils.reverse(timeList);
+                for (String time:timeList){
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String formatedTime = simpleDateFormat.format(new Date(Long.parseLong(time) * 1000L));
+                    Map<String,String>  map = new HashMap<>();
+                    map.put("commitTime",formatedTime);
+                    map.put("link",step);
+                    map.put("episode",step);
+                    map.put("src",innerPath);
+                    form.add(map);
+                    System.out.println("list:"+step+formatedTime);
 
+                }
             }
         }
 
