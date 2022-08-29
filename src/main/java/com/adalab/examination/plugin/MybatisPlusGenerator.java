@@ -52,7 +52,7 @@ public class MybatisPlusGenerator {
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
 
-        strategy.setInclude("episode");
+        strategy.setInclude("challenge_type");
 
 
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
