@@ -67,13 +67,12 @@ public class EpisodeController {
     @PatchMapping("/update")
     String upLoadEpConfig(@RequestPart(value = "test", required = false) MultipartFile[] files,
                           @RequestPart(value = "episode") Episode episode, HttpServletResponse response) {
-
+        Episode target = episodeService.getById(episode.getId());
+        if (target == null) {
+            response.setStatus(400);
+            return "试图更新不存在的关卡";
+        }
         if (files != null) {
-            Episode target = episodeService.getById(episode.getId());
-            if (target == null) {
-                response.setStatus(400);
-                return "试图更新不存在的关卡";
-            }
             if (target.getTestFileName() != null) {
                 File file = new File("src/main/resources/testFile/" + target.getTestFileName());
                 try {
@@ -177,9 +176,12 @@ public class EpisodeController {
 
 
     @GetMapping("/getOne")
-    Episode getOne (int id){
+    Episode getOne(int id) {
         return episodeService.getById(id);
     }
+
+
+
     @DeleteMapping("/images")
     void delImg(@RequestParam("id") String id) {
         dockerService.removeImage(id);
