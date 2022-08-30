@@ -207,5 +207,16 @@ public class StudentInfoController {
         return form;
     }
 
+    //设置学生的闯关数
+    @GetMapping("/setDoneMission/{id}")
+    public String setDoneMission(@PathVariable String id){
+        int studentId = Integer.parseInt(id);
+        LambdaQueryWrapper<StudentInfo> lqw = new LambdaQueryWrapper<>();
+        StudentInfo studentInfo = studentInfoService.getById(studentId);
+        int doneMission = studentInfo.getEpisode();
+        studentInfo.setEpisode(doneMission+1);
+        studentInfoService.saveOrUpdate(studentInfo);
+        return "success";
+    }
 }
 
