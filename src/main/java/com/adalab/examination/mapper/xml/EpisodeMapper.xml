@@ -14,7 +14,7 @@
     <update id="upAfterId" parameterType="int">
         UPDATE episode
         SET id=id + 1
-        WHERE id >= #{id};
+        WHERE id >= #{id} ORDER BY id desc;
     </update>
 
     <update id="downAfterId" parameterType="int">
