@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -49,13 +48,12 @@ public class GitLoginController {
     @GetMapping("/callback")
     public void getAccessToken(@RequestParam(name = "code") String code,
                                @RequestParam(name = "state") String state,
-                               HttpServletRequest request,
                                HttpServletResponse resp) {
         String token = gitLoginService.callBack(CLIENT_ID, CLIENT_SECRET,URL,code,state);
         // 如果token为null，那么与gihub的连结出了问题，重定向回login界面
         //不为null，获得用户并重定向到闯关界面
         if (token == null) {
-            Cookie cookie = new Cookie("NETERROR","NETERROR");
+            Cookie cookie = new Cookie("NETERROR", "NETERROR");
             resp.addCookie(cookie);
             resp.sendRedirect("https://challenge.adalab.cn/student");
 

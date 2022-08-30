@@ -36,7 +36,7 @@ public class Episode implements Serializable {
 
     private String imgId;
 
-    private int type;
+    private Integer type;
 
     private String markdownUrl;
 }
