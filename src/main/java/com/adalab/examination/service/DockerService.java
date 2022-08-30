@@ -47,7 +47,7 @@ public class DockerService {
         try {
             return imageFactoryBean.createImage(fileName, Arrays.stream(tags).collect(Collectors.toSet()));
         } catch (IOException e) {
-            return null;
+            throw new RuntimeException("生成镜像文件失败");
         }
     }
 

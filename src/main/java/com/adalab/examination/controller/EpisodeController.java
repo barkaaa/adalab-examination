@@ -1,9 +1,6 @@
 package com.adalab.examination.controller;
 
-import com.adalab.examination.entity.Episode;
-import com.adalab.examination.entity.StudentInfo;
-import com.adalab.examination.entity.TaggedImage;
-import com.adalab.examination.entity.TestResult;
+import com.adalab.examination.entity.*;
 import com.adalab.examination.service.*;
 import com.github.dockerjava.api.model.Image;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -43,35 +40,35 @@ public class EpisodeController {
      * @param file docker file
      */
     @PostMapping("/docker")
-    String uploadDockerFile(@RequestPart("docker") MultipartFile file, @RequestParam("tag") String tag, HttpServletResponse response) {
-
-        if (fileUpLoadService.uploadDockerFile(file, tag).equals("")) {
+    ServiceResponse<String> uploadDockerFile(@RequestPart("docker") MultipartFile file, @RequestParam("tag") String tag, HttpServletResponse response) {
+        try {
+            fileUpLoadService.uploadDockerFile(file, tag);
+        } catch (RuntimeException e) {
             response.setStatus(400);
-            return "上传失败";
+            return new ServiceResponse<>(400, e.getMessage());
         }
-
-        return "上传成功";
+        return new ServiceResponse<>(200, "上传成功");
     }
 
     @PostMapping("/createEp")
-    String createEp(@RequestBody Episode episode, HttpServletResponse response) {
+    ServiceResponse<String> createEp(@RequestBody Episode episode, HttpServletResponse response) {
         try {
             episodeService.insert(episode);
         } catch (Exception e) {
             response.setStatus(400);
-            return e.getMessage();
+            return new ServiceResponse<>(400, e.getMessage());
         }
-        return "更新成功";
+        return new ServiceResponse<>(200, "创建关卡成功");
     }
 
 
     @PatchMapping("/update")
-    String upLoadEpConfig(@RequestPart(value = "test", required = false) MultipartFile[] files,
-                          @RequestPart(value = "episode") Episode episode, HttpServletResponse response) {
+    ServiceResponse<String> upLoadEpConfig(@RequestPart(value = "test", required = false) MultipartFile[] files,
+                                           @RequestPart(value = "episode") Episode episode, HttpServletResponse response) {
         Episode target = episodeService.getById(episode.getId());
         if (target == null) {
             response.setStatus(400);
-            return "试图更新不存在的关卡";
+            return new ServiceResponse<>(400, "试图更新不存在的关卡");
         }
         if (files != null) {
             System.out.println("更新关卡");
@@ -89,12 +86,12 @@ public class EpisodeController {
         }
         episodeService.updateById(episode);
 
-        return "上传成功";
+        return new ServiceResponse<>(200, "上传成功");
 
     }
 
     @GetMapping("/test/{id}")
-    TestResult doTest(@PathVariable("id") int episodeId, HttpServletResponse response) throws InterruptedException {
+    ServiceResponse<TestResult> doTest(@PathVariable("id") int episodeId, HttpServletResponse response) throws InterruptedException {
         int id = 1;
         StudentInfo studentInfo = studentService.getById(id);
 
@@ -102,7 +99,7 @@ public class EpisodeController {
             gitService.gitClone(id + "", studentInfo.getWebPage(), episodeId + "");
         } catch (GitAPIException e) {
             response.setStatus(400);
-            return null;
+            return new ServiceResponse<>(400, "git拉取代码失败", null);
         }
 
         Episode episode = episodeService.getById(episodeId);
@@ -124,22 +121,21 @@ public class EpisodeController {
             dockerService.stopContainer(containerId);
         }
         dockerService.removeContainer(containerId);
-        return dockerService.getResult(id + "", episodeId);
+        return new ServiceResponse<>(200, "", dockerService.getResult(id + "", episodeId));
 
     }
 
 
     @DeleteMapping("/delete/{id}")
-    String delete(@PathVariable("id") int id) {
+    ServiceResponse<String> delete(@PathVariable("id") int id) {
         Episode episode = episodeService.getById(id);
         episodeService.delete(id);
         try {
             delete(new File("src/main/resources/testFile/" + episode.getTestFileName()));
         } catch (IOException e) {
-            e.printStackTrace();
-            return "删除失败";
+            return new ServiceResponse<>(200, "删除失败");
         }
-        return "删除成功";
+        return new ServiceResponse<>(200, "删除成功");
     }
 
     void delete(File file) throws IOException {
@@ -190,8 +186,14 @@ public class EpisodeController {
 
 
     @DeleteMapping("/images")
-    void delImg(@RequestParam("id") String id) {
-        dockerService.removeImage(id);
+    ServiceResponse<String> delImg(@RequestParam("id") String id) {
+        try {
+            dockerService.removeImage(id);
+        } catch (Exception e) {
+            return new ServiceResponse<>(500, "删除失败");
+        }
+
+        return new ServiceResponse<>(200, "删除成功");
     }
 
 }

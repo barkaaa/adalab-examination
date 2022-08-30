@@ -46,21 +46,22 @@ public class FileUpLoadService {
         }
     }
 
-    public String uploadDockerFile(MultipartFile file, String tag) {
+    public String uploadDockerFile(MultipartFile file, String tag) throws RuntimeException {
         try {
             File sourceFile = new File("src/main/resources");
             String resourcePath = sourceFile.getCanonicalPath();
             File localFile = new File(resourcePath + "/dockerFiles/DockerFile");
             if (!localFile.getParentFile().exists()) {
                 if (!localFile.getParentFile().mkdirs()) {
-                    return "";
+                    throw new RuntimeException("镜像文件目录生成失败");
                 }
             }
             file.transferTo(localFile);
             return dockerService.createImage("DockerFile", tag);
         } catch (IOException e) {
-            e.printStackTrace();
-            return "";
+            throw new RuntimeException("文件写入失败");
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 }
