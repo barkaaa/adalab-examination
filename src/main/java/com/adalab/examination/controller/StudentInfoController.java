@@ -254,6 +254,38 @@ public class StudentInfoController {
 //        name=>step1,step2,step3=> step=> time:List
         return form;
     }
+    @GetMapping("/studentCode/FilesTree")
+    public Map<String,Map<String,List<String>>> getFilesTreeAll() {
+        String localPath = "src/main/resources/studentCode";
+        HashMap<String, Object> hashMap = traverseDir(localPath);
+        //获取用户提交文件夹名
+        File file  = new File(localPath);
+        String[] usrFolderName = file.list();
+        Map<String,Map<String,List<String>>> usrFolderNames = new HashMap<>();
+        for (String U:usrFolderName){
+            String innerpath = localPath+"/"+U;
+            //获取日期文件夹 名
+            File innerFile = new File(innerpath);
+            String[] dateFolder = innerFile.list();
+            Map<String,List<String>> dataFolderNames = new HashMap<>();
+            for (String D:dateFolder){
+                String innerInerPath = innerpath+"/"+D;
+                //获取文件名
+                File innerInnerFile = new File(innerpath);
+
+                String[] files = innerInnerFile.list();
+                List<String> fileNames = new ArrayList<>();
+                for (String F: files){
+                    fileNames.add(F);
+                }
+                dataFolderNames.put(D,fileNames);
+            }
+            usrFolderNames.put(U,dataFolderNames);
+        }
+        logger.info("获取到结构树");
+        System.out.println(hashMap.get("佐々木玲奈"));
+        return usrFolderNames;
+    }
 
 }
 
