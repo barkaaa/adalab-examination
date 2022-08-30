@@ -27,7 +27,7 @@ public class FileUpLoadService {
                 //重新随机生成名字
                 String filename = UUID.randomUUID() + "";
                 File newFile = new File(resourcePath + "/testFile/" + filename);
-                if (!newFile.mkdir()) {
+                if (!newFile.mkdirs()) {
                     return "";
                 }
                 for (MultipartFile f : files) {
@@ -51,8 +51,13 @@ public class FileUpLoadService {
             File sourceFile = new File("src/main/resources");
             String resourcePath = sourceFile.getCanonicalPath();
             File localFile = new File(resourcePath + "/dockerFiles/DockerFile");
+            if (!localFile.getParentFile().exists()) {
+                if (!localFile.getParentFile().mkdirs()) {
+                    return "";
+                }
+            }
             file.transferTo(localFile);
-            return dockerService.createImage("DockerFile",  tag);
+            return dockerService.createImage("DockerFile", tag);
         } catch (IOException e) {
             e.printStackTrace();
             return "";

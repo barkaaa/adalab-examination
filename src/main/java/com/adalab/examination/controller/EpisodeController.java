@@ -2,6 +2,7 @@ package com.adalab.examination.controller;
 
 import com.adalab.examination.entity.Episode;
 import com.adalab.examination.entity.StudentInfo;
+import com.adalab.examination.entity.TaggedImage;
 import com.adalab.examination.entity.TestResult;
 import com.adalab.examination.service.*;
 import com.github.dockerjava.api.model.Image;
@@ -14,7 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/episode")
@@ -73,6 +74,7 @@ public class EpisodeController {
             return "试图更新不存在的关卡";
         }
         if (files != null) {
+            System.out.println("更新关卡");
             if (target.getTestFileName() != null) {
                 File file = new File("src/main/resources/testFile/" + target.getTestFileName());
                 try {
@@ -165,8 +167,14 @@ public class EpisodeController {
 
 
     @GetMapping("/images")
-    List<Image> getImages() {
-        return dockerService.getImages();
+    List<TaggedImage> getImages() {
+        List<TaggedImage> res = new ArrayList<>();
+        for (Image image : dockerService.getImages()) {
+            for (String s : image.getRepoTags()) {
+                res.add(new TaggedImage(s));
+            }
+        }
+        return res;
     }
 
     @GetMapping("/get")
@@ -179,7 +187,6 @@ public class EpisodeController {
     Episode getOne(int id) {
         return episodeService.getById(id);
     }
-
 
 
     @DeleteMapping("/images")

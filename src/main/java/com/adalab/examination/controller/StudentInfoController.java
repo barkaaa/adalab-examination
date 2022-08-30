@@ -165,7 +165,7 @@ public class StudentInfoController {
     //分页获取排名
     @GetMapping("getPagingRanking/{page}")
     public List<StudentInfo> getPagingRanking(@PathVariable int page) {
-        IPage pageParameter = new Page(page,12);
+        IPage pageParameter = new Page(page,14);
 
         LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
         studentLambdaQueryWrapper.orderByDesc(StudentInfo::getEpisode);
