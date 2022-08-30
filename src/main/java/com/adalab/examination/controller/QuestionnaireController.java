@@ -5,6 +5,7 @@ import com.adalab.examination.entity.Questionnaire;
 import com.adalab.examination.entity.missionEntity.MissionInfo;
 import com.adalab.examination.entity.missionEntity.TextContents;
 import com.adalab.examination.service.QuestionnaireService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,5 +81,13 @@ public class QuestionnaireController {
         return questionnaireService.list(qw);
     }
 
+    @DeleteMapping("DeleteQuestionnaire/{missionNumber}")
+    public String deleteQuestionnaire(@PathVariable int missionNumber){
+        LambdaQueryWrapper<Questionnaire> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(Questionnaire::getMissionNumber,missionNumber);
+        var list = questionnaireService.list(lqw);
+        list.stream().forEach(questionnaireService::removeById);
+        return "ok";
+    }
 
 }
