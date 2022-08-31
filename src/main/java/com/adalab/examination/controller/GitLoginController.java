@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 public class GitLoginController {
 
 
-
     StudentInfoService studentInfoService;
 
     GitLoginService gitLoginService;
@@ -25,9 +24,9 @@ public class GitLoginController {
 
     public final String CLIENT_SECRET = "ba1e86d41d2382078aea528d7c7410dc560e128b";
 
-    public final String URL = "https://challenge.adalab.cn/callback";
+    public final String URL = "http://localhost:8080/callback";
 
-    public GitLoginController(StudentInfoService studentInfoService,GitLoginService gitLoginService) {
+    public GitLoginController(StudentInfoService studentInfoService, GitLoginService gitLoginService) {
         this.studentInfoService = studentInfoService;
         this.gitLoginService = gitLoginService;
     }
@@ -38,19 +37,19 @@ public class GitLoginController {
     public void getAccessToken(@RequestParam(name = "code") String code,
                                @RequestParam(name = "state") String state,
                                HttpServletResponse resp) {
-        String token = gitLoginService.callBack(CLIENT_ID, CLIENT_SECRET,URL,code,state);
+        String token = gitLoginService.callBack(CLIENT_ID, CLIENT_SECRET, URL, code, state);
         // 如果token为null，那么与gihub的连结出了问题，重定向回login界面
         //不为null，获得用户并重定向到闯关界面
         if (token == null) {
             Cookie cookie = new Cookie("NETERROR", "NETERROR");
             resp.addCookie(cookie);
-            resp.sendRedirect("https://challenge.adalab.cn/student");
+            resp.sendRedirect("http://localhost:8002/student");
 
         } else {
             StudentInfo student = gitLoginService.getUser(token);
-            Cookie cookie = new Cookie("id",student.getId()+"");
+            Cookie cookie = new Cookie("id", student.getId() + "");
             resp.addCookie(cookie);
-            resp.sendRedirect("https://challenge.adalab.cn/home");
+            resp.sendRedirect("http://localhost:8002/home");
         }
     }
 }

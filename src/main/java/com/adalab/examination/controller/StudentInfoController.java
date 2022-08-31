@@ -281,6 +281,14 @@ public class StudentInfoController {
         return new ServiceResponse<>(200, "", studentInfo.getWebPage());
     }
 
+    @GetMapping("/me")
+    public ServiceResponse<Integer> me(@CookieValue(value = "id", required = false) Integer id) {
+        if (id == null) {
+            return new ServiceResponse<>(401, "未登录");
+        }
+        return new ServiceResponse<>(200, "", id);
+    }
+
 
 }
 
