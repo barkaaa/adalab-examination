@@ -1,6 +1,7 @@
 package com.adalab.examination.service;
 
 import com.adalab.examination.entity.QuestionnaireReply;
+import com.adalab.examination.entity.missionEntity.QuestionnaireResult;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface QuestionnaireReplyService extends IService<QuestionnaireReply> {
 
+    void putStudentReply(QuestionnaireResult q);
 }
