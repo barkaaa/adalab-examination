@@ -43,11 +43,11 @@ public class DockerService {
      * @param tags     生产镜像的标签
      * @return 镜像的服务器ID
      */
-    public String createImage(String fileName, String... tags) {
+    public String createImage(String fileName, String... tags) throws RuntimeException {
         try {
             return imageFactoryBean.createImage(fileName, Arrays.stream(tags).collect(Collectors.toSet()));
-        } catch (IOException e) {
-            return null;
+        } catch (Exception e) {
+            throw new RuntimeException("生成镜像文件失败");
         }
     }
 

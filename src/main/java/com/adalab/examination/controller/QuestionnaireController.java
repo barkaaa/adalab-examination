@@ -81,12 +81,26 @@ public class QuestionnaireController {
         return questionnaireService.list(qw);
     }
 
+    /**
+     * 前端删除关卡调用此接口，先删除关卡下所有问题，然后将后面问题的missionnumber前移一位
+     * @param missionNumber 该问题属于第几关
+     * @return
+     */
     @DeleteMapping("DeleteQuestionnaire/{missionNumber}")
     public String deleteQuestionnaire(@PathVariable int missionNumber){
         LambdaQueryWrapper<Questionnaire> lqw = new LambdaQueryWrapper<>();
         lqw.eq(Questionnaire::getMissionNumber,missionNumber);
         var list = questionnaireService.list(lqw);
         list.stream().forEach(questionnaireService::removeById);
+        lqw.clear();
+        lqw.gt(Questionnaire::getMissionNumber, missionNumber);
+        var list2 = questionnaireService.list(lqw);
+        list2.stream().forEach((item)->{
+            item.setMissionNumber(item.getMissionNumber()-1);
+            questionnaireService.updateById(item);
+                }
+
+        );
         return "ok";
     }
 

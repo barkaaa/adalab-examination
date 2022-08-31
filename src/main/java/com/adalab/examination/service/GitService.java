@@ -22,7 +22,6 @@ public class GitService {
         String time = "/" + System.currentTimeMillis();
         String localPath = path + "/src/main/resources/studentCode" + "/" + studentID + "/step" + step + time;
 
-
         try (Git git = Git.cloneRepository()
                 .setURI(url)
                 .setDirectory(new File(localPath))
