@@ -4,6 +4,7 @@ import com.adalab.examination.entity.*;
 import com.adalab.examination.service.*;
 import com.github.dockerjava.api.model.Image;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,7 +45,6 @@ public class EpisodeController {
         try {
             fileUpLoadService.uploadDockerFile(file, tag);
         } catch (RuntimeException e) {
-            response.setStatus(400);
             return new ServiceResponse<>(400, e.getMessage());
         }
         return new ServiceResponse<>(200, "上传成功");
@@ -55,7 +55,6 @@ public class EpisodeController {
         try {
             episodeService.insert(episode);
         } catch (Exception e) {
-            response.setStatus(400);
             return new ServiceResponse<>(400, e.getMessage());
         }
         return new ServiceResponse<>(200, "创建关卡成功");
@@ -67,7 +66,6 @@ public class EpisodeController {
                                            @RequestPart(value = "episode") Episode episode, HttpServletResponse response) {
         Episode target = episodeService.getById(episode.getId());
         if (target == null) {
-            response.setStatus(400);
             return new ServiceResponse<>(400, "试图更新不存在的关卡");
         }
         if (files != null) {
@@ -86,6 +84,7 @@ public class EpisodeController {
         }
         episodeService.updateById(episode);
 
+
         return new ServiceResponse<>(200, "上传成功");
 
     }
@@ -98,7 +97,6 @@ public class EpisodeController {
         try {
             gitService.gitClone(id + "", studentInfo.getWebPage(), episodeId + "");
         } catch (GitAPIException e) {
-            response.setStatus(400);
             return new ServiceResponse<>(400, "git拉取代码失败", null);
         }
 
@@ -163,25 +161,26 @@ public class EpisodeController {
 
 
     @GetMapping("/images")
-    List<TaggedImage> getImages() {
+    ServiceResponse<List<TaggedImage>> getImages() {
         List<TaggedImage> res = new ArrayList<>();
         for (Image image : dockerService.getImages()) {
             for (String s : image.getRepoTags()) {
                 res.add(new TaggedImage(s));
             }
         }
-        return res;
+        return new ServiceResponse<>(200, "获取成功", res);
     }
 
     @GetMapping("/get")
-    List<Episode> getEpisode() {
-        return episodeService.list();
+    ServiceResponse<List<Episode>>
+    getEpisode() {
+        return new ServiceResponse<>(200, "", episodeService.list());
     }
 
 
     @GetMapping("/getOne")
-    Episode getOne(int id) {
-        return episodeService.getById(id);
+    ServiceResponse<Episode> getOne(int id) {
+        return new ServiceResponse<>(200, "", episodeService.getById(id));
     }
 
 
