@@ -195,4 +195,9 @@ public class EpisodeController {
         return new ServiceResponse<>(200, "删除成功");
     }
 
+    @GetMapping("/counts")
+    ServiceResponse<Integer> counts() {
+        return new ServiceResponse<>(200, "", episodeService.count());
+    }
+
 }
