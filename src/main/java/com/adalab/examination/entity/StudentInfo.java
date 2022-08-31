@@ -37,7 +37,7 @@ public class StudentInfo implements Serializable {
 
     private LocalDateTime daysNeeded;
 
-    private int actualHours;
+    private Integer actualHours;
 
     private LocalDateTime lastEdited;
 
