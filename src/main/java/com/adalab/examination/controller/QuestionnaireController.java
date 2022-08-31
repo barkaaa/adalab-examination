@@ -2,6 +2,7 @@ package com.adalab.examination.controller;
 
 
 import com.adalab.examination.entity.Questionnaire;
+import com.adalab.examination.entity.ServiceResponse;
 import com.adalab.examination.entity.missionEntity.MissionInfo;
 import com.adalab.examination.entity.missionEntity.TextContents;
 import com.adalab.examination.service.QuestionnaireService;
@@ -32,7 +33,7 @@ public class QuestionnaireController {
     }
 
     @PutMapping("addorupdate")
-    public String addOrUpdate(@RequestBody MissionInfo missionInfo) {
+    public ServiceResponse<String> addOrUpdate(@RequestBody MissionInfo missionInfo) {
         Questionnaire questionnaire = new Questionnaire();
         //第几关
         questionnaire.setMissionNumber(missionInfo.getMissionNumber());
@@ -71,37 +72,38 @@ public class QuestionnaireController {
             i++;
         }
 
-        return "ok";
+        return new ServiceResponse<>(200, "ok");
     }
 
 
     @GetMapping("getone")
-    public List<Questionnaire> getOne(int missionNum) {
+    public ServiceResponse<List<Questionnaire>> getOne(int missionNum) {
         QueryWrapper<Questionnaire> qw = new QueryWrapper<Questionnaire>().eq("mission_number", missionNum);
-        return questionnaireService.list(qw);
+        return new ServiceResponse<>(200, "", questionnaireService.list(qw));
     }
 
     /**
      * 前端删除关卡调用此接口，先删除关卡下所有问题，然后将后面问题的missionnumber前移一位
+     *
      * @param missionNumber 该问题属于第几关
      * @return
      */
     @DeleteMapping("DeleteQuestionnaire/{missionNumber}")
-    public String deleteQuestionnaire(@PathVariable int missionNumber){
+    public ServiceResponse<String> deleteQuestionnaire(@PathVariable int missionNumber) {
         LambdaQueryWrapper<Questionnaire> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(Questionnaire::getMissionNumber,missionNumber);
+        lqw.eq(Questionnaire::getMissionNumber, missionNumber);
         var list = questionnaireService.list(lqw);
         list.stream().forEach(questionnaireService::removeById);
         lqw.clear();
         lqw.gt(Questionnaire::getMissionNumber, missionNumber);
         var list2 = questionnaireService.list(lqw);
-        list2.stream().forEach((item)->{
-            item.setMissionNumber(item.getMissionNumber()-1);
-            questionnaireService.updateById(item);
+        list2.stream().forEach((item) -> {
+                    item.setMissionNumber(item.getMissionNumber() - 1);
+                    questionnaireService.updateById(item);
                 }
 
         );
-        return "ok";
+        return new ServiceResponse<>(200, "ok");
     }
 
 }

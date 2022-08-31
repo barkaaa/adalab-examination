@@ -40,7 +40,7 @@ public class EpisodeController {
      * @param file docker file
      */
     @PostMapping("/docker")
-    ServiceResponse<String> uploadDockerFile(@RequestPart("docker") MultipartFile file, @RequestParam("tag") String tag, HttpServletResponse response) {
+    ServiceResponse<String> uploadDockerFile(@RequestPart("docker") MultipartFile file, @RequestParam("tag") String tag) {
         try {
             fileUpLoadService.uploadDockerFile(file, tag);
         } catch (RuntimeException e) {
@@ -50,7 +50,7 @@ public class EpisodeController {
     }
 
     @PostMapping("/createEp")
-    ServiceResponse<String> createEp(@RequestBody Episode episode, HttpServletResponse response) {
+    ServiceResponse<String> createEp(@RequestBody Episode episode) {
         try {
             episodeService.insert(episode);
         } catch (Exception e) {
@@ -62,7 +62,7 @@ public class EpisodeController {
 
     @PatchMapping("/update")
     ServiceResponse<String> upLoadEpConfig(@RequestPart(value = "test", required = false) MultipartFile[] files,
-                                           @RequestPart(value = "episode") Episode episode, HttpServletResponse response) {
+                                           @RequestPart(value = "episode") Episode episode) {
         Episode target = episodeService.getById(episode.getId());
         if (target == null) {
             return new ServiceResponse<>(400, "试图更新不存在的关卡");

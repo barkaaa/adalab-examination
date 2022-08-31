@@ -77,7 +77,8 @@ public class StudentInfoController {
 
     /**
      * 在前端按下开始按钮开始闯关
-     *设置学员开始时间
+     * 设置学员开始时间
+     *
      * @param id
      * @return
      */
@@ -86,14 +87,15 @@ public class StudentInfoController {
         StudentInfo studentInfo = studentInfoService.getById(id);
         studentInfo.setBeginDate(LocalDateTime.now());
         if (studentInfoService.updateById(studentInfo)) {
-            return new ServiceResponse<String>(200,"SUCCESS");
+            return new ServiceResponse<String>(200, "SUCCESS");
         } else {
-            return new ServiceResponse<String>(201,"未能成功设置开始时间");
+            return new ServiceResponse<String>(201, "未能成功设置开始时间");
         }
     }
 
     /**
      * 通过id得到学生信息
+     *
      * @param id cookie存的是string类型的ID，这里也按照string处理
      * @return 学生信息
      */
@@ -103,9 +105,9 @@ public class StudentInfoController {
         LambdaQueryWrapper<StudentInfo> lqw = new LambdaQueryWrapper<>();
         StudentInfo studentInfo = studentInfoService.getById(studentId);
         if (studentInfo != null) {
-            return new ServiceResponse<>(200,"success",studentInfo);
+            return new ServiceResponse<>(200, "success", studentInfo);
         } else {
-            return new ServiceResponse<>(201,"未能成功获取学员信息");
+            return new ServiceResponse<>(201, "未能成功获取学员信息");
         }
     }
 
@@ -117,7 +119,7 @@ public class StudentInfoController {
      * @return 学生信息
      */
     @PostMapping("/getDetail")
-    public HashMap<Object, Object> getDetail(@NotNull @RequestBody StudentInfo studentInfo) {
+    public ServiceResponse<HashMap<Object, Object>> getDetail(@NotNull @RequestBody StudentInfo studentInfo) {
         LambdaQueryWrapper<StudentInfo> studentQuery = new LambdaQueryWrapper<>();
         studentQuery.eq(StudentInfo::getName, studentInfo.getName());
         StudentInfo one = studentInfoService.getOne(studentQuery);
@@ -129,24 +131,24 @@ public class StudentInfoController {
         objectHashMap.put("Last Edited", one.getLastEdited());
         objectHashMap.put("Current Week", one.getId());
         objectHashMap.put("type", one.getType());
-        return objectHashMap;
+        return new ServiceResponse<>(200, "", objectHashMap);
     }
 
     /**
      * @return 所有学生数据组成的LIST
      */
     @GetMapping("getList")
-    public List<StudentInfo> getList() {
+    public ServiceResponse<List<StudentInfo>> getList() {
         LambdaQueryWrapper<StudentInfo> studentInfoLambdaQueryWrapper = new LambdaQueryWrapper<>();
 //        studentInfoLambdaQueryWrapper.Desc(StudentInfo::getRanking);
-        return studentInfoService.list(studentInfoLambdaQueryWrapper);
+        return new ServiceResponse<>(200, "", studentInfoService.list(studentInfoLambdaQueryWrapper));
     }
 
     @GetMapping("getRanking")
-    public List<StudentInfo> getRanking() {
+    public ServiceResponse<List<StudentInfo>> getRanking() {
         LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
         studentLambdaQueryWrapper.orderByDesc(StudentInfo::getEpisode);
-        return studentInfoService.list(studentLambdaQueryWrapper);
+        return new ServiceResponse<>(200, "", studentInfoService.list(studentLambdaQueryWrapper));
     }
 
 
@@ -160,7 +162,7 @@ public class StudentInfoController {
         } else {
             pageNum = toalPieces / piecesNum + 1;
         }
-        return new ServiceResponse<> (200,"success",pageNum);
+        return new ServiceResponse<>(200, "success", pageNum);
     }
 
 
@@ -172,12 +174,12 @@ public class StudentInfoController {
         LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
         studentLambdaQueryWrapper.orderByDesc(StudentInfo::getEpisode);
         IPage<StudentInfo> toolPage = studentInfoService.page(pageParameter, studentLambdaQueryWrapper);
-        return new ServiceResponse<>(200,"success",toolPage.getRecords());
+        return new ServiceResponse<>(200, "success", toolPage.getRecords());
     }
 
     //获取提交信息表格行
     @GetMapping("/getSubmission/{name}")
-    public List<Map<String, String>> getSubmission(@PathVariable String name) {
+    public ServiceResponse<List<Map<String, String>>> getSubmission(@PathVariable String name) {
         String userName = "/" + name;
         String localPath = "src/main/resources/studentCode" + userName;
 //        String localPath ="src/main/resources/studentCode";
@@ -206,7 +208,7 @@ public class StudentInfoController {
             }
         }
 
-        return form;
+        return new ServiceResponse<>(200, "", form);
     }
 
     //设置学生的闯关数
@@ -218,7 +220,7 @@ public class StudentInfoController {
         int doneMission = studentInfo.getEpisode();
         studentInfo.setEpisode(doneMission + 1);
         studentInfoService.saveOrUpdate(studentInfo);
-        return new ServiceResponse<>(200,"success");
+        return new ServiceResponse<>(200, "success");
     }
 }
 
