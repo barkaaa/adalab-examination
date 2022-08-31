@@ -53,10 +53,10 @@ public class QuestionnaireReplyController {
         return new ServiceResponse<>(200,"success",questionnaireReplyService.getReply());
     }
     @GetMapping("getReply/{id}")
-    public ServiceResponse<Map<String, String>> getReply(@PathVariable int id){
-        Map<String, String> map = questionnaireReplyService.getReplyById(id);
-
-        return new ServiceResponse<>(200,"success",map);
+    public ServiceResponse<ReplyOneInfo> getReply(@PathVariable int id){
+//        Map<String, String> map = questionnaireReplyService.getReplyById(id);
+        ReplyOneInfo replyOneInfo = questionnaireReplyService.getReplyOneById(id);
+        return new ServiceResponse<>(200,"success",replyOneInfo);
     }
 
 }

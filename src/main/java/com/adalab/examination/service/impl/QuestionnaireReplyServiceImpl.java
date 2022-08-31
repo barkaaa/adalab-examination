@@ -3,6 +3,7 @@ package com.adalab.examination.service.impl;
 import com.adalab.examination.entity.Questionnaire;
 import com.adalab.examination.entity.QuestionnaireReply;
 import com.adalab.examination.entity.ReplyInfo;
+import com.adalab.examination.entity.ReplyOneInfo;
 import com.adalab.examination.entity.missionEntity.QuestionnaireResult;
 import com.adalab.examination.mapper.QuestionnaireReplyMapper;
 import com.adalab.examination.service.QuestionnaireReplyService;
@@ -126,5 +127,37 @@ public class QuestionnaireReplyServiceImpl extends ServiceImpl<QuestionnaireRepl
             map.put(one.getTheme(), sb.toString());
         });
         return map;
+    }
+
+    @Override
+    public ReplyOneInfo getReplyOneById(int id) {
+        ReplyOneInfo replyOneInfo = new ReplyOneInfo();
+        replyOneInfo.setName(studentInfoService.getById(id).getName());
+        List<String> returnList = new ArrayList<>();
+        LambdaQueryWrapper<QuestionnaireReply> lqw = new LambdaQueryWrapper<>();
+        //通过学生id找到其所有问卷回答
+        lqw.eq(QuestionnaireReply::getStudentId,id);
+        var list = list(lqw);
+        //遍历其回答找到问题题干
+        list.stream().forEach(item ->{
+            int missionId = item.getMissionId();
+            int quesionId = item.getQuestionId();
+            LambdaQueryWrapper<Questionnaire> lqw1 = new LambdaQueryWrapper<>();
+            lqw1.eq(Questionnaire::getMissionNumber,missionId);
+            lqw1.eq(Questionnaire::getQuestionNumber,quesionId);
+            var one = questionnaireService.getOne(lqw1);
+
+            StringBuilder sb = new StringBuilder();
+            var split = item.getReply().split("%");
+            for (int i = 0; i < split.length; i++) {
+                sb.append(split[i]);
+                if(i!=split.length-1){
+                    sb.append(",");
+                }
+            }
+            returnList.add(one.getTheme()+"->"+sb);
+        });
+        replyOneInfo.setList(returnList);
+        return replyOneInfo;
     }
 }

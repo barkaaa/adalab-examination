@@ -2,6 +2,7 @@ package com.adalab.examination.service;
 
 import com.adalab.examination.entity.QuestionnaireReply;
 import com.adalab.examination.entity.ReplyInfo;
+import com.adalab.examination.entity.ReplyOneInfo;
 import com.adalab.examination.entity.missionEntity.QuestionnaireResult;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -24,4 +25,5 @@ public interface QuestionnaireReplyService extends IService<QuestionnaireReply> 
 
     Map<String, String> getReplyById(int id);
 
+    ReplyOneInfo getReplyOneById(int id);
 }
