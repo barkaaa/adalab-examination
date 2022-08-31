@@ -1,13 +1,13 @@
 package com.adalab.examination.controller;
 
 
-import com.adalab.examination.entity.QuestionnaireReply;
-import com.adalab.examination.entity.ReplyInfo;
-import com.adalab.examination.entity.ServiceResponse;
-import com.adalab.examination.entity.StudentInfo;
+import com.adalab.examination.entity.*;
 import com.adalab.examination.entity.missionEntity.QuestionnaireResult;
 import com.adalab.examination.service.QuestionnaireReplyService;
+import com.adalab.examination.service.QuestionnaireService;
 import com.adalab.examination.service.StudentInfoService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -51,6 +51,12 @@ public class QuestionnaireReplyController {
     @GetMapping("getAllReply")
     public ServiceResponse<List<ReplyInfo>> getAllReply(){
         return new ServiceResponse<>(200,"success",questionnaireReplyService.getReply());
+    }
+    @GetMapping("getReply/{id}")
+    public ServiceResponse<Map<String, String>> getReply(@PathVariable int id){
+        Map<String, String> map = questionnaireReplyService.getReplyById(id);
+
+        return new ServiceResponse<>(200,"success",map);
     }
 
 }
