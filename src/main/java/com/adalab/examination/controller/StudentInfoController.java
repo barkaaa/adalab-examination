@@ -181,7 +181,7 @@ public class StudentInfoController {
     @GetMapping("/getSubmission/{name}")
     public ServiceResponse<List<Map<String, String>>> getSubmission(@PathVariable String name) {
         LambdaQueryWrapper<StudentInfo> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(StudentInfo::getName,name);
+        queryWrapper.eq(StudentInfo::getName, name);
         int episopde = studentInfoService.getOne(queryWrapper).getEpisode();
         String userName = "/" + name;
         String localPath = "src/main/resources/studentCode" + userName;
@@ -199,16 +199,16 @@ public class StudentInfoController {
                 for (String time : timeList) {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String formatedTime = simpleDateFormat.format(new Date(Long.parseLong(time) * 1000L));
-                    Map<String,String>  map = new HashMap<>();
+                    Map<String, String> map = new HashMap<>();
                     String[] string = step.split("[p]");
                     String episopdeNum = string[1];
-                    map.put("commitTime",formatedTime);
-                    map.put("link",step);
-                    map.put("episode",episopdeNum);
-                    map.put("src",innerPath);
+                    map.put("commitTime", formatedTime);
+                    map.put("link", step);
+                    map.put("episode", episopdeNum);
+                    map.put("src", innerPath);
                     map.put("curEpisode", String.valueOf(episopde));
                     form.add(map);
-                    System.out.println("list:"+step+formatedTime);
+                    System.out.println("list:" + step + formatedTime);
 
                 }
             }
@@ -216,43 +216,66 @@ public class StudentInfoController {
 
         return new ServiceResponse<>(200, "", form);
     }
+
     @GetMapping("/studentCode/FilesTree")
-    public ServiceResponse<Map<String,Map<String,List<String>>>> getFilesTreeAll() {
+    public ServiceResponse<Map<String, Map<String,Map<String, List<String>>>>> getFilesTreeAll() {
+        //提交路径
         String localPath = "src/main/resources/studentCode";
-        HashMap<String, Object> hashMap = traverseDir(localPath);
-        //获取用户提交文件夹名
-        File file  = new File(localPath);
+
+        //提交文件夹
+        File file = new File(localPath);
+        //用户文件夹列表
         String[] usrFolderName = file.list();
-        Map<String,Map<String,List<String>>> usrFolderNames = new HashMap<>();
-        for (String U:usrFolderName){
-            String innerpath = localPath+"/"+U;
-            //获取日期文件夹 名
-            File innerFile = new File(innerpath);
-            String[] dateFolder = innerFile.list();
-            Map<String,List<String>> dataFolderNames = new HashMap<>();
-            for (String D:dateFolder){
-                String innerInerPath = innerpath+"/"+D;
-                //获取文件名
-                File innerInnerFile = new File(innerpath);
-                String[] files = innerInnerFile.list();
-                List<String> fileNames = new ArrayList<>();
-                for (String F: files){
-                    fileNames.add(F);
+        Map<String, Map<String,Map<String, List<String>>>> usrFolderNames = new HashMap<>();
+        for (String U : usrFolderName) {
+            //用户文件夹路径
+            String usrPath = localPath + "/" + U;
+            //用户文件夹
+            File usrFile = new File(usrPath);
+            //关卡文件夹列表
+            String[] stepFolders = usrFile.list();
+            Map<String,Map<String, List<String>>> stepFoldersMap = new HashMap<>();
+            for (String S : stepFolders) {
+                //关卡文件路径
+                String stepPath = usrPath + "/" + S;
+                //关卡文件
+                File stepFile = new File(stepPath);
+                //提交时间文件夹列表
+                String[] timeFolders = stepFile.list();
+
+                Map<String, List<String>> timeFoldersMap = new HashMap<>();
+                for (String T : timeFolders) {
+                    //提交时间文件夹路径
+                    String timePath = stepPath + "/" + T;
+                    //提交时间文件夹
+                    File timeFile = new File(timePath);
+                    //文件列表
+                    String[] files = timeFile.list();
+                    List<String> fileNames = new ArrayList<>();
+                    for (String F : files) {
+                        fileNames.add(F);
+                    }
+                    //存入提交时间文件夹
+                    timeFoldersMap.put(T, fileNames);
                 }
-                dataFolderNames.put(D,fileNames);
+
+            stepFoldersMap.put(S,timeFoldersMap);
             }
-            usrFolderNames.put(U,dataFolderNames);
+
+            //用户文件夹
+            usrFolderNames.put(U, stepFoldersMap);
         }
         logger.info("获取到结构树");
-        System.out.println(hashMap.get("佐々木玲奈"));
-        return new ServiceResponse<>(200, "success",usrFolderNames);
+        System.out.println(usrFolderNames.get("佐々木玲奈"));
+        return new ServiceResponse<>(200, "", usrFolderNames);
     }
-//    @GetMapping("/curUserID")
-//    public String getCurUserID(@CookieValue("JSESSIONID") String name){
+
+    @GetMapping("/curUserID")
+    public String getCurUserID(@CookieValue("id") String name) {
 //        String name = "huihuihui";
-//        System.out.println(name);
-//        return name;
-//    }
+        System.out.println(name);
+        return name;
+    }
 
     //设置学生的闯关数
     @GetMapping("/setDoneMission/{id}")
