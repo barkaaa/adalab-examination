@@ -217,7 +217,7 @@ public class StudentInfoController {
         return new ServiceResponse<>(200, "", form);
     }
     @GetMapping("/studentCode/FilesTree")
-    public Map<String,Map<String,List<String>>> getFilesTreeAll() {
+    public ServiceResponse<Map<String,Map<String,List<String>>>> getFilesTreeAll() {
         String localPath = "src/main/resources/studentCode";
         HashMap<String, Object> hashMap = traverseDir(localPath);
         //获取用户提交文件夹名
@@ -245,7 +245,7 @@ public class StudentInfoController {
         }
         logger.info("获取到结构树");
         System.out.println(hashMap.get("佐々木玲奈"));
-        return usrFolderNames;
+        return new ServiceResponse<>(200, "success",usrFolderNames);
     }
 //    @GetMapping("/curUserID")
 //    public String getCurUserID(@CookieValue("JSESSIONID") String name){
