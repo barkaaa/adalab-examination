@@ -77,36 +77,35 @@ public class StudentInfoController {
 
     /**
      * 在前端按下开始按钮开始闯关
-     *
+     *设置学员开始时间
      * @param id
-     * @return 和前端沟通后再修改返回值
+     * @return
      */
     @GetMapping("begin/{id}")
-    public String begin(@PathVariable int id) {
+    public ServiceResponse<String> begin(@PathVariable int id) {
         StudentInfo studentInfo = studentInfoService.getById(id);
         studentInfo.setBeginDate(LocalDateTime.now());
-        if (studentInfoService.save(studentInfo)) {
-            return "success";
+        if (studentInfoService.updateById(studentInfo)) {
+            return new ServiceResponse<String>(200,"SUCCESS");
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            return new ServiceResponse<String>(201,"未能成功设置开始时间");
         }
     }
 
     /**
      * 通过id得到学生信息
-     *
      * @param id cookie存的是string类型的ID，这里也按照string处理
      * @return 学生信息
      */
     @GetMapping("getStudent/{id}")
-    public StudentInfo getStudentById(@PathVariable String id) {
+    public ServiceResponse<StudentInfo> getStudentById(@PathVariable String id) {
         int studentId = Integer.parseInt(id);
         LambdaQueryWrapper<StudentInfo> lqw = new LambdaQueryWrapper<>();
         StudentInfo studentInfo = studentInfoService.getById(studentId);
         if (studentInfo != null) {
-            return studentInfo;
+            return new ServiceResponse<>(200,"success",studentInfo);
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            return new ServiceResponse<>(201,"未能成功获取学员信息");
         }
     }
 
@@ -153,26 +152,27 @@ public class StudentInfoController {
 
     //获取总页数
     @GetMapping("/getTotalPages/{piecesNum}")
-    public long getTotalPages(@PathVariable int piecesNum) {
+    public ServiceResponse<Long> getTotalPages(@PathVariable int piecesNum) {
         long toalPieces = studentInfoService.count();
         long pageNum;
-        if (toalPieces % piecesNum == 0)
+        if (toalPieces % piecesNum == 0) {
             pageNum = toalPieces / piecesNum;
-        else
+        } else {
             pageNum = toalPieces / piecesNum + 1;
-        return pageNum;
+        }
+        return new ServiceResponse<> (200,"success",pageNum);
     }
 
 
     //分页获取排名
     @GetMapping("getPagingRanking/{page}")
-    public List<StudentInfo> getPagingRanking(@PathVariable int page) {
+    public ServiceResponse<List<StudentInfo>> getPagingRanking(@PathVariable int page) {
         IPage<StudentInfo> pageParameter = new Page<>(page, 14);
 
         LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
         studentLambdaQueryWrapper.orderByDesc(StudentInfo::getEpisode);
         IPage<StudentInfo> toolPage = studentInfoService.page(pageParameter, studentLambdaQueryWrapper);
-        return toolPage.getRecords();
+        return new ServiceResponse<>(200,"success",toolPage.getRecords());
     }
 
     //获取提交信息表格行
@@ -211,14 +211,14 @@ public class StudentInfoController {
 
     //设置学生的闯关数
     @GetMapping("/setDoneMission/{id}")
-    public String setDoneMission(@PathVariable String id) {
+    public ServiceResponse<String> setDoneMission(@PathVariable String id) {
         int studentId = Integer.parseInt(id);
         LambdaQueryWrapper<StudentInfo> lqw = new LambdaQueryWrapper<>();
         StudentInfo studentInfo = studentInfoService.getById(studentId);
         int doneMission = studentInfo.getEpisode();
         studentInfo.setEpisode(doneMission + 1);
         studentInfoService.saveOrUpdate(studentInfo);
-        return "success";
+        return new ServiceResponse<>(200,"success");
     }
 }
 
