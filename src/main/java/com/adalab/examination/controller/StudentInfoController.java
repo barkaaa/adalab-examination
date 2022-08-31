@@ -4,6 +4,7 @@ package com.adalab.examination.controller;
 import com.adalab.examination.entity.ServiceResponse;
 import com.adalab.examination.entity.StudentInfo;
 import com.adalab.examination.service.StudentInfoService;
+import com.adalab.examination.service.impl.StudentInfoServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -38,9 +39,9 @@ public class StudentInfoController {
 
 
     final
-    StudentInfoService studentInfoService;
+    StudentInfoServiceImpl studentInfoService;
 
-    public StudentInfoController(StudentInfoService studentInfoService) {
+    public StudentInfoController(StudentInfoServiceImpl studentInfoService) {
         this.studentInfoService = studentInfoService;
     }
 
@@ -87,9 +88,9 @@ public class StudentInfoController {
         StudentInfo studentInfo = studentInfoService.getById(id);
         studentInfo.setBeginDate(LocalDateTime.now());
         if (studentInfoService.updateById(studentInfo)) {
-            return new ServiceResponse<String>(200, "SUCCESS");
+            return new ServiceResponse<>(200, "SUCCESS");
         } else {
-            return new ServiceResponse<String>(201, "未能成功设置开始时间");
+            return new ServiceResponse<>(201, "未能成功设置开始时间");
         }
     }
 
@@ -222,5 +223,14 @@ public class StudentInfoController {
         studentInfoService.saveOrUpdate(studentInfo);
         return new ServiceResponse<>(200, "success");
     }
+
+    @PatchMapping("/update")
+    public ServiceResponse<String> update(@CookieValue("id") int id, @RequestBody StudentInfo studentInfo) {
+        studentInfo.setId(id);
+        studentInfoService.updateById(studentInfo);
+        return new ServiceResponse<>(200, "更新成功");
+    }
+
+
 }
 
