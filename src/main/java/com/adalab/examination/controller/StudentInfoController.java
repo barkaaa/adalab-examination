@@ -74,8 +74,8 @@ public class StudentInfoController {
         }else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-
     }
+
     /**
      * 在前端按下开始按钮开始闯关
      * @param id

@@ -5,6 +5,7 @@ import com.adalab.examination.entity.missionEntity.QuestionnaireResult;
 import com.adalab.examination.mapper.QuestionnaireReplyMapper;
 import com.adalab.examination.service.QuestionnaireReplyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,11 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class QuestionnaireReplyServiceImpl extends ServiceImpl<QuestionnaireReplyMapper, QuestionnaireReply> implements QuestionnaireReplyService {
 
-    QuestionnaireReplyService questionnaireReplyService;
 
-    QuestionnaireReplyServiceImpl(QuestionnaireReplyService questionnaireReplyService) {
-        this.questionnaireReplyService = questionnaireReplyService;
-    }
 
     @Override
     public void putStudentReply(QuestionnaireResult q) {
@@ -46,7 +43,7 @@ public class QuestionnaireReplyServiceImpl extends ServiceImpl<QuestionnaireRepl
 
             questionnaireReply.setReply(sb.toString());
             questionnaireReply.setQuestionId(i.get());
-            questionnaireReplyService.save(questionnaireReply);
+            save(questionnaireReply);
             i.getAndIncrement();
         });
     }
