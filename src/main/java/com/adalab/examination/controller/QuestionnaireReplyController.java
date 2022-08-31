@@ -30,7 +30,7 @@ public class QuestionnaireReplyController {
         this.studentInfoService = studentInfoService;
     }
     @PutMapping("putReply")
-    public ServiceResponse putReply(@RequestBody QuestionnaireResult q){
+    public ServiceResponse<String> putReply(@RequestBody QuestionnaireResult q){
         questionnaireReplyService.putStudentReply(q);
         return new ServiceResponse<>(200,"提交成功");
     }

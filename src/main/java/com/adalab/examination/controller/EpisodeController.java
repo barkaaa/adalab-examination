@@ -4,7 +4,6 @@ import com.adalab.examination.entity.*;
 import com.adalab.examination.service.*;
 import com.github.dockerjava.api.model.Image;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +40,7 @@ public class EpisodeController {
      * @param file docker file
      */
     @PostMapping("/docker")
-    ServiceResponse<String> uploadDockerFile(@RequestPart("docker") MultipartFile file, @RequestParam("tag") String tag, HttpServletResponse response) {
+    ServiceResponse<String> uploadDockerFile(@RequestPart("docker") MultipartFile file, @RequestParam("tag") String tag) {
         try {
             fileUpLoadService.uploadDockerFile(file, tag);
         } catch (RuntimeException e) {
@@ -51,7 +50,7 @@ public class EpisodeController {
     }
 
     @PostMapping("/createEp")
-    ServiceResponse<String> createEp(@RequestBody Episode episode, HttpServletResponse response) {
+    ServiceResponse<String> createEp(@RequestBody Episode episode) {
         try {
             episodeService.insert(episode);
         } catch (Exception e) {
@@ -63,7 +62,7 @@ public class EpisodeController {
 
     @PatchMapping("/update")
     ServiceResponse<String> upLoadEpConfig(@RequestPart(value = "test", required = false) MultipartFile[] files,
-                                           @RequestPart(value = "episode") Episode episode, HttpServletResponse response) {
+                                           @RequestPart(value = "episode") Episode episode) {
         Episode target = episodeService.getById(episode.getId());
         if (target == null) {
             return new ServiceResponse<>(400, "试图更新不存在的关卡");
@@ -90,8 +89,8 @@ public class EpisodeController {
     }
 
     @GetMapping("/test/{id}")
-    ServiceResponse<TestResult> doTest(@PathVariable("id") int episodeId, HttpServletResponse response) throws InterruptedException {
-        int id = 1;
+    ServiceResponse<TestResult> doTest(@PathVariable("id") int episodeId, @CookieValue("id") String id) throws InterruptedException {
+
         StudentInfo studentInfo = studentService.getById(id);
 
         try {
