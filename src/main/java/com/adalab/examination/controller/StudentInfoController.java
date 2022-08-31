@@ -199,13 +199,16 @@ public class StudentInfoController {
                 for (String time : timeList) {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String formatedTime = simpleDateFormat.format(new Date(Long.parseLong(time) * 1000L));
-                    Map<String, String> map = new HashMap<>();
-                    map.put("commitTime", formatedTime);
-                    map.put("link", step);
-                    map.put("episode", step);
-                    map.put("src", innerPath);
+                    Map<String,String>  map = new HashMap<>();
+                    String[] string = step.split("[p]");
+                    String episopdeNum = string[1];
+                    map.put("commitTime",formatedTime);
+                    map.put("link",step);
+                    map.put("episode",episopdeNum);
+                    map.put("src",innerPath);
+                    map.put("curEpisode", String.valueOf(episopde));
                     form.add(map);
-                    System.out.println("list:" + step + formatedTime);
+                    System.out.println("list:"+step+formatedTime);
 
                 }
             }
@@ -244,6 +247,12 @@ public class StudentInfoController {
         System.out.println(hashMap.get("佐々木玲奈"));
         return usrFolderNames;
     }
+//    @GetMapping("/curUserID")
+//    public String getCurUserID(@CookieValue("JSESSIONID") String name){
+//        String name = "huihuihui";
+//        System.out.println(name);
+//        return name;
+//    }
 
     //设置学生的闯关数
     @GetMapping("/setDoneMission/{id}")
