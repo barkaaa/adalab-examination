@@ -182,7 +182,7 @@ public class StudentInfoController {
     @GetMapping("/getSubmission/{name}")
     public ServiceResponse<List<Map<String, String>>> getSubmission(@PathVariable String name) {
         LambdaQueryWrapper<StudentInfo> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(StudentInfo::getName,name);
+        queryWrapper.eq(StudentInfo::getName, name);
         int episopde = studentInfoService.getOne(queryWrapper).getEpisode();
         String userName = "/" + name;
         String localPath = "src/main/resources/studentCode" + userName;
@@ -200,16 +200,16 @@ public class StudentInfoController {
                 for (String time : timeList) {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String formatedTime = simpleDateFormat.format(new Date(Long.parseLong(time) * 1000L));
-                    Map<String,String>  map = new HashMap<>();
+                    Map<String, String> map = new HashMap<>();
                     String[] string = step.split("[p]");
                     String episopdeNum = string[1];
-                    map.put("commitTime",formatedTime);
-                    map.put("link",step);
-                    map.put("episode",episopdeNum);
-                    map.put("src",innerPath);
+                    map.put("commitTime", formatedTime);
+                    map.put("link", step);
+                    map.put("episode", episopdeNum);
+                    map.put("src", innerPath);
                     map.put("curEpisode", String.valueOf(episopde));
                     form.add(map);
-                    System.out.println("list:"+step+formatedTime);
+                    System.out.println("list:" + step + formatedTime);
 
                 }
             }
@@ -217,32 +217,33 @@ public class StudentInfoController {
 
         return new ServiceResponse<>(200, "", form);
     }
+
     @GetMapping("/studentCode/FilesTree")
-    public Map<String,Map<String,List<String>>> getFilesTreeAll() {
+    public Map<String, Map<String, List<String>>> getFilesTreeAll() {
         String localPath = "src/main/resources/studentCode";
         HashMap<String, Object> hashMap = traverseDir(localPath);
         //获取用户提交文件夹名
-        File file  = new File(localPath);
+        File file = new File(localPath);
         String[] usrFolderName = file.list();
-        Map<String,Map<String,List<String>>> usrFolderNames = new HashMap<>();
-        for (String U:usrFolderName){
-            String innerpath = localPath+"/"+U;
+        Map<String, Map<String, List<String>>> usrFolderNames = new HashMap<>();
+        for (String U : usrFolderName) {
+            String innerpath = localPath + "/" + U;
             //获取日期文件夹 名
             File innerFile = new File(innerpath);
             String[] dateFolder = innerFile.list();
-            Map<String,List<String>> dataFolderNames = new HashMap<>();
-            for (String D:dateFolder){
-                String innerInerPath = innerpath+"/"+D;
+            Map<String, List<String>> dataFolderNames = new HashMap<>();
+            for (String D : dateFolder) {
+                String innerInerPath = innerpath + "/" + D;
                 //获取文件名
                 File innerInnerFile = new File(innerpath);
                 String[] files = innerInnerFile.list();
                 List<String> fileNames = new ArrayList<>();
-                for (String F: files){
+                for (String F : files) {
                     fileNames.add(F);
                 }
-                dataFolderNames.put(D,fileNames);
+                dataFolderNames.put(D, fileNames);
             }
-            usrFolderNames.put(U,dataFolderNames);
+            usrFolderNames.put(U, dataFolderNames);
         }
         logger.info("获取到结构树");
         System.out.println(hashMap.get("佐々木玲奈"));
@@ -272,6 +273,12 @@ public class StudentInfoController {
         studentInfo.setId(id);
         studentInfoService.updateById(studentInfo);
         return new ServiceResponse<>(200, "更新成功");
+    }
+
+    @GetMapping("/url")
+    public ServiceResponse<String> url(@CookieValue("id") int id) {
+        StudentInfo studentInfo = studentInfoService.getById(id);
+        return new ServiceResponse<>(200, "", studentInfo.getWebPage());
     }
 
 
