@@ -87,9 +87,9 @@ public class StudentInfoController {
         StudentInfo studentInfo = studentInfoService.getById(id);
         studentInfo.setBeginDate(LocalDateTime.now());
         if (studentInfoService.updateById(studentInfo)) {
-            return new ServiceResponse<String>(200, "SUCCESS");
+            return new ServiceResponse<>(200, "SUCCESS");
         } else {
-            return new ServiceResponse<String>(201, "未能成功设置开始时间");
+            return new ServiceResponse<>(201, "未能成功设置开始时间");
         }
     }
 
@@ -265,5 +265,28 @@ public class StudentInfoController {
         studentInfoService.saveOrUpdate(studentInfo);
         return new ServiceResponse<>(200, "success");
     }
+
+    @PatchMapping("/update")
+    public ServiceResponse<String> update(@CookieValue("id") int id, @RequestBody StudentInfo studentInfo) {
+        studentInfo.setId(id);
+        studentInfoService.updateById(studentInfo);
+        return new ServiceResponse<>(200, "更新成功");
+    }
+
+    @GetMapping("/url")
+    public ServiceResponse<String> url(@CookieValue("id") int id) {
+        StudentInfo studentInfo = studentInfoService.getById(id);
+        return new ServiceResponse<>(200, "", studentInfo.getWebPage());
+    }
+
+    @GetMapping("/me")
+    public ServiceResponse<Integer> me(@CookieValue(value = "id", required = false) Integer id) {
+        if (id == null) {
+            return new ServiceResponse<>(401, "未登录");
+        }
+        return new ServiceResponse<>(200, "", id);
+    }
+
+
 }
 

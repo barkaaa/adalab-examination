@@ -130,7 +130,7 @@ public class EpisodeController {
         try {
             delete(new File("src/main/resources/testFile/" + episode.getTestFileName()));
         } catch (IOException e) {
-            return new ServiceResponse<>(200, "删除失败");
+            System.err.print("删除失败(不重要)");
         }
         return new ServiceResponse<>(200, "删除成功");
     }

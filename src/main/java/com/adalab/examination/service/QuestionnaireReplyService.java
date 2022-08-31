@@ -1,8 +1,11 @@
 package com.adalab.examination.service;
 
 import com.adalab.examination.entity.QuestionnaireReply;
+import com.adalab.examination.entity.ReplyInfo;
 import com.adalab.examination.entity.missionEntity.QuestionnaireResult;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +18,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface QuestionnaireReplyService extends IService<QuestionnaireReply> {
 
     void putStudentReply(QuestionnaireResult q);
+
+    List<ReplyInfo>  getReply();
 }
