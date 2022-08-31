@@ -1,25 +1,14 @@
 package com.adalab.examination.controller;
 
 
-import com.adalab.examination.entity.AccessTokenDTO;
-import com.adalab.examination.entity.GitHubUser;
 import com.adalab.examination.entity.StudentInfo;
 import com.adalab.examination.service.GitLoginService;
 import com.adalab.examination.service.StudentInfoService;
-import com.alibaba.fastjson.JSON;
 import lombok.SneakyThrows;
-import okhttp3.RequestBody;
-import okhttp3.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 @RestController
 @RequestMapping
