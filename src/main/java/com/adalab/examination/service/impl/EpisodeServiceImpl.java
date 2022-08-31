@@ -38,4 +38,9 @@ public class EpisodeServiceImpl extends ServiceImpl<EpisodeMapper, Episode> impl
         episodeMapper.insertById(episode);
         episodeMapper.refreshIncreaseId(episodeMapper.getCount() + 1);
     }
+
+    public int nums() {
+        return episodeMapper.getCount();
+    }
+
 }

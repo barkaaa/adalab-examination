@@ -61,6 +61,7 @@ public class StudentInfoController {
     /**
      * 闯关结束后则调用这个接口
      * 设置实际所用了多少小时
+     *
      * @param id
      * @return
      */
@@ -78,6 +79,7 @@ public class StudentInfoController {
 
     /**
      * 在前端按下开始按钮开始闯关
+     *
      * @param id
      * @return 和前端沟通后再修改返回值
      */
@@ -94,6 +96,7 @@ public class StudentInfoController {
 
     /**
      * 通过id得到学生信息
+     *
      * @param id cookie存的是string类型的ID，这里也按照string处理
      * @return 学生信息
      */
@@ -112,6 +115,7 @@ public class StudentInfoController {
 
     /**
      * 获取单个 student 的所有信息
+     *
      * @param studentInfo 学生的姓名
      * @return 学生信息
      */
@@ -213,47 +217,6 @@ public class StudentInfoController {
 
         return form;
     }
-
-    @GetMapping("/getSubmission2/{name}")
-    public List<Map<String, List<String>>> getSubmission2(@PathVariable String name) {
-        LambdaQueryWrapper<StudentInfo> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(StudentInfo::getName,name);
-        int episopde = studentInfoService.getOne(queryWrapper).getEpisode();
-        String userName = "/" + name;
-        String localPath = "src/main/resources/studentCode" + userName;
-//        String localPath ="src/main/resources/studentCode";
-        List<Map<String,List<String>>> form = new ArrayList<>();
-        HashMap<String, Object> hashMap = traverseDir(localPath);
-        File file = new File(localPath);
-        if(file.exists()){
-            String[] stepList = file.list();
-            for (String step:stepList){
-                Map<String,List<String>>  map = new HashMap<>();
-                String innerPath = localPath + "/" + step;
-                String[] timeList = new File(innerPath).list();
-                for (String time:timeList){
-                    String innerInnerPath = localPath + "/" + timeList;
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String formatedTime = simpleDateFormat.format(new Date(Long.parseLong(time) * 1000L));
-
-
-
-
-                    String[] fileNameList = new File(innerInnerPath).list();
-                    List<String> resultFileNameList = new ArrayList<>();
-                    for (String fileName :fileNameList)
-                    {
-                        resultFileNameList.add(fileName);
-                    }
-                    map.put(formatedTime,resultFileNameList);
-                    System.out.println("list:"+step+formatedTime);
-                }
-                form.add(map);
-            }
-        }
-//        name=>step1,step2,step3=> step=> time:List
-        return form;
-    }
     @GetMapping("/studentCode/FilesTree")
     public Map<String,Map<String,List<String>>> getFilesTreeAll() {
         String localPath = "src/main/resources/studentCode";
@@ -272,7 +235,6 @@ public class StudentInfoController {
                 String innerInerPath = innerpath+"/"+D;
                 //获取文件名
                 File innerInnerFile = new File(innerpath);
-
                 String[] files = innerInnerFile.list();
                 List<String> fileNames = new ArrayList<>();
                 for (String F: files){
@@ -287,5 +249,16 @@ public class StudentInfoController {
         return usrFolderNames;
     }
 
+    //设置学生的闯关数
+    @GetMapping("/setDoneMission/{id}")
+    public String setDoneMission(@PathVariable String id) {
+        int studentId = Integer.parseInt(id);
+        LambdaQueryWrapper<StudentInfo> lqw = new LambdaQueryWrapper<>();
+        StudentInfo studentInfo = studentInfoService.getById(studentId);
+        int doneMission = studentInfo.getEpisode();
+        studentInfo.setEpisode(doneMission + 1);
+        studentInfoService.saveOrUpdate(studentInfo);
+        return "success";
+    }
 }
 

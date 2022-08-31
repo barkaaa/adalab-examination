@@ -18,7 +18,7 @@ public class ManageController {
 
     private final String MANAGE_PSW = "1919810";
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public String manageLogin(@RequestBody Map<String,String> map){
         if (map.get("username").equals(MANAGE_NAME)){
             if(map.get("password").equals(MANAGE_PSW)){
