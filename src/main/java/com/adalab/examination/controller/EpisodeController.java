@@ -105,7 +105,6 @@ public class EpisodeController {
             if (studentInfo.getWebPage() == null) {
                 return new ServiceResponse<>(400, "未输入仓库地址");
             }
-
             try {
                 gitService.gitClone(id + "", studentInfo.getWebPage(), episodeId + "");
             } catch (GitAPIException e) {
