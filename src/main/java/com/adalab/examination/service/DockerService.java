@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -128,9 +129,9 @@ public class DockerService {
     }
 
 
-    public void pullImage(String image) throws InterruptedException {
+    public boolean pullImage(String image) throws InterruptedException {
         PullImageResultCallback callback = new PullImageResultCallback();
-        dockerClient.pullImageCmd(image).exec(callback).awaitCompletion();
+        return dockerClient.pullImageCmd(image).exec(callback).awaitCompletion(5, TimeUnit.MINUTES);
     }
 
 }

@@ -1,8 +1,11 @@
 package com.adalab.examination.controller;
 
 import com.adalab.examination.entity.*;
+import com.adalab.examination.entity.missionEntity.QuestionnaireResult;
 import com.adalab.examination.service.*;
 import com.github.dockerjava.api.model.Image;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,15 +26,18 @@ public class EpisodeController {
     EpisodeService episodeService;
     StudentInfoService studentService;
     GitService gitService;
+    QuestionnaireReplyService questionnaireService;
+
 
     EpisodeController(DockerService dockerService, FileUpLoadService fileUpLoadService,
                       EpisodeService episodeService, StudentInfoService studentService,
-                      GitService gitService) {
+                      GitService gitService, QuestionnaireReplyService questionnaireService) {
         this.dockerService = dockerService;
         this.fileUpLoadService = fileUpLoadService;
         this.episodeService = episodeService;
         this.studentService = studentService;
         this.gitService = gitService;
+        this.questionnaireService = questionnaireService;
     }
 
     /**
@@ -88,40 +94,66 @@ public class EpisodeController {
 
     }
 
-    @GetMapping("/test/{id}")
-    ServiceResponse<TestResult> doTest(@PathVariable("id") int episodeId, @CookieValue("id") String id) throws InterruptedException {
-
+    @PostMapping("/test/{id}")
+    ServiceResponse<TestResult> doTest(@PathVariable("id") int episodeId, @RequestBody(required = false) QuestionnaireResult questionnaireResult) throws InterruptedException {
+        int id = ((MyPrincipal) SecurityUtils.getSubject().getPrincipal()).getName();
         StudentInfo studentInfo = studentService.getById(id);
-
-        try {
-            gitService.gitClone(id + "", studentInfo.getWebPage(), episodeId + "");
-        } catch (GitAPIException e) {
-            return new ServiceResponse<>(400, "git拉取代码失败", null);
-        }
-
         Episode episode = episodeService.getById(episodeId);
-
-        int time = episode.getTimeOut();
-
-        String containerId = dockerService.createContainer(episode.getImgId(), id + "",
-                episodeId, episode.getTestFileName(),
-                "/test", "testContainer", episode.getCmd());
-
-        dockerService.startContainer(containerId);
-        long t = System.currentTimeMillis();
-
-        while (System.currentTimeMillis() - t <= time && dockerService.checkContainer(containerId)) {
-            Thread.sleep(500);
+        if (studentInfo == null || episode == null) {
+            return new ServiceResponse<>(400, "条件错误");
         }
 
-        if (dockerService.checkContainer(containerId)) {
-            dockerService.stopContainer(containerId);
-        }
-        dockerService.removeContainer(containerId);
-        return new ServiceResponse<>(200, "", dockerService.getResult(id + "", episodeId));
+        if (episode.getType() == 2) {
+            if (studentInfo.getWebPage() == null) {
+                return new ServiceResponse<>(400, "未输入仓库地址");
+            }
+            try {
+                gitService.gitClone(id + "", studentInfo.getWebPage(), episodeId + "");
+            } catch (GitAPIException e) {
+                return new ServiceResponse<>(400, "git拉取代码失败,请检查仓库地址", null);
+            }
 
+            int time = episode.getTimeOut();
+
+            String containerId = dockerService.createContainer(episode.getImgId(), id + "",
+                    episodeId, episode.getTestFileName(),
+                    "/test", "testContainer", episode.getCmd());
+            dockerService.startContainer(containerId);
+            long t = System.currentTimeMillis();
+
+            while (System.currentTimeMillis() - t <= time && dockerService.checkContainer(containerId)) {
+                Thread.sleep(500);
+            }
+            if (dockerService.checkContainer(containerId)) {
+                dockerService.stopContainer(containerId);
+            }
+            dockerService.removeContainer(containerId);
+            TestResult testResult = dockerService.getResult(id + "", episodeId);
+            if (testResult.isPassed()) {
+                goNext(studentInfo, episodeId);
+                return new ServiceResponse<>(200, "闯关成通过", testResult);
+            } else {
+                return new ServiceResponse<>(401, "闯关失败", testResult);
+            }
+        } else if (episode.getType() == 0) {
+            goNext(studentInfo, episodeId);
+            return new ServiceResponse<>(200, "闯关成通过");
+        } else if (episode.getType() == 1) {
+            if (questionnaireResult == null) {
+                return new ServiceResponse<>(401, "请填写关卡问卷");
+            }
+            questionnaireService.putStudentReply(questionnaireResult);
+            goNext(studentInfo, episodeId);
+            return new ServiceResponse<>(200, "闯关成通过");
+        }
+        return new ServiceResponse<>(400, "关卡设置有误,请联系管理员");
     }
 
+
+    void goNext(StudentInfo studentInfo, Integer episodeId) {
+        studentInfo.setEpisode(episodeId);
+        studentService.updateById(studentInfo);
+    }
 
     @DeleteMapping("/delete/{id}")
     ServiceResponse<String> delete(@PathVariable("id") int id) {
@@ -170,6 +202,7 @@ public class EpisodeController {
         return new ServiceResponse<>(200, "获取成功", res);
     }
 
+    @RequiresRoles("root")
     @GetMapping("/get")
     ServiceResponse<List<Episode>>
     getEpisode() {
@@ -202,10 +235,15 @@ public class EpisodeController {
     @PutMapping("/pull")
     ServiceResponse<String> pullImage(@RequestParam String image) {
         try {
-            dockerService.pullImage(image);
+            if (dockerService.pullImage(image)) {
+                return new ServiceResponse<>(200, "拉取成功");
+            } else {
+                return new ServiceResponse<>(200, "任在拉去中,请稍后刷新页面产看");
+            }
         } catch (Exception e) {
             return new ServiceResponse<>(500, "拉取镜像失败");
         }
-        return new ServiceResponse<>(200, "拉取成功");
+
+
     }
 }

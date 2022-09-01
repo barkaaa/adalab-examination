@@ -1,17 +1,13 @@
 package com.adalab.examination.controller;
 
-
 import com.adalab.examination.entity.*;
 import com.adalab.examination.entity.missionEntity.QuestionnaireResult;
 import com.adalab.examination.service.QuestionnaireReplyService;
-import com.adalab.examination.service.QuestionnaireService;
+
 import com.adalab.examination.service.StudentInfoService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>
@@ -35,7 +31,7 @@ public class QuestionnaireReplyController {
 
     /**
      * 上传学生的问卷回答到数据库
-     * @param q
+     * @param
      * @return
      */
     @PutMapping("putReply")
