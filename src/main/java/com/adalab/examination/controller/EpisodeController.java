@@ -1,6 +1,7 @@
 package com.adalab.examination.controller;
 
 import com.adalab.examination.entity.*;
+import com.adalab.examination.entity.missionEntity.QuestionnaireResult;
 import com.adalab.examination.service.*;
 import com.github.dockerjava.api.model.Image;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -23,15 +24,18 @@ public class EpisodeController {
     EpisodeService episodeService;
     StudentInfoService studentService;
     GitService gitService;
+    QuestionnaireReplyService questionnaireService;
+
 
     EpisodeController(DockerService dockerService, FileUpLoadService fileUpLoadService,
                       EpisodeService episodeService, StudentInfoService studentService,
-                      GitService gitService) {
+                      GitService gitService, QuestionnaireReplyService questionnaireService) {
         this.dockerService = dockerService;
         this.fileUpLoadService = fileUpLoadService;
         this.episodeService = episodeService;
         this.studentService = studentService;
         this.gitService = gitService;
+        this.questionnaireService = questionnaireService;
     }
 
     /**
@@ -89,37 +93,59 @@ public class EpisodeController {
     }
 
     @GetMapping("/test/{id}")
-    ServiceResponse<TestResult> doTest(@PathVariable("id") int episodeId, @CookieValue("id") String id) throws InterruptedException {
+    ServiceResponse<TestResult> doTest(@PathVariable("id") int episodeId, @CookieValue("id") String id, @RequestBody(required = false) QuestionnaireResult questionnaireResult) throws InterruptedException {
 
         StudentInfo studentInfo = studentService.getById(id);
-
-        try {
-            gitService.gitClone(id + "", studentInfo.getWebPage(), episodeId + "");
-        } catch (GitAPIException e) {
-            return new ServiceResponse<>(400, "git拉取代码失败", null);
-        }
-
         Episode episode = episodeService.getById(episodeId);
-
-        int time = episode.getTimeOut();
-
-        String containerId = dockerService.createContainer(episode.getImgId(), id + "",
-                episodeId, episode.getTestFileName(),
-                "/test", "testContainer", episode.getCmd());
-
-        dockerService.startContainer(containerId);
-        long t = System.currentTimeMillis();
-
-        while (System.currentTimeMillis() - t <= time && dockerService.checkContainer(containerId)) {
-            Thread.sleep(500);
+        if (studentInfo == null || episode == null) {
+            return new ServiceResponse<>(400, "条件错误");
         }
 
-        if (dockerService.checkContainer(containerId)) {
-            dockerService.stopContainer(containerId);
-        }
-        dockerService.removeContainer(containerId);
-        return new ServiceResponse<>(200, "", dockerService.getResult(id + "", episodeId));
+        if (episode.getType() == 2) {
+            if (studentInfo.getWebPage() == null) {
+                return new ServiceResponse<>(400, "未输入仓库地址");
+            }
 
+            try {
+                gitService.gitClone(id + "", studentInfo.getWebPage(), episodeId + "");
+            } catch (GitAPIException e) {
+                return new ServiceResponse<>(400, "git拉取代码失败,请检查仓库地址", null);
+            }
+
+            int time = episode.getTimeOut();
+
+            String containerId = dockerService.createContainer(episode.getImgId(), id + "",
+                    episodeId, episode.getTestFileName(),
+                    "/test", "testContainer", episode.getCmd());
+            dockerService.startContainer(containerId);
+            long t = System.currentTimeMillis();
+
+            while (System.currentTimeMillis() - t <= time && dockerService.checkContainer(containerId)) {
+                Thread.sleep(500);
+            }
+            if (dockerService.checkContainer(containerId)) {
+                dockerService.stopContainer(containerId);
+            }
+            dockerService.removeContainer(containerId);
+            TestResult testResult = dockerService.getResult(id + "", episodeId);
+            if (testResult.isPassed()) {
+                studentInfo.setEpisode(episodeId + 1);
+                return new ServiceResponse<>(200, "闯关成通过", testResult);
+            } else {
+                return new ServiceResponse<>(401, "闯关失败", testResult);
+            }
+        } else if (episode.getType() == 0) {
+            studentInfo.setEpisode(episodeId + 1);
+            return new ServiceResponse<>(200, "闯关成通过");
+        } else if (episode.getType() == 1) {
+            if (questionnaireResult == null) {
+                return new ServiceResponse<>(401, "请填写关卡问卷");
+            }
+            questionnaireService.putStudentReply(questionnaireResult);
+            studentInfo.setEpisode(episodeId + 1);
+            return new ServiceResponse<>(200, "闯关成通过");
+        }
+        return new ServiceResponse<>(400, "关卡设置有误,请联系管理员");
     }
 
 
