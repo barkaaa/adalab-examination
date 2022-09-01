@@ -4,6 +4,7 @@ import com.adalab.examination.Docker.DockerContainerFactoryBean;
 import com.adalab.examination.Docker.DockerImageFactoryBean;
 import com.adalab.examination.entity.TestResult;
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.PullImageResultCallback;
 import com.github.dockerjava.api.model.Image;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -124,6 +125,12 @@ public class DockerService {
 
     public List<Image> getImages() {
         return dockerClient.listImagesCmd().exec();
+    }
+
+
+    public void pullImage(String image) throws InterruptedException {
+        PullImageResultCallback callback = new PullImageResultCallback();
+        dockerClient.pullImageCmd(image).exec(callback).awaitCompletion();
     }
 
 }

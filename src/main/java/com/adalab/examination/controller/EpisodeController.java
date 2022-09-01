@@ -199,4 +199,13 @@ public class EpisodeController {
         return new ServiceResponse<>(200, "", episodeService.count());
     }
 
+    @PutMapping("/pull")
+    ServiceResponse<String> pullImage(@RequestParam String image) {
+        try {
+            dockerService.pullImage(image);
+        } catch (Exception e) {
+            return new ServiceResponse<>(500, "拉取镜像失败");
+        }
+        return new ServiceResponse<>(200, "拉取成功");
+    }
 }
