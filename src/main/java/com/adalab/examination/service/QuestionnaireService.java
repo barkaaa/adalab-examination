@@ -1,6 +1,7 @@
 package com.adalab.examination.service;
 
 import com.adalab.examination.entity.Questionnaire;
+import com.adalab.examination.entity.missionEntity.MissionInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -13,4 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface QuestionnaireService extends IService<Questionnaire> {
 
+    void addOrUpdateMission(MissionInfo missionInfo);
+
+    void deleteById(int missionNumber);
 }

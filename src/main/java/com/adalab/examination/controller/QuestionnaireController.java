@@ -34,43 +34,7 @@ public class QuestionnaireController {
 
     @PutMapping("addorupdate")
     public ServiceResponse<String> addOrUpdate(@RequestBody MissionInfo missionInfo) {
-        Questionnaire questionnaire = new Questionnaire();
-        //第几关
-        questionnaire.setMissionNumber(missionInfo.getMissionNumber());
-
-        int i = 1;
-        for (TextContents textContents : missionInfo.getTextContents()) {
-
-            if (textContents.getQuestionType().equals("选择")) {
-                questionnaire.setQuestionType(2);
-            } else {
-                questionnaire.setQuestionType(1);
-            }
-
-            questionnaire.setTheme(textContents.getDescription());
-            questionnaire.setQuestionNumber(i);
-            //将会得到“false”或“true”
-            questionnaire.setIsAddtional(textContents.getIsAdditional());
-            questionnaire.setIsMultiple(textContents.getIsMultiple());
-
-            StringBuilder sb = new StringBuilder();
-            for (String str : textContents.getOptions()) {
-                sb.append(str).append("?");
-            }
-            questionnaire.setOptions(sb.toString());
-
-            QueryWrapper<Questionnaire> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("mission_number", questionnaire.getMissionNumber());
-            queryWrapper.eq("question_number", i);
-            Questionnaire query = questionnaireService.getOne(queryWrapper);
-
-            if (query == null) {
-                questionnaireService.save(questionnaire);
-            } else {
-                questionnaireService.update(questionnaire, queryWrapper);
-            }
-            i++;
-        }
+        questionnaireService.addOrUpdateMission(missionInfo);
 
         return new ServiceResponse<>(200, "ok");
     }
@@ -90,19 +54,7 @@ public class QuestionnaireController {
      */
     @DeleteMapping("DeleteQuestionnaire/{missionNumber}")
     public ServiceResponse<String> deleteQuestionnaire(@PathVariable int missionNumber) {
-        LambdaQueryWrapper<Questionnaire> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(Questionnaire::getMissionNumber, missionNumber);
-        var list = questionnaireService.list(lqw);
-        list.stream().forEach(questionnaireService::removeById);
-        lqw.clear();
-        lqw.gt(Questionnaire::getMissionNumber, missionNumber);
-        var list2 = questionnaireService.list(lqw);
-        list2.stream().forEach((item) -> {
-                    item.setMissionNumber(item.getMissionNumber() - 1);
-                    questionnaireService.updateById(item);
-                }
-
-        );
+        questionnaireService.deleteById(missionNumber);
         return new ServiceResponse<>(200, "ok");
     }
 
