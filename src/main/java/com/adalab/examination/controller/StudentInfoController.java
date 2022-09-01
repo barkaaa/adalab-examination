@@ -221,7 +221,7 @@ public class StudentInfoController {
     }
 
     @GetMapping("/studentCode/FilesTree")
-    public ServiceResponse<Map<String, Map<String,Map<String, List<String>>>>> getFilesTreeAll() {
+    public ServiceResponse<Map<String, Map<String, Map<String, List<String>>>>> getFilesTreeAll() {
         //提交路径
         String localPath = "src/main/resources/studentCode";
 
@@ -229,7 +229,7 @@ public class StudentInfoController {
         File file = new File(localPath);
         //用户文件夹列表
         String[] usrFolderName = file.list();
-        Map<String, Map<String,Map<String, List<String>>>> usrFolderNames = new HashMap<>();
+        Map<String, Map<String, Map<String, List<String>>>> usrFolderNames = new HashMap<>();
         for (String U : usrFolderName) {
             //用户文件夹路径
             String usrPath = localPath + "/" + U;
@@ -237,7 +237,7 @@ public class StudentInfoController {
             File usrFile = new File(usrPath);
             //关卡文件夹列表
             String[] stepFolders = usrFile.list();
-            Map<String,Map<String, List<String>>> stepFoldersMap = new HashMap<>();
+            Map<String, Map<String, List<String>>> stepFoldersMap = new HashMap<>();
             for (String S : stepFolders) {
                 //关卡文件路径
                 String stepPath = usrPath + "/" + S;
@@ -262,7 +262,7 @@ public class StudentInfoController {
                     timeFoldersMap.put(T, fileNames);
                 }
 
-            stepFoldersMap.put(S,timeFoldersMap);
+                stepFoldersMap.put(S, timeFoldersMap);
             }
 
             //用户文件夹
@@ -273,12 +273,6 @@ public class StudentInfoController {
         return new ServiceResponse<>(200, "", usrFolderNames);
     }
 
-    @GetMapping("/curUserID")
-    public String getCurUserID(@CookieValue("id") String name) {
-//        String name = "huihuihui";
-        System.out.println(name);
-        return name;
-    }
 
     //设置学生的闯关数
     @GetMapping("/setDoneMission/{id}")
@@ -293,26 +287,28 @@ public class StudentInfoController {
     }
 
     @PatchMapping("/update")
-    public ServiceResponse<String> update(@CookieValue("id") int id, @RequestBody StudentInfo studentInfo) {
+    public ServiceResponse<String> update( @RequestBody StudentInfo studentInfo) {
+        int id = ((MyPrincipal) SecurityUtils.getSubject().getPrincipal()).getName();
         studentInfo.setId(id);
         studentInfoService.updateById(studentInfo);
         return new ServiceResponse<>(200, "更新成功");
     }
 
     @GetMapping("/url")
-    public ServiceResponse<String> url(@CookieValue("id") int id) {
+    public ServiceResponse<String> url() {
+        int id = ((MyPrincipal) SecurityUtils.getSubject().getPrincipal()).getName();
         StudentInfo studentInfo = studentInfoService.getById(id);
         return new ServiceResponse<>(200, "", studentInfo.getWebPage());
     }
 
     @GetMapping("/me")
     public ServiceResponse<MyPrincipal> me() {
-        Subject subject= SecurityUtils.getSubject();
-        if (subject.getPrincipal()==null){
-            return new ServiceResponse<>(401,"未登录！",null);
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.getPrincipal() == null) {
+            return new ServiceResponse<>(401, "未登录！", null);
         }
         MyPrincipal principal = (MyPrincipal) subject.getPrincipal();
-        return new ServiceResponse<>(200,"OK",principal);
+        return new ServiceResponse<>(200, "OK", principal);
     }
 
 
