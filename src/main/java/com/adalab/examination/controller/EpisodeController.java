@@ -5,7 +5,6 @@ import com.adalab.examination.entity.missionEntity.QuestionnaireResult;
 import com.adalab.examination.service.*;
 import com.github.dockerjava.api.model.Image;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,6 +101,12 @@ public class EpisodeController {
         Episode episode = episodeService.getById(episodeId);
         if (studentInfo == null || episode == null) {
             return new ServiceResponse<>(400, "条件错误");
+        }
+
+        if (studentInfo.getBeginDate() == null) {
+            studentInfo.setBeginDate(LocalDateTime.now());
+            studentInfo.setLastEdited(LocalDateTime.now());
+            studentService.updateById(studentInfo);
         }
 
         if (episode.getType() == 2) {
@@ -202,7 +208,7 @@ public class EpisodeController {
         return new ServiceResponse<>(200, "获取成功", res);
     }
 
-    @RequiresRoles("root")
+
     @GetMapping("/get")
     ServiceResponse<List<Episode>>
     getEpisode() {
@@ -243,7 +249,14 @@ public class EpisodeController {
         } catch (Exception e) {
             return new ServiceResponse<>(500, "拉取镜像失败");
         }
-
-
     }
+
+
+    @PatchMapping("/updateChallengeInfo")
+    public ServiceResponse<Object> updateChallengeInfo(@RequestBody Episode episode) {
+        episodeService.updateById(episode);
+        return new ServiceResponse<>(200, "修改关卡描述成功");
+    }
+
+
 }
