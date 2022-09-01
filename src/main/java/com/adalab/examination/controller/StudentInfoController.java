@@ -3,6 +3,7 @@ package com.adalab.examination.controller;
 
 import com.adalab.examination.entity.ServiceResponse;
 import com.adalab.examination.entity.StudentInfo;
+import com.adalab.examination.mapper.StudentInfoMapper;
 import com.adalab.examination.service.StudentInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
 
@@ -35,7 +38,8 @@ import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
 @RequestMapping("/api/studentInfo")
 public class StudentInfoController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    @Autowired
+    StudentInfoMapper studentInfoMapper;
 
     final
     StudentInfoService studentInfoService;
@@ -170,7 +174,6 @@ public class StudentInfoController {
     @GetMapping("getPagingRanking/{page}")
     public ServiceResponse<List<StudentInfo>> getPagingRanking(@PathVariable int page) {
         IPage<StudentInfo> pageParameter = new Page<>(page, 14);
-
         LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
         studentLambdaQueryWrapper.orderByDesc(StudentInfo::getEpisode);
         IPage<StudentInfo> toolPage = studentInfoService.page(pageParameter, studentLambdaQueryWrapper);
@@ -218,7 +221,7 @@ public class StudentInfoController {
     }
 
     @GetMapping("/studentCode/FilesTree")
-    public ServiceResponse<Map<String, Map<String,Map<String, List<String>>>>> getFilesTreeAll() {
+    public ServiceResponse<Map<String, Map<String, Map<String, List<String>>>>> getFilesTreeAll() {
         //提交路径
         String localPath = "src/main/resources/studentCode";
 
@@ -226,7 +229,7 @@ public class StudentInfoController {
         File file = new File(localPath);
         //用户文件夹列表
         String[] usrFolderName = file.list();
-        Map<String, Map<String,Map<String, List<String>>>> usrFolderNames = new HashMap<>();
+        Map<String, Map<String, Map<String, List<String>>>> usrFolderNames = new HashMap<>();
         for (String U : usrFolderName) {
             //用户文件夹路径
             String usrPath = localPath + "/" + U;
@@ -234,7 +237,7 @@ public class StudentInfoController {
             File usrFile = new File(usrPath);
             //关卡文件夹列表
             String[] stepFolders = usrFile.list();
-            Map<String,Map<String, List<String>>> stepFoldersMap = new HashMap<>();
+            Map<String, Map<String, List<String>>> stepFoldersMap = new HashMap<>();
             for (String S : stepFolders) {
                 //关卡文件路径
                 String stepPath = usrPath + "/" + S;
@@ -259,7 +262,7 @@ public class StudentInfoController {
                     timeFoldersMap.put(T, fileNames);
                 }
 
-            stepFoldersMap.put(S,timeFoldersMap);
+                stepFoldersMap.put(S, timeFoldersMap);
             }
 
             //用户文件夹
@@ -304,12 +307,68 @@ public class StudentInfoController {
 
     @GetMapping("/me")
     public ServiceResponse<Integer> me(@CookieValue(value = "id", required = false) Integer id) {
-        if (id == null) {
-            return new ServiceResponse<>(401, "未登录");
-        }
-        return new ServiceResponse<>(200, "", id);
+//        if (id == null) {
+//            return new ServiceResponse<>(401, "未登录");
+//        }
+        return new ServiceResponse<>(200, "", 1);
     }
 
+    /**
+     * 获取通关数据
+     *
+     * @param page
+     * @return
+     */
+    @GetMapping("/getPass/{page}")
+    public ServiceResponse<List<StudentInfo>> getPass(@PathVariable int page) {
+        IPage<StudentInfo> pageParameter = new Page<>(page, 14);
+        LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        studentLambdaQueryWrapper.gt(StudentInfo::getEpisode, 9);
+        studentLambdaQueryWrapper.orderByDesc(StudentInfo::getEpisode);
+        IPage<StudentInfo> toolPage = studentInfoService.page(pageParameter, studentLambdaQueryWrapper);
+        return new ServiceResponse<>(200, "success", toolPage.getRecords());
+    }
 
+    /**
+     * 查询近一周的数据
+     */
+    @GetMapping("/getWeekData/{page}")
+    public ServiceResponse<List<StudentInfo>> getWeekData(@PathVariable int page) {
+
+        int start = (page - 1) * 14;
+        List<StudentInfo> studentInfos = studentInfoMapper.selectWeekDataPage(start, 14);
+        return new ServiceResponse<>(200, "success", studentInfos);
+    }
+
+    /**
+     * 获取passed页数
+     */
+    @GetMapping("/getPassedPage/{pageSize}")
+
+    public int getPassedPage(@PathVariable int pageSize) {
+        LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        studentLambdaQueryWrapper.gt(StudentInfo::getEpisode, 9);
+        List<StudentInfo> list = studentInfoService.list(studentLambdaQueryWrapper);
+        int size = list.size();
+        if (size % pageSize == 0) {
+            return size / pageSize;
+        } else {
+            return size / pageSize + 1;
+        }
+    }
+
+    /**
+     * 获取weekdata页数
+     */
+    @GetMapping("/getWeekPage/{pageSize}")
+    public int getWeekPage(@PathVariable int pageSize) {
+        List<StudentInfo> studentInfos = studentInfoMapper.selectWeekData();
+        int size = studentInfos.size();
+        if (size % pageSize == 0) {
+            return size / pageSize;
+        } else {
+            return size / pageSize + 1;
+        }
+    }
 }
 
