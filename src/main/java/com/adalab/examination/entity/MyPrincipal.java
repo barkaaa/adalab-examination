@@ -1,15 +1,15 @@
 package com.adalab.examination.entity;
 
 public class MyPrincipal {
-    String name;
+    Integer id;
     String role;
 
-    public String getName() {
-        return name;
+    public Integer getName() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(Integer name) {
+        this.id = name;
     }
 
     public String getRole() {
@@ -20,8 +20,8 @@ public class MyPrincipal {
         this.role = role;
     }
 
-    public MyPrincipal(String name, String role) {
-        this.name = name;
+    public MyPrincipal(Integer name, String role) {
+        this.id = name;
         this.role = role;
     }
 }

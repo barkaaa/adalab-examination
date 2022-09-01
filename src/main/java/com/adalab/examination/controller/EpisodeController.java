@@ -4,6 +4,9 @@ import com.adalab.examination.entity.*;
 import com.adalab.examination.entity.missionEntity.QuestionnaireResult;
 import com.adalab.examination.service.*;
 import com.github.dockerjava.api.model.Image;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.subject.Subject;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -93,8 +96,8 @@ public class EpisodeController {
     }
 
     @GetMapping("/test/{id}")
-    ServiceResponse<TestResult> doTest(@PathVariable("id") int episodeId, @CookieValue("id") String id, @RequestBody(required = false) QuestionnaireResult questionnaireResult) throws InterruptedException {
-
+    ServiceResponse<TestResult> doTest(@PathVariable("id") int episodeId, @RequestBody(required = false) QuestionnaireResult questionnaireResult) throws InterruptedException {
+        int id = ((MyPrincipal) SecurityUtils.getSubject().getPrincipal()).getName();
         StudentInfo studentInfo = studentService.getById(id);
         Episode episode = episodeService.getById(episodeId);
         if (studentInfo == null || episode == null) {
@@ -149,7 +152,7 @@ public class EpisodeController {
 
 
     void goNext(StudentInfo studentInfo, Integer episodeId) {
-        studentInfo.setEpisode(episodeId + 1);
+        studentInfo.setEpisode(episodeId);
         studentService.updateById(studentInfo);
     }
 
@@ -200,6 +203,7 @@ public class EpisodeController {
         return new ServiceResponse<>(200, "获取成功", res);
     }
 
+    @RequiresRoles("root")
     @GetMapping("/get")
     ServiceResponse<List<Episode>>
     getEpisode() {
@@ -232,10 +236,15 @@ public class EpisodeController {
     @PutMapping("/pull")
     ServiceResponse<String> pullImage(@RequestParam String image) {
         try {
-            dockerService.pullImage(image);
+            if (dockerService.pullImage(image)) {
+                return new ServiceResponse<>(200, "拉取成功");
+            } else {
+                return new ServiceResponse<>(200, "任在拉去中,请稍后刷新页面产看");
+            }
         } catch (Exception e) {
             return new ServiceResponse<>(500, "拉取镜像失败");
         }
-        return new ServiceResponse<>(200, "拉取成功");
+
+
     }
 }
