@@ -2,4 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.adalab.examination.mapper.StudentInfoMapper">
 
+
+    <select id="selectWeekDataPage" resultType="com.adalab.examination.entity.StudentInfo">
+        SELECT *
+        FROM `student_info`
+        WHERE DATE_SUB(CURDATE(), INTERVAL 7 DAY) <![CDATA[<=]]> DATE(begin_date)
+        ORDER BY created_date desc
+        limit #{start} , #{pageSize}
+    </select>
+
+
+    <select id="selectWeekData" resultType="com.adalab.examination.entity.StudentInfo">
+        SELECT *
+        FROM `student_info`
+        WHERE DATE_SUB(CURDATE(), INTERVAL 7 DAY) <![CDATA[<=]]> DATE(begin_date)
+        ORDER BY created_date desc
+    </select>
+
+
+
 </mapper>
+

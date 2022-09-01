@@ -6,7 +6,6 @@ import com.adalab.examination.service.*;
 import com.github.dockerjava.api.model.Image;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.apache.shiro.subject.Subject;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -95,7 +94,7 @@ public class EpisodeController {
 
     }
 
-    @GetMapping("/test/{id}")
+    @PostMapping("/test/{id}")
     ServiceResponse<TestResult> doTest(@PathVariable("id") int episodeId, @RequestBody(required = false) QuestionnaireResult questionnaireResult) throws InterruptedException {
         int id = ((MyPrincipal) SecurityUtils.getSubject().getPrincipal()).getName();
         StudentInfo studentInfo = studentService.getById(id);

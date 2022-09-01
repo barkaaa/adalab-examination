@@ -1,19 +1,18 @@
 package com.adalab.examination.controller;
 
 
-import com.adalab.examination.entity.MyPrincipal;
 import com.adalab.examination.entity.ServiceResponse;
 import com.adalab.examination.entity.StudentInfo;
+import com.adalab.examination.mapper.StudentInfoMapper;
 import com.adalab.examination.service.StudentInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
 
@@ -38,7 +38,8 @@ import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
 @RequestMapping("/api/studentInfo")
 public class StudentInfoController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    @Autowired
+    StudentInfoMapper studentInfoMapper;
 
     final
     StudentInfoService studentInfoService;
@@ -306,15 +307,67 @@ public class StudentInfoController {
     }
 
     @GetMapping("/me")
-    public ServiceResponse<MyPrincipal> me() {
-        Subject subject= SecurityUtils.getSubject();
-        if (subject.getPrincipal()==null){
-            return new ServiceResponse<>(401,"未登录！",null);
+    public ServiceResponse<Integer> me(@CookieValue(value = "id", required = false) Integer id) {
+        if (id == null) {
+            return new ServiceResponse<>(401, "未登录");
         }
-        MyPrincipal principal = (MyPrincipal) subject.getPrincipal();
-        return new ServiceResponse<>(200,"OK",principal);
+        return new ServiceResponse<>(200, "", id);
+    }
+    /**
+     * 获取通关数据
+     *
+     * @param page
+     * @return
+     */
+    @GetMapping("/getPass/{page}")
+    public ServiceResponse<List<StudentInfo>> getPass(@PathVariable int page) {
+        IPage<StudentInfo> pageParameter = new Page<>(page, 14);
+        LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        studentLambdaQueryWrapper.gt(StudentInfo::getEpisode, 9);
+        studentLambdaQueryWrapper.orderByDesc(StudentInfo::getEpisode);
+        IPage<StudentInfo> toolPage = studentInfoService.page(pageParameter, studentLambdaQueryWrapper);
+        return new ServiceResponse<>(200, "success", toolPage.getRecords());
+    }
+    /**
+     * 查询近一周的数据
+     */
+    @GetMapping("/getWeekData/{page}")
+    public ServiceResponse<List<StudentInfo>> getWeekData(@PathVariable int page) {
+
+        int start = (page - 1) * 14;
+        List<StudentInfo> studentInfos = studentInfoMapper.selectWeekDataPage(start, 14);
+        return new ServiceResponse<>(200, "success", studentInfos);
     }
 
+    /**
+     * 获取passed页数
+     */
+    @GetMapping("/getPassedPage/{pageSize}")
 
+    public int getPassedPage(@PathVariable int pageSize) {
+        LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        studentLambdaQueryWrapper.gt(StudentInfo::getEpisode, 9);
+        List<StudentInfo> list = studentInfoService.list(studentLambdaQueryWrapper);
+        int size = list.size();
+        if (size % pageSize == 0) {
+            return size / pageSize;
+        } else {
+            return size / pageSize + 1;
+        }
+    }
+
+    /**
+     * 获取weekdata页数
+     */
+    @GetMapping("/getWeekPage/{pageSize}")
+    public int getWeekPage(@PathVariable int pageSize) {
+        List<StudentInfo> studentInfos = studentInfoMapper.selectWeekData();
+        int size = studentInfos.size();
+        if (size % pageSize == 0) {
+            return size / pageSize;
+        } else {
+            return size / pageSize + 1;
+        }
+    }
 }
 
