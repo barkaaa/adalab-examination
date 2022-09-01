@@ -2,9 +2,18 @@ package com.adalab.examination.controller;
 
 
 import com.adalab.examination.entity.StudentInfo;
+import com.adalab.examination.entity.StudentInfoToken;
 import com.adalab.examination.service.GitLoginService;
 import com.adalab.examination.service.StudentInfoService;
 import lombok.SneakyThrows;
+import okhttp3.RequestBody;
+import okhttp3.*;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -47,7 +56,12 @@ public class GitLoginController {
 
         } else {
             StudentInfo student = gitLoginService.getUser(token);
-            Cookie cookie = new Cookie("id", student.getId() + "");
+            //通过 SecurityUtils 工具类 获取当前的用户(Subject)
+            Subject subject= SecurityUtils.getSubject();
+            //封装用户的登录数据
+            StudentInfoToken studentInfoToken=new StudentInfoToken(student.getName(), String.valueOf(student.getId()),"student");
+            subject.login(studentInfoToken);
+            Cookie cookie = new Cookie("id",student.getId()+"");
             resp.addCookie(cookie);
             resp.sendRedirect("https://loaclhost:8001/home");
         }

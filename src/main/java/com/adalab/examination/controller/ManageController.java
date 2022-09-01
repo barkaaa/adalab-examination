@@ -1,6 +1,10 @@
 package com.adalab.examination.controller;
 
 import com.adalab.examination.entity.ServiceResponse;
+import com.adalab.examination.entity.StudentInfoToken;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.subject.Subject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,11 +25,14 @@ public class ManageController {
 
     @PostMapping("/login")
     public ServiceResponse<String> manageLogin(@RequestBody Map<String, String> map) {
-        if (map.get("username").equals(MANAGE_NAME)) {
-            if (map.get("password").equals(MANAGE_PSW)) {
-                return new ServiceResponse<>(200, "登录成功");
-            }
+        Subject subject= SecurityUtils.getSubject();
+        //封装用户的登录数据
+        StudentInfoToken token = new StudentInfoToken(map.get("username"),map.get("password"),"root");
+        try {
+            subject.login(token);
+            return new ServiceResponse<>(200, "登录成功");
+        }catch (AuthenticationException e){
+            return new ServiceResponse<>(403,"用户名或密码错误");
         }
-        return new ServiceResponse<>(403,"用户名或密码错误");
     }
 }
