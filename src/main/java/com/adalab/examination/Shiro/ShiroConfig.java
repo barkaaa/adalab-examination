@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Configuration
@@ -24,7 +25,6 @@ public class ShiroConfig {
 
         //关联DefaultWeSecurityManager 安全管理器对象
         shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager);
-
         /*
             添加shiro的内置过滤器
             用于添加需要拦截的路径,并设置拦截级别
@@ -35,18 +35,14 @@ public class ShiroConfig {
               perms：拥有对某个资源的权限才能访问
               roles： 拥有某个角色才能访问
          */
-        Map<String,String> interceptMap=new HashMap<>();
+        Map<String,String> interceptMap=new LinkedHashMap<>();
         //例如 拦截 修改个人资料 功能，设置为需要登录认证才能访问
-        //interceptMap.put("/user/add","authc");
-        //此处设置放行路径
-//        interceptMap.put("/login","anon");
-        //使用通配符拦截所有请求
-//        interceptMap.put("/me","anon");
-//        interceptMap.put("/customers","roles");
-//        interceptMap.put("/customers/{id}","roles");
+        interceptMap.put("/api/manage/login","anon");
+        interceptMap.put("/callback","anon");
+//        interceptMap.put("/api/test/login","anon");
+//        interceptMap.put("/api/test/student/login","anon");
+        interceptMap.put("/**","authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(interceptMap);
-
-
         return shiroFilterFactoryBean;
     }
 

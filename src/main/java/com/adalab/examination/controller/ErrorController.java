@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ErrorController {
     @RequestMapping("/401")
     public ServiceResponse<String> error(){
-        return new ServiceResponse<>(401,"没有权限",null);
+        return new ServiceResponse<>(401,"没有权限!!",null);
     }
 }
