@@ -129,25 +129,30 @@ public class EpisodeController {
             dockerService.removeContainer(containerId);
             TestResult testResult = dockerService.getResult(id + "", episodeId);
             if (testResult.isPassed()) {
-                studentInfo.setEpisode(episodeId + 1);
+                goNext(studentInfo, episodeId);
                 return new ServiceResponse<>(200, "闯关成通过", testResult);
             } else {
                 return new ServiceResponse<>(401, "闯关失败", testResult);
             }
         } else if (episode.getType() == 0) {
-            studentInfo.setEpisode(episodeId + 1);
+            goNext(studentInfo, episodeId);
             return new ServiceResponse<>(200, "闯关成通过");
         } else if (episode.getType() == 1) {
             if (questionnaireResult == null) {
                 return new ServiceResponse<>(401, "请填写关卡问卷");
             }
             questionnaireService.putStudentReply(questionnaireResult);
-            studentInfo.setEpisode(episodeId + 1);
+            goNext(studentInfo, episodeId);
             return new ServiceResponse<>(200, "闯关成通过");
         }
         return new ServiceResponse<>(400, "关卡设置有误,请联系管理员");
     }
 
+
+    void goNext(StudentInfo studentInfo, Integer episodeId) {
+        studentInfo.setEpisode(episodeId + 1);
+        studentService.updateById(studentInfo);
+    }
 
     @DeleteMapping("/delete/{id}")
     ServiceResponse<String> delete(@PathVariable("id") int id) {
