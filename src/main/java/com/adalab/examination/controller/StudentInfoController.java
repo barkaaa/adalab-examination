@@ -270,8 +270,6 @@ public class StudentInfoController {
             //用户文件夹
             usrFolderNames.put(U, stepFoldersMap);
         }
-        logger.info("获取到结构树");
-        System.out.println(usrFolderNames.get("佐々木玲奈"));
         return new ServiceResponse<>(200, "", usrFolderNames);
     }
 
