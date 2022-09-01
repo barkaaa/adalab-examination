@@ -4,12 +4,12 @@ public class MyPrincipal {
     Integer id;
     String role;
 
-    public Integer getName() {
+    public Integer getId() {
         return id;
     }
 
-    public void setName(Integer name) {
-        this.id = name;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getRole() {

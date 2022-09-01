@@ -37,11 +37,10 @@ public class ShiroConfig {
          */
         Map<String,String> interceptMap=new LinkedHashMap<>();
         //例如 拦截 修改个人资料 功能，设置为需要登录认证才能访问
-        interceptMap.put("/api/manage/login","anon");
-        interceptMap.put("/callback","anon");
-//        interceptMap.put("/api/test/login","anon");
-//        interceptMap.put("/api/test/student/login","anon");
-        interceptMap.put("/**","authc");
+//        interceptMap.put("/api/manage/login","anon");
+//        interceptMap.put("/callback","anon");
+//        interceptMap.put("/api/studentInfo/me","anon");
+//        interceptMap.put("/**","authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(interceptMap);
         return shiroFilterFactoryBean;
     }

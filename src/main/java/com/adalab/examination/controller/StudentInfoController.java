@@ -1,6 +1,7 @@
 package com.adalab.examination.controller;
 
 
+import com.adalab.examination.entity.MyPrincipal;
 import com.adalab.examination.entity.ServiceResponse;
 import com.adalab.examination.entity.StudentInfo;
 import com.adalab.examination.mapper.StudentInfoMapper;
@@ -9,10 +10,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.shiro.SecurityUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
 
@@ -38,14 +38,15 @@ import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
 @RequestMapping("/api/studentInfo")
 public class StudentInfoController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    StudentInfoMapper studentInfoMapper;
+
+    private final StudentInfoMapper studentInfoMapper;
 
     final
     StudentInfoService studentInfoService;
 
-    public StudentInfoController(StudentInfoService studentInfoService) {
+    public StudentInfoController(StudentInfoService studentInfoService, StudentInfoMapper studentInfoMapper) {
         this.studentInfoService = studentInfoService;
+        this.studentInfoMapper = studentInfoMapper;
     }
 
 
@@ -222,7 +223,7 @@ public class StudentInfoController {
     }
 
     @GetMapping("/studentCode/FilesTree")
-    public ServiceResponse<Map<String, Map<String,Map<String, List<String>>>>> getFilesTreeAll() {
+    public ServiceResponse<Map<String, Map<String, Map<String, List<String>>>>> getFilesTreeAll() {
         //提交路径
         String localPath = "src/main/resources/studentCode";
 
@@ -230,7 +231,7 @@ public class StudentInfoController {
         File file = new File(localPath);
         //用户文件夹列表
         String[] usrFolderName = file.list();
-        Map<String, Map<String,Map<String, List<String>>>> usrFolderNames = new HashMap<>();
+        Map<String, Map<String, Map<String, List<String>>>> usrFolderNames = new HashMap<>();
         for (String U : usrFolderName) {
             //用户文件夹路径
             String usrPath = localPath + "/" + U;
@@ -238,7 +239,7 @@ public class StudentInfoController {
             File usrFile = new File(usrPath);
             //关卡文件夹列表
             String[] stepFolders = usrFile.list();
-            Map<String,Map<String, List<String>>> stepFoldersMap = new HashMap<>();
+            Map<String, Map<String, List<String>>> stepFoldersMap = new HashMap<>();
             for (String S : stepFolders) {
                 //关卡文件路径
                 String stepPath = usrPath + "/" + S;
@@ -263,7 +264,7 @@ public class StudentInfoController {
                     timeFoldersMap.put(T, fileNames);
                 }
 
-            stepFoldersMap.put(S,timeFoldersMap);
+                stepFoldersMap.put(S, timeFoldersMap);
             }
 
             //用户文件夹
@@ -307,12 +308,16 @@ public class StudentInfoController {
     }
 
     @GetMapping("/me")
-    public ServiceResponse<Integer> me(@CookieValue(value = "id", required = false) Integer id) {
-        if (id == null) {
-            return new ServiceResponse<>(401, "未登录");
+    public ServiceResponse<MyPrincipal> me() {
+        var principal = SecurityUtils.getSubject().getPrincipal();
+        if (principal == null) {
+            return new ServiceResponse<>(403, "未登录");
+        } else {
+            return new ServiceResponse<>(200, "", (MyPrincipal) principal);
         }
-        return new ServiceResponse<>(200, "", id);
+
     }
+
     /**
      * 获取通关数据
      *
@@ -328,6 +333,7 @@ public class StudentInfoController {
         IPage<StudentInfo> toolPage = studentInfoService.page(pageParameter, studentLambdaQueryWrapper);
         return new ServiceResponse<>(200, "success", toolPage.getRecords());
     }
+
     /**
      * 查询近一周的数据
      */

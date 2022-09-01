@@ -33,7 +33,7 @@ public class GitLoginController {
 
     public final String CLIENT_SECRET = "ba1e86d41d2382078aea528d7c7410dc560e128b";
 
-    public final String URL = "http://loaclhost:8080/callback";
+    public final String URL = "http://localhost:8080/callback";
 
     public GitLoginController(StudentInfoService studentInfoService, GitLoginService gitLoginService) {
         this.studentInfoService = studentInfoService;
@@ -52,7 +52,7 @@ public class GitLoginController {
         if (token == null) {
             Cookie cookie = new Cookie("NETERROR", "NETERROR");
             resp.addCookie(cookie);
-            resp.sendRedirect("https://loaclhost:8001/student");
+            resp.sendRedirect("http://localhost:8001/student");
 
         } else {
             StudentInfo student = gitLoginService.getUser(token);
@@ -63,7 +63,7 @@ public class GitLoginController {
             subject.login(studentInfoToken);
             Cookie cookie = new Cookie("id",student.getId()+"");
             resp.addCookie(cookie);
-            resp.sendRedirect("https://loaclhost:8001/home");
+            resp.sendRedirect("http://localhost:8001/home");
         }
     }
 }

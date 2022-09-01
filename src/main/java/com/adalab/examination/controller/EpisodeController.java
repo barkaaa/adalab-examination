@@ -96,7 +96,7 @@ public class EpisodeController {
 
     @PostMapping("/test/{id}")
     ServiceResponse<TestResult> doTest(@PathVariable("id") int episodeId, @RequestBody(required = false) QuestionnaireResult questionnaireResult) throws InterruptedException {
-        int id = ((MyPrincipal) SecurityUtils.getSubject().getPrincipal()).getName();
+        int id = ((MyPrincipal) SecurityUtils.getSubject().getPrincipal()).getId();
         StudentInfo studentInfo = studentService.getById(id);
         Episode episode = episodeService.getById(episodeId);
         if (studentInfo == null || episode == null) {
