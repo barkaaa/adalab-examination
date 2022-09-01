@@ -1,6 +1,7 @@
 package com.adalab.examination.controller;
 
 
+import com.adalab.examination.entity.MyPrincipal;
 import com.adalab.examination.entity.ServiceResponse;
 import com.adalab.examination.entity.StudentInfo;
 import com.adalab.examination.service.StudentInfoService;
@@ -8,6 +9,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -303,11 +306,13 @@ public class StudentInfoController {
     }
 
     @GetMapping("/me")
-    public ServiceResponse<Integer> me(@CookieValue(value = "id", required = false) Integer id) {
-        if (id == null) {
-            return new ServiceResponse<>(401, "未登录");
+    public ServiceResponse<MyPrincipal> me() {
+        Subject subject= SecurityUtils.getSubject();
+        if (subject.getPrincipal()==null){
+            return new ServiceResponse<>(401,"未登录！",null);
         }
-        return new ServiceResponse<>(200, "", id);
+        MyPrincipal principal = (MyPrincipal) subject.getPrincipal();
+        return new ServiceResponse<>(200,"OK",principal);
     }
 
 

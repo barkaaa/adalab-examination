@@ -1,4 +1,5 @@
 package com.adalab.examination.Shiro;
+import com.adalab.examination.entity.MyPrincipal;
 import com.adalab.examination.entity.StudentInfo;
 import com.adalab.examination.entity.StudentInfoToken;
 import com.adalab.examination.service.StudentInfoService;
@@ -28,8 +29,9 @@ public class ShiroRealm extends AuthorizingRealm {
         //获取权限对象
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         //获取用户的主身份信息，
-        String role =principal.toString();
-        simpleAuthorizationInfo.addRole(role);
+        Object primaryPrincipal = principal.getPrimaryPrincipal();
+        MyPrincipal myPrincipal = (MyPrincipal) primaryPrincipal;
+        simpleAuthorizationInfo.addRole(myPrincipal.getRole());
         //将角色赋值给 simpleAuthorizationInfo 权限对象
         return simpleAuthorizationInfo;
     }
@@ -42,14 +44,14 @@ public class ShiroRealm extends AuthorizingRealm {
         StudentInfoToken token = (StudentInfoToken)authenticationToken;
         if (token.getRole().equals("root")){
             if (token.getName().equals(realUsername)){
-                return new SimpleAuthenticationInfo("root",realPassword,token.getID());
+                return new SimpleAuthenticationInfo(new MyPrincipal(token.getID(),"root"),realPassword,token.getID());
             }else {
                 return null;
             }
 
         }
         //认证密码 第二个参数本来应该是密码 但是我们这个项目随意
-        return new SimpleAuthenticationInfo("student",token.getID(),token.getID());
+        return new SimpleAuthenticationInfo(new MyPrincipal(token.getID(),"student"),token.getID(),token.getID());
     }
 
     /**
