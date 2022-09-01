@@ -39,7 +39,6 @@ import static com.adalab.examination.GitClone.DirectoryUtils.traverseDir;
 public class StudentInfoController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-
     final
     StudentInfoService studentInfoService;
 
