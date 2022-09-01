@@ -28,7 +28,7 @@ public class ShiroRealm extends AuthorizingRealm {
         //获取权限对象
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         //获取用户的主身份信息，
-        String role = (String) principal.getPrimaryPrincipal();
+        String role =principal.toString();
         simpleAuthorizationInfo.addRole(role);
         //将角色赋值给 simpleAuthorizationInfo 权限对象
         return simpleAuthorizationInfo;
@@ -42,14 +42,14 @@ public class ShiroRealm extends AuthorizingRealm {
         StudentInfoToken token = (StudentInfoToken)authenticationToken;
         if (token.getRole().equals("root")){
             if (token.getName().equals(realUsername)){
-                return new SimpleAuthenticationInfo("root",realPassword,this.getName());
+                return new SimpleAuthenticationInfo("root",realPassword,token.getID());
             }else {
                 return null;
             }
 
         }
         //认证密码 第二个参数本来应该是密码 但是我们这个项目随意
-        return new SimpleAuthenticationInfo("student",token.getID(),this.getName());
+        return new SimpleAuthenticationInfo("student",token.getID(),token.getID());
     }
 
     /**
