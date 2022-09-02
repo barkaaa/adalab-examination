@@ -79,6 +79,12 @@ public class StudentInfoController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("getSenven/{id}")
+    public ServiceResponse<List<StudentInfo>> getSenven(@PathVariable int id){
+        var beginDate = studentInfoService.getById(id).getBeginDate();
+        List<StudentInfo> list = studentInfoMapper.selectWithinSevenDays(beginDate.toString());
+        return new ServiceResponse<>(200,"ok",list);
+    }
 
     /**
      * 在前端按下开始按钮开始闯关
