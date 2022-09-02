@@ -58,18 +58,16 @@ public class DockerService {
      * @param stuCodeFileName 学生代码文件名
      * @param testFileName    测试文件名
      * @param workDir         容器测试目录(学生代码和测试代码会挂载到一个目录)
-     * @param name            容器名
      * @param runCMD          测试文件命令行运行代码
      * @return 生成容器在docker服务的位置
      */
 
     public String createContainer(String imageId, String stuCodeFileName, int ep,
-                                  String testFileName, String workDir,
-                                  String name, String runCMD) {
+                                  String testFileName, String workDir, String runCMD) {
         String[] cmd = runCMD.split(" ");
 
         try {
-            return containerFactoryBean.createContainer(findLastPost(stuCodeFileName, ep), testFileName, imageId, name, workDir, cmd);
+            return containerFactoryBean.createContainer(findLastPost(stuCodeFileName, ep), testFileName, imageId, workDir, cmd);
         } catch (IOException e) {
             return null;
         }

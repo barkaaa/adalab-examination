@@ -123,7 +123,7 @@ public class EpisodeController {
 
             String containerId = dockerService.createContainer(episode.getImgId(), id + "",
                     episodeId, episode.getTestFileName(),
-                    "/test", "testContainer", episode.getCmd());
+                    "/test", episode.getCmd());
             dockerService.startContainer(containerId);
             long t = System.currentTimeMillis();
 

@@ -20,7 +20,7 @@ public class DockerContainerFactoryBean {
 
     }
 
-    public String createContainer(String stuFilePath, String testFileName, String imageId, String name, String workFile, String[] cmd) throws IOException {
+    public String createContainer(String stuFilePath, String testFileName, String imageId, String workFile, String[] cmd) throws IOException {
         HostConfig hostConfig = newHostConfig();
         File file = new File("src/main/resources");
         String resourcePath = file.getCanonicalPath();
@@ -31,7 +31,6 @@ public class DockerContainerFactoryBean {
 
         hostConfig.setBinds(stuCodeMounting, testCodeMounting);
         return client.createContainerCmd(imageId)
-                .withName(name)
                 .withHostConfig(hostConfig)
                 .withWorkingDir(workFile + "/" + testFileName)
                 .withCmd(cmd)
