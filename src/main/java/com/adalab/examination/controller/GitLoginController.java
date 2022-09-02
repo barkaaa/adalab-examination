@@ -1,6 +1,5 @@
 package com.adalab.examination.controller;
 
-
 import com.adalab.examination.entity.StudentInfo;
 import com.adalab.examination.entity.StudentInfoToken;
 import com.adalab.examination.service.GitLoginService;
@@ -57,11 +56,11 @@ public class GitLoginController {
         } else {
             StudentInfo student = gitLoginService.getUser(token);
             //通过 SecurityUtils 工具类 获取当前的用户(Subject)
-            Subject subject= SecurityUtils.getSubject();
+            Subject subject = SecurityUtils.getSubject();
             //封装用户的登录数据
-            StudentInfoToken studentInfoToken=new StudentInfoToken(student.getName(), String.valueOf(student.getId()),"student");
+            StudentInfoToken studentInfoToken = new StudentInfoToken(student.getName(), String.valueOf(student.getId()), "student");
             subject.login(studentInfoToken);
-            Cookie cookie = new Cookie("id",student.getId()+"");
+            Cookie cookie = new Cookie("id", student.getId() + "");
             resp.addCookie(cookie);
             resp.sendRedirect("http://localhost:8001/home");
         }

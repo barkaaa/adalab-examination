@@ -1,6 +1,5 @@
 package com.adalab.examination.controller;
 
-
 import com.adalab.examination.entity.MyPrincipal;
 import com.adalab.examination.entity.ServiceResponse;
 import com.adalab.examination.entity.StudentInfo;
@@ -18,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.File;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -205,7 +204,7 @@ public class StudentInfoController {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String formatedTime = simpleDateFormat.format(new Date(Long.parseLong(time) * 1000L));
                     Map<String, String> map = new HashMap<>();
-                    String[] string = step.split("[p]");
+                    String[] string = step.split("p");
                     String episopdeNum = string[1];
                     map.put("commitTime", formatedTime);
                     map.put("link", step);
@@ -257,9 +256,7 @@ public class StudentInfoController {
                     //文件列表
                     String[] files = timeFile.list();
                     List<String> fileNames = new ArrayList<>();
-                    for (String F : files) {
-                        fileNames.add(F);
-                    }
+                    Collections.addAll(fileNames, files);
                     //存入提交时间文件夹
                     timeFoldersMap.put(T, fileNames);
                 }
@@ -372,6 +369,25 @@ public class StudentInfoController {
         } else {
             return size / pageSize + 1;
         }
+    }
+
+    //读取文件内容
+    @PostMapping("/fileContent")
+    public ServiceResponse<StringBuffer> getFileContent(@RequestBody Map<String, String> srcMap) {
+        File file = new File("src/main/resources/studentCode/" + srcMap.get("src"));
+        StringBuffer sb = new StringBuffer();
+        try {
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String readLine;
+            while ((readLine = br.readLine()) != null) {
+                sb.append(readLine).append("\r\n");
+            }
+            br.close();
+        } catch (IOException e) {
+            return new ServiceResponse<>(500, "读取文件错误");
+        }
+        return new ServiceResponse<>(200, "success", sb);
     }
 }
 
