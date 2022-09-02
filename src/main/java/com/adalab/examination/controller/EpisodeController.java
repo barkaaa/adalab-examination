@@ -8,6 +8,7 @@ import com.adalab.examination.vo.UploadVo;
 import com.github.dockerjava.api.model.Image;
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.jgit.api.errors.GitAPIException;
+
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -97,7 +98,7 @@ public class EpisodeController {
                 try {
                     delete(file);
                 } catch (IOException e) {
-
+                    System.out.println("删除文件失败");
                 }
             }
 
@@ -185,7 +186,7 @@ public class EpisodeController {
         try {
             delete(new File("src/main/resources/testFile/" + episode.getTestFileName()));
         } catch (IOException e) {
-
+            System.out.println("删除测试文件失败|或本身就不存在");
         }
         return new ServiceResponse<>(200, "删除成功");
     }
