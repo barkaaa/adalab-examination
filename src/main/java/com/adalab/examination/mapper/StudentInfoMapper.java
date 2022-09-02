@@ -21,4 +21,7 @@ public interface StudentInfoMapper extends BaseMapper<StudentInfo> {
     List<StudentInfo>selectWeekDataPage(@Param("start") int start, @Param("pageSize") int pageSize);
 
     List<StudentInfo>selectWeekData();
+
+    List<StudentInfo>selectWithinSevenDays(@Param("start") String begin_data);
+
 }
