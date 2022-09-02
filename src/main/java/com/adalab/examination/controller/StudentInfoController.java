@@ -236,45 +236,65 @@ public class StudentInfoController {
         //提交文件夹
         File file = new File(localPath);
         //用户文件夹列表
-        String[] usrFolderName = file.list();
-        Map<String, Map<String, Map<String, List<String>>>> usrFolderNames = new HashMap<>();
-        for (String U : usrFolderName) {
-            //用户文件夹路径
-            String usrPath = localPath + "/" + U;
-            //用户文件夹
-            File usrFile = new File(usrPath);
-            //关卡文件夹列表
-            String[] stepFolders = usrFile.list();
-            Map<String, Map<String, List<String>>> stepFoldersMap = new HashMap<>();
-            for (String S : stepFolders) {
-                //关卡文件路径
-                String stepPath = usrPath + "/" + S;
-                //关卡文件
-                File stepFile = new File(stepPath);
-                //提交时间文件夹列表
-                String[] timeFolders = stepFile.list();
+        if(file.exists()){
 
-                Map<String, List<String>> timeFoldersMap = new HashMap<>();
-                for (String T : timeFolders) {
-                    //提交时间文件夹路径
-                    String timePath = stepPath + "/" + T;
-                    //提交时间文件夹
-                    File timeFile = new File(timePath);
-                    //文件列表
-                    String[] files = timeFile.list();
-                    List<String> fileNames = new ArrayList<>();
-                    Collections.addAll(fileNames, files);
-                    //存入提交时间文件夹
-                    timeFoldersMap.put(T, fileNames);
+            String[] usrFolderName = file.list(); //存在才遍历
+
+            if (usrFolderName.length!=0){
+                Map<String, Map<String, Map<String, List<String>>>> usrFolderNames = new HashMap<>();
+                for (String U : usrFolderName) {
+                    //用户文件夹路径
+                    String usrPath = localPath + "/" + U;
+                    //用户文件夹
+                    File usrFile = new File(usrPath);
+                    //关卡文件夹列表
+
+                    String[] stepFolders = usrFile.list();
+                    if (stepFolders.length!=0){
+                        Map<String, Map<String, List<String>>> stepFoldersMap = new HashMap<>();
+                        for (String S : stepFolders) {
+                            //关卡文件路径
+                            String stepPath = usrPath + "/" + S;
+                            //关卡文件
+                            File stepFile = new File(stepPath);
+                            //提交时间文件夹列表
+                            String[] timeFolders = stepFile.list();
+
+                            if (timeFolders.length!=0){
+                                Map<String, List<String>> timeFoldersMap = new HashMap<>();
+                                for (String T : timeFolders) {
+                                    //提交时间文件夹路径
+                                    String timePath = stepPath + "/" + T;
+                                    //提交时间文件夹
+                                    File timeFile = new File(timePath);
+                                    //文件列表
+                                    String[] files = timeFile.list();
+                                    if (files.length!=0){
+                                        List<String> fileNames = new ArrayList<>();
+                                        for (String F : files) {
+                                            fileNames.add(F);
+                                        }
+                                        //存入提交时间文件夹
+                                        timeFoldersMap.put(T, fileNames);
+                                    }
+                                    else continue;
+                                }
+
+                                stepFoldersMap.put(S, timeFoldersMap);
+                            }
+                            else continue;
+                        }
+
+                        //用户文件夹
+                        usrFolderNames.put(U, stepFoldersMap);
+                    }
+                    else continue;
                 }
-
-                stepFoldersMap.put(S, timeFoldersMap);
+                return new ServiceResponse<>(200, "", usrFolderNames);
             }
-
-            //用户文件夹
-            usrFolderNames.put(U, stepFoldersMap);
+            else return new ServiceResponse<>(404, "", null);
         }
-        return new ServiceResponse<>(200, "", usrFolderNames);
+        else return new ServiceResponse<>(404, "文件夹不存在", null);
     }
 
     @GetMapping("/curUserID")
