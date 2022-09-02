@@ -3,19 +3,24 @@ package com.adalab.examination.controller;
 import com.adalab.examination.entity.*;
 import com.adalab.examination.entity.missionEntity.QuestionnaireResult;
 import com.adalab.examination.service.*;
+import com.adalab.examination.service.impl.OSSService;
+import com.adalab.examination.vo.UploadVo;
 import com.github.dockerjava.api.model.Image;
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/episode")
@@ -28,16 +33,18 @@ public class EpisodeController {
     GitService gitService;
     QuestionnaireReplyService questionnaireService;
 
+    OSSService ossService;
 
     EpisodeController(DockerService dockerService, FileUpLoadService fileUpLoadService,
                       EpisodeService episodeService, StudentInfoService studentService,
-                      GitService gitService, QuestionnaireReplyService questionnaireService) {
+                      GitService gitService, QuestionnaireReplyService questionnaireService, OSSService ossService) {
         this.dockerService = dockerService;
         this.fileUpLoadService = fileUpLoadService;
         this.episodeService = episodeService;
         this.studentService = studentService;
         this.gitService = gitService;
         this.questionnaireService = questionnaireService;
+        this.ossService = ossService;
     }
 
     /**
@@ -58,6 +65,16 @@ public class EpisodeController {
     @PostMapping("/createEp")
     ServiceResponse<String> createEp(@RequestBody Episode episode) {
         try {
+
+            if (episode.getMarkdownUrl().equals("")) {
+                File file = new File("src\\main\\resources\\md\\" + UUID.randomUUID() + ".md");
+                file.createNewFile();
+                MultipartFile cMultiFile = new MockMultipartFile("file", file.getName(), null, new FileInputStream(file));
+                UploadVo uploadVo = ossService.uploadFile(cMultiFile);
+//                删除文件
+                file.delete();
+                episode.setMarkdownUrl(uploadVo.getUrl());
+            }
             episodeService.insert(episode);
         } catch (Exception e) {
             return new ServiceResponse<>(400, e.getMessage());

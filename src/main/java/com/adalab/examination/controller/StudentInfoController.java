@@ -4,6 +4,7 @@ import com.adalab.examination.entity.MyPrincipal;
 import com.adalab.examination.entity.ServiceResponse;
 import com.adalab.examination.entity.StudentInfo;
 import com.adalab.examination.mapper.StudentInfoMapper;
+import com.adalab.examination.service.EpisodeService;
 import com.adalab.examination.service.StudentInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -39,13 +40,13 @@ public class StudentInfoController {
 
 
     private final StudentInfoMapper studentInfoMapper;
+    final EpisodeService episodeService;
+    final StudentInfoService studentInfoService;
 
-    final
-    StudentInfoService studentInfoService;
-
-    public StudentInfoController(StudentInfoService studentInfoService, StudentInfoMapper studentInfoMapper) {
+    public StudentInfoController(StudentInfoService studentInfoService, StudentInfoMapper studentInfoMapper,EpisodeService episodeService) {
         this.studentInfoService = studentInfoService;
         this.studentInfoMapper = studentInfoMapper;
+        this.episodeService = episodeService;
     }
 
 
@@ -323,7 +324,9 @@ public class StudentInfoController {
     public ServiceResponse<List<StudentInfo>> getPass(@PathVariable int page) {
         IPage<StudentInfo> pageParameter = new Page<>(page, 14);
         LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        studentLambdaQueryWrapper.gt(StudentInfo::getEpisode, 9);
+
+        int count = episodeService.count();
+        studentLambdaQueryWrapper.gt(StudentInfo::getEpisode, count);
         studentLambdaQueryWrapper.orderByDesc(StudentInfo::getEpisode);
         IPage<StudentInfo> toolPage = studentInfoService.page(pageParameter, studentLambdaQueryWrapper);
         return new ServiceResponse<>(200, "success", toolPage.getRecords());
@@ -347,7 +350,8 @@ public class StudentInfoController {
 
     public int getPassedPage(@PathVariable int pageSize) {
         LambdaQueryWrapper<StudentInfo> studentLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        studentLambdaQueryWrapper.gt(StudentInfo::getEpisode, 9);
+        int count = episodeService.count();
+        studentLambdaQueryWrapper.gt(StudentInfo::getEpisode, count);
         List<StudentInfo> list = studentInfoService.list(studentLambdaQueryWrapper);
         int size = list.size();
         if (size % pageSize == 0) {
