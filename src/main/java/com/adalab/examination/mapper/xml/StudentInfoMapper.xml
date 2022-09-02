@@ -20,6 +20,14 @@
     </select>
 
 
+    <select id="selectWithinSevenDays" resultType="com.adalab.examination.entity.StudentInfo">
+        SELECT DISTINCT *
+        FROM student_info
+        WHERE DATE_ADD(begin_date, INTERVAL 3  DAY) >= #{begin_data}
+        AND DATE_SUB(begin_date, INTERVAL 3  DAY) <![CDATA[<=]]> #{begin_data}
+        ORDER BY begin_date DESC;
+    </select>
+
 
 </mapper>
 
