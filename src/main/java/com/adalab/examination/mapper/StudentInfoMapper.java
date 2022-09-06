@@ -22,6 +22,6 @@ public interface StudentInfoMapper extends BaseMapper<StudentInfo> {
 
     List<StudentInfo>selectWeekData();
 
-    List<StudentInfo>selectWithinSevenDays(@Param("start") String begin_data);
+    List<StudentInfo>selectWithinSevenDays(@Param("begin_data") String begin_data);
 
 }
